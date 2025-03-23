@@ -50,6 +50,9 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
+    <DataSource Include="Exam.rds" />
+  </ItemGroup>
+  <ItemGroup>
     <Report Include="GetStudentsByDeptId.rdl" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
