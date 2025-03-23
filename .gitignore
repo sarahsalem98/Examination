@@ -1,0 +1,14 @@
+**/obj/
+**/bin/
+*.nuget.cache
+*.assets.json
+
+# Ignore IDE and project settings
+*.vs/
+.vscode/
+
+# Ignore environment variables and sensitive files
+.env
+config.json
+Examination.PL/appSettings.json
+Examination.PL/appSettings.*.json
