@@ -3,24 +3,21 @@
   <am:AuthoringMetadata>
     <am:CreatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.13.35825.156</am:Version>
+      <am:Version>17.12.35707.178</am:Version>
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.12.35707.178</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-03-24T12:30:00.1216597Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-03-24T18:11:10.8712751Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="Exam">
-      <ConnectionProperties>
-        <DataProvider>SQLAZURE</DataProvider>
-        <ConnectString>Data Source=sarahsalem.database.windows.net;Initial Catalog=Exam;TrustServerCertificate=True</ConnectString>
-      </ConnectionProperties>
-      <rd:SecurityType>DataBase</rd:SecurityType>
-      <rd:DataSourceID>d3cf2206-6d89-435a-991a-e5677cbfcc55</rd:DataSourceID>
+      <DataSourceReference>Exam</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>21535f2b-6a2b-4467-a992-859455813f06</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
@@ -28,23 +25,15 @@
       <Query>
         <DataSourceName>Exam</DataSourceName>
         <QueryParameters>
-          <QueryParameter Name="@DeptId">
-            <Value>=Parameters!DeptId.Value</Value>
+          <QueryParameter Name="@StudentId">
+            <Value>=Parameters!StudentId.Value</Value>
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
-        <CommandText>Report.GetStudentsByDeptID</CommandText>
+        <CommandText>Report.GetGrades</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="DepartmentId">
-          <DataField>DepartmentId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="FirstName">
           <DataField>FirstName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -53,36 +42,21 @@
           <DataField>LastName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Email">
-          <DataField>Email</DataField>
+        <Field Name="Name">
+          <DataField>Name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Phone">
-          <DataField>Phone</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Password">
-          <DataField>Password</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DateOfBirth">
-          <DataField>DateOfBirth</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="EnrollmentDate">
-          <DataField>EnrollmentDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="Status">
-          <DataField>Status</DataField>
+        <Field Name="FinalGradePercent">
+          <DataField>FinalGradePercent</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="Departments">
+    <DataSet Name="Students">
       <Query>
         <DataSourceName>Exam</DataSourceName>
-        <CommandText>select id,name from departments</CommandText>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>GetALLStudents</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
@@ -90,8 +64,8 @@
           <DataField>id</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="name">
-          <DataField>name</DataField>
+        <Field Name="Name">
+          <DataField>Name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -105,31 +79,22 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.25in</Width>
+                  <Width>1.66667in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.15in</Width>
+                  <Width>1.78333in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.18333in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1.90833in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>2.00833in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.875in</Width>
+                  <Width>2.025in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.33in</Height>
+                  <Height>0.32in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="textbox3">
+                        <Textbox Name="textbox2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -149,7 +114,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>textbox3</rd:DefaultName>
+                          <rd:DefaultName>textbox2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -164,7 +129,45 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox4">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Course Name</Value>
+                                  <Style>
+                                    <FontFamily />
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox4</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                            </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <FontFamily />
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -176,7 +179,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Email</Value>
+                                  <Value>Final Grade Percent</Value>
                                   <Style>
                                     <FontFamily />
                                     <FontSize>11pt</FontSize>
@@ -185,6 +188,7 @@
                                 </TextRun>
                               </TextRuns>
                               <Style>
+                                <FontFamily />
                                 <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
@@ -206,167 +210,10 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox6">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Phone</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>textbox6</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox7">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Date Of Birth</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>textbox7</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox8">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Enrollment Date</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>textbox8</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox9">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Status</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <FontFamily />
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>textbox9</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.32667in</Height>
+                  <Height>0.34333in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -377,7 +224,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!FirstName.Value &amp;" " &amp;Fields!LastName.Value</Value>
+                                  <Value>=Fields!FirstName.Value &amp;" "&amp; Fields!LastName.Value</Value>
                                   <Style>
                                     <FontFamily />
                                     <Color>#333333</Color>
@@ -409,14 +256,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Email">
+                        <Textbox Name="Name">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Email.Value</Value>
+                                  <Value>=Fields!Name.Value</Value>
                                   <Style>
                                     <FontFamily />
                                     <Color>#333333</Color>
@@ -428,7 +275,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Email</rd:DefaultName>
+                          <rd:DefaultName>Name</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -448,14 +295,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Phone">
+                        <Textbox Name="FinalGradePercent">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Phone.Value</Value>
+                                  <Value>=Fields!FinalGradePercent.Value &amp;"%"</Value>
                                   <Style>
                                     <FontFamily />
                                     <Color>#333333</Color>
@@ -467,124 +314,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Phone</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2 = 0,"Gainsboro", "No Color ")</BackgroundColor>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="DateOfBirth">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!DateOfBirth.Value</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>DateOfBirth</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2 = 0,"Gainsboro", "No Color ")</BackgroundColor>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="EnrollmentDate">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!EnrollmentDate.Value</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>EnrollmentDate</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <BackgroundColor>=IIf(RowNumber(Nothing) Mod 2 = 0,"Gainsboro", "No Color ")</BackgroundColor>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Status">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Status.Value</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Status</rd:DefaultName>
+                          <rd:DefaultName>FinalGradePercent</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -608,9 +338,6 @@
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
-                <TablixMember />
-                <TablixMember />
-                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -638,15 +365,15 @@
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
             <Top>0.42in</Top>
-            <Height>0.65667in</Height>
-            <Width>9.375in</Width>
+            <Height>0.66333in</Height>
+            <Width>5.475in</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>1.19333in</Height>
+        <Height>1.08333in</Height>
         <Style />
       </Body>
-      <Width>12.025in</Width>
+      <Width>5.475in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
@@ -657,14 +384,14 @@
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="DeptId">
+    <ReportParameter Name="StudentId">
       <DataType>Integer</DataType>
-      <Prompt>Department Name</Prompt>
+      <Prompt>Student Name</Prompt>
       <ValidValues>
         <DataSetReference>
-          <DataSetName>Departments</DataSetName>
+          <DataSetName>Students</DataSetName>
           <ValueField>id</ValueField>
-          <LabelField>name</LabelField>
+          <LabelField>Name</LabelField>
         </DataSetReference>
       </ValidValues>
     </ReportParameter>
@@ -677,7 +404,7 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>DeptId</ParameterName>
+          <ParameterName>StudentId</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
@@ -685,5 +412,5 @@
   <Language>en-US</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportID>2366cff7-eb68-4c25-afbb-bf459aff1c69</rd:ReportID>
+  <rd:ReportID>25513b54-44ea-4f5f-9807-4de95fccf108</rd:ReportID>
 </Report>
