@@ -7,26 +7,23 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.12.35707.178</am:Version>
+      <am:Version>17.13.35825.156</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-03-24T12:30:00.1216597Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-03-26T21:34:49.9862674Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="Exam">
-      <ConnectionProperties>
-        <DataProvider>SQLAZURE</DataProvider>
-        <ConnectString>Data Source=sarahsalem.database.windows.net;Initial Catalog=Exam;TrustServerCertificate=True</ConnectString>
-      </ConnectionProperties>
-      <rd:SecurityType>DataBase</rd:SecurityType>
-      <rd:DataSourceID>d3cf2206-6d89-435a-991a-e5677cbfcc55</rd:DataSourceID>
+    <DataSource Name="Exam2">
+      <DataSourceReference>Exam</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>be946785-d44b-4d79-8656-2f0fba8bde4a</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="DataSet1">
       <Query>
-        <DataSourceName>Exam</DataSourceName>
+        <DataSourceName>Exam2</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@DeptId">
             <Value>=Parameters!DeptId.Value</Value>
@@ -81,7 +78,7 @@
     </DataSet>
     <DataSet Name="Departments">
       <Query>
-        <DataSourceName>Exam</DataSourceName>
+        <DataSourceName>Exam2</DataSourceName>
         <CommandText>select id,name from departments</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
@@ -164,7 +161,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -639,7 +635,7 @@
             <DataSetName>DataSet1</DataSetName>
             <Top>0.42in</Top>
             <Height>0.65667in</Height>
-            <Width>9.375in</Width>
+            <Width>9.37499in</Width>
             <Style />
           </Tablix>
         </ReportItems>
