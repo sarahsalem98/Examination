@@ -53,7 +53,12 @@
     <DataSource Include="Exam.rds" />
   </ItemGroup>
   <ItemGroup>
+    <Report Include="GetCpacityAndCoursesByInstructorID.rdl" />
+    <Report Include="GetGradesBtStudentID.rdl" />
+    <Report Include="GetQuestionsAndChoicesByExamID.rdl" />
+    <Report Include="GetQuestionsAndStudentAnswers.rdl" />
     <Report Include="GetStudentsByDeptId.rdl" />
+    <Report Include="GetTopicsByCourseID.rdl" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>
