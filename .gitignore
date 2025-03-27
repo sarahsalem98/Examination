@@ -12,3 +12,4 @@
 config.json
 Examination.PL/appSettings.json
 Examination.PL/appSettings.*.json
+/Examination.DAL/Entities/AppDbContext.cs
