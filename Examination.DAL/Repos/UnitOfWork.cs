@@ -10,17 +10,17 @@ namespace Examination.DAL.Repos
 {
    public class UnitOfWork: IUnitOfWork
     {
-        //private readonly AppDbContext _db;
-        //public IStudentRepo StudentRepo { get; private set; }
-        //public UnitOfWork(AppDbContext db)
-        //{
-        //    _db = db;
-        //    StudentRepo = new StudentRepo(_db);
-        //}
-        //public int Save()
-        //{
-        //    return _db.SaveChanges();
-        //}
+        private readonly AppDbContext _db;
+        public IStudentRepo StudentRepo { get; private set; }
+        public UnitOfWork(AppDbContext db)
+        {
+            _db = db;
+            StudentRepo = new StudentRepo(_db);
+        }
+        public int Save()
+        {
+            return _db.SaveChanges();
+        }
     }
    
 }
