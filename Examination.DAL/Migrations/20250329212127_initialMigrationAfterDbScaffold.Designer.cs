@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Examination.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250329185717_updateStudentsTbl")]
-    partial class updateStudentsTbl
+    [Migration("20250329212127_initialMigrationAfterDbScaffold")]
+    partial class initialMigrationAfterDbScaffold
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -377,40 +377,16 @@ namespace Examination.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<bool>("IsExternal")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int?>("Status")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
                         .HasName("PK__Instruct__3214EC07FE3406E8");
 
-                    b.HasIndex(new[] { "Email" }, "UQ__Instruct__A9D10534BCA0D73C")
-                        .IsUnique();
+                    b.HasIndex(new[] { "UserId" }, "IX_Instructors_UserId");
 
                     b.ToTable("Instructors");
                 });
@@ -473,7 +449,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("DepartmentBranchId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "UserId" }, "IX_Students_UserId");
 
                     b.ToTable("Students");
                 });
@@ -535,10 +511,10 @@ namespace Examination.DAL.Migrations
                     b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatedBy")
+                    b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -562,10 +538,10 @@ namespace Examination.DAL.Migrations
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UpdatedBy")
+                    b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -590,7 +566,7 @@ namespace Examination.DAL.Migrations
                     b.ToTable("UserTypes");
                 });
 
-            modelBuilder.Entity("Examination.DAL.Entities.UserUserType", b =>
+            modelBuilder.Entity("UserUserType", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -600,9 +576,9 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("UserId", "UserTypeId");
 
-                    b.HasIndex("UserTypeId");
+                    b.HasIndex(new[] { "UserTypeId" }, "IX_UserUserTypes_UserTypeId");
 
-                    b.ToTable("UserUserTypes");
+                    b.ToTable("UserUserTypes", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.CourseTopic", b =>
@@ -757,6 +733,17 @@ namespace Examination.DAL.Migrations
                     b.Navigation("GeneratedExam");
                 });
 
+            modelBuilder.Entity("Examination.DAL.Entities.Instructor", b =>
+                {
+                    b.HasOne("Examination.DAL.Entities.User", "User")
+                        .WithMany("Instructors")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Examination.DAL.Entities.InstructorCourse", b =>
                 {
                     b.HasOne("Examination.DAL.Entities.Course", "Course")
@@ -792,7 +779,7 @@ namespace Examination.DAL.Migrations
                         .HasConstraintName("Fk_Students_DepartmentBranch");
 
                     b.HasOne("Examination.DAL.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -821,23 +808,19 @@ namespace Examination.DAL.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Examination.DAL.Entities.UserUserType", b =>
+            modelBuilder.Entity("UserUserType", b =>
                 {
-                    b.HasOne("Examination.DAL.Entities.User", "User")
-                        .WithMany("Types")
+                    b.HasOne("Examination.DAL.Entities.User", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Examination.DAL.Entities.UserType", "UserType")
+                    b.HasOne("Examination.DAL.Entities.UserType", null)
                         .WithMany()
                         .HasForeignKey("UserTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("UserType");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Branch", b =>
@@ -919,7 +902,9 @@ namespace Examination.DAL.Migrations
 
             modelBuilder.Entity("Examination.DAL.Entities.User", b =>
                 {
-                    b.Navigation("Types");
+                    b.Navigation("Instructors");
+
+                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

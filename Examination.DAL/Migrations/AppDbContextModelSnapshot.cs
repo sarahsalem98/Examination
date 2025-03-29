@@ -42,7 +42,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Branches__3214EC0765A92EC8");
 
-                    b.ToTable("Branches");
+                    b.ToTable("Branches", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Course", b =>
@@ -67,7 +67,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Courses__3214EC074391AACD");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.CourseTopic", b =>
@@ -117,7 +117,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Departme__3214EC0748EFB9B1");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.DepartmentBranch", b =>
@@ -175,7 +175,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Exams");
+                    b.ToTable("Exams", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.ExamQ", b =>
@@ -383,9 +383,9 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Instruct__3214EC07FE3406E8");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "UserId" }, "IX_Instructors_UserId");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructors", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.InstructorCourse", b =>
@@ -446,9 +446,9 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("DepartmentBranchId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "UserId" }, "IX_Students_UserId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.StudentCourse", b =>
@@ -494,7 +494,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Topics__3214EC073196F110");
 
-                    b.ToTable("Topics");
+                    b.ToTable("Topics", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.User", b =>
@@ -543,7 +543,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.UserType", b =>
@@ -560,27 +560,10 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            TypeName = "Student"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            TypeName = "Instructor"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            TypeName = "SuperAdmin"
-                        });
+                    b.ToTable("UserTypes", (string)null);
                 });
 
-            modelBuilder.Entity("Examination.DAL.Entities.UserUserType", b =>
+            modelBuilder.Entity("UserUserType", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -590,9 +573,9 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("UserId", "UserTypeId");
 
-                    b.HasIndex("UserTypeId");
+                    b.HasIndex(new[] { "UserTypeId" }, "IX_UserUserTypes_UserTypeId");
 
-                    b.ToTable("UserUserTypes");
+                    b.ToTable("UserUserTypes", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.CourseTopic", b =>
@@ -750,7 +733,7 @@ namespace Examination.DAL.Migrations
             modelBuilder.Entity("Examination.DAL.Entities.Instructor", b =>
                 {
                     b.HasOne("Examination.DAL.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Instructors")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -793,7 +776,7 @@ namespace Examination.DAL.Migrations
                         .HasConstraintName("Fk_Students_DepartmentBranch");
 
                     b.HasOne("Examination.DAL.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -822,23 +805,19 @@ namespace Examination.DAL.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Examination.DAL.Entities.UserUserType", b =>
+            modelBuilder.Entity("UserUserType", b =>
                 {
-                    b.HasOne("Examination.DAL.Entities.User", "User")
-                        .WithMany("Types")
+                    b.HasOne("Examination.DAL.Entities.User", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Examination.DAL.Entities.UserType", "UserType")
+                    b.HasOne("Examination.DAL.Entities.UserType", null)
                         .WithMany()
                         .HasForeignKey("UserTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("UserType");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Branch", b =>
@@ -920,7 +899,9 @@ namespace Examination.DAL.Migrations
 
             modelBuilder.Entity("Examination.DAL.Entities.User", b =>
                 {
-                    b.Navigation("Types");
+                    b.Navigation("Instructors");
+
+                    b.Navigation("Students");
                 });
 #pragma warning restore 612, 618
         }

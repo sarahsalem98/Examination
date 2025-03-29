@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Examination.DAL.Entities
+namespace Examination.DAL.Entities;
+
+public partial class UserType
 {
-   public class UserType
-    {
-        public int Id { get; set; }
-        public string TypeName { get; set; } = null!;
-    }
+    public int Id { get; set; }
+
+    public string TypeName { get; set; } = null!;
+
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
