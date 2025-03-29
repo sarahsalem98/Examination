@@ -11,23 +11,19 @@ namespace Examination.BLL.ModelViews
     {
         public int Id { get; set; }
 
-        public int DepartmentId { get; set; }
-
-        public string FirstName { get; set; } = null!;
-
-        public string LastName { get; set; } = null!;
-
-        public string Email { get; set; } = null!;
-
-        public string? Phone { get; set; }
-
-        public string? Password { get; set; }
+        public int DepartmentBranchId { get; set; }
 
         public DateOnly? DateOfBirth { get; set; }
 
         public DateTime? EnrollmentDate { get; set; }
 
-        public int? Status { get; set; }
+        public int? TrackType { get; set; }
+
+        public int UserId { get; set; }
+
+        public UserMV? UserMV { get; set; }
+
+
     }
 
 }
