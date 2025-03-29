@@ -4,6 +4,7 @@ using Examination.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Examination.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250329184508_addUserTbls")]
+    partial class addUserTbls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -374,16 +377,40 @@ namespace Examination.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("IsExternal")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
                         .HasName("PK__Instruct__3214EC07FE3406E8");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "Email" }, "UQ__Instruct__A9D10534BCA0D73C")
+                        .IsUnique();
 
                     b.ToTable("Instructors");
                 });
@@ -432,13 +459,33 @@ namespace Examination.DAL.Migrations
                     b.Property<int>("DepartmentBranchId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<DateTime?>("EnrollmentDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
-                    b.Property<int?>("TrackType")
-                        .HasColumnType("int");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
@@ -446,7 +493,8 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("DepartmentBranchId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex(new[] { "Email" }, "UQ__Students__A9D105341C9519F1")
+                        .IsUnique();
 
                     b.ToTable("Students");
                 });
@@ -508,10 +556,10 @@ namespace Examination.DAL.Migrations
                     b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatedBy")
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -535,10 +583,10 @@ namespace Examination.DAL.Migrations
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UpdatedBy")
+                    b.Property<int>("UpdatedBy")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -561,23 +609,6 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            TypeName = "Student"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            TypeName = "Instructor"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            TypeName = "SuperAdmin"
-                        });
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.UserUserType", b =>
@@ -747,17 +778,6 @@ namespace Examination.DAL.Migrations
                     b.Navigation("GeneratedExam");
                 });
 
-            modelBuilder.Entity("Examination.DAL.Entities.Instructor", b =>
-                {
-                    b.HasOne("Examination.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Examination.DAL.Entities.InstructorCourse", b =>
                 {
                     b.HasOne("Examination.DAL.Entities.Course", "Course")
@@ -792,15 +812,7 @@ namespace Examination.DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("Fk_Students_DepartmentBranch");
 
-                    b.HasOne("Examination.DAL.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("DepartmentBranch");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.StudentCourse", b =>

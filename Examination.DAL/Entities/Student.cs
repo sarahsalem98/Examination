@@ -7,27 +7,17 @@ public partial class Student
 {
     public int Id { get; set; }
 
+    public int UserId { get; set; }
+
     public int DepartmentBranchId { get; set; }
-
-    public string FirstName { get; set; } = null!;
-
-    public string LastName { get; set; } = null!;
-
-    public string Email { get; set; } = null!;
-
-    public string? Phone { get; set; }
-
-    public string? Password { get; set; }
 
     public DateOnly? DateOfBirth { get; set; }
 
     public DateTime? EnrollmentDate { get; set; }
 
+    public int? TrackType { get; set; }
 
-
-
-    public int? Status { get; set; }
-
+    public virtual User User { get; set; }
     public virtual DepartmentBranch DepartmentBranch { get; set; } = null!;
 
     public virtual ICollection<ExamStudentAnswer> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswer>();

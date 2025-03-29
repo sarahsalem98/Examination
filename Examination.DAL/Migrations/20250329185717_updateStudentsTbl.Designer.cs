@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Examination.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250329132944_firstMigrationAfterDbScaffold")]
-    partial class firstMigrationAfterDbScaffold
+    [Migration("20250329185717_updateStudentsTbl")]
+    partial class updateStudentsTbl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -459,33 +459,13 @@ namespace Examination.DAL.Migrations
                     b.Property<int>("DepartmentBranchId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<DateTime?>("EnrollmentDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int?>("TrackType")
+                        .HasColumnType("int");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int?>("Status")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
@@ -493,8 +473,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("DepartmentBranchId");
 
-                    b.HasIndex(new[] { "Email" }, "UQ__Students__A9D105341C9519F1")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Students");
                 });
@@ -543,6 +522,87 @@ namespace Examination.DAL.Migrations
                         .HasName("PK__Topics__3214EC073196F110");
 
                     b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("Examination.DAL.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Examination.DAL.Entities.UserType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserTypes");
+                });
+
+            modelBuilder.Entity("Examination.DAL.Entities.UserUserType", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "UserTypeId");
+
+                    b.HasIndex("UserTypeId");
+
+                    b.ToTable("UserUserTypes");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.CourseTopic", b =>
@@ -731,7 +791,15 @@ namespace Examination.DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("Fk_Students_DepartmentBranch");
 
+                    b.HasOne("Examination.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("DepartmentBranch");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.StudentCourse", b =>
@@ -751,6 +819,25 @@ namespace Examination.DAL.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Examination.DAL.Entities.UserUserType", b =>
+                {
+                    b.HasOne("Examination.DAL.Entities.User", "User")
+                        .WithMany("Types")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Examination.DAL.Entities.UserType", "UserType")
+                        .WithMany()
+                        .HasForeignKey("UserTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserType");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Branch", b =>
@@ -828,6 +915,11 @@ namespace Examination.DAL.Migrations
             modelBuilder.Entity("Examination.DAL.Entities.Topic", b =>
                 {
                     b.Navigation("CourseTopics");
+                });
+
+            modelBuilder.Entity("Examination.DAL.Entities.User", b =>
+                {
+                    b.Navigation("Types");
                 });
 #pragma warning restore 612, 618
         }

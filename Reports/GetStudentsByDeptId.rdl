@@ -7,9 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.12.35707.178</am:Version>
+      <am:Version>17.13.35825.156</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-03-29T13:08:28.2364598Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-03-29T19:32:41.7047045Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -37,17 +37,13 @@
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
-        <Field Name="Id">
-          <DataField>Id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="DepartmentBranchId">
-          <DataField>DepartmentBranchId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
         <Field Name="FirstName">
           <DataField>FirstName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Age">
+          <DataField>Age</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="LastName">
           <DataField>LastName</DataField>
@@ -61,9 +57,9 @@
           <DataField>Phone</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Password">
-          <DataField>Password</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+        <Field Name="TrackType">
+          <DataField>TrackType</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="DateOfBirth">
           <DataField>DateOfBirth</DataField>

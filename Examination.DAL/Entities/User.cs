@@ -8,6 +8,7 @@ namespace Examination.DAL.Entities
 {
     public class User
     {
+        public int Id { get; set; } 
         public string FirstName { get; set; } = null!;
 
         public string LastName { get; set; } = null!;
@@ -21,5 +22,11 @@ namespace Examination.DAL.Entities
         public int? Age { get; set; }
 
         public int? Status { get; set; }
+
+        public int? CreatedBy { get; set; }  
+        public int? UpdatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public virtual IList<UserUserType> Types { get; set; } 
     }
 }
