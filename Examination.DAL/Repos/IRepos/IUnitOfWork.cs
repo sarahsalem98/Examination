@@ -8,7 +8,7 @@ namespace Examination.DAL.Repos.IRepos
 {
     public interface IUnitOfWork
     {
-        public IStudentRepo StudentRepo { get; }
-        public int Save();
+       // public IStudentRepo StudentRepo { get; }
+       // public int Save();
     }
 }

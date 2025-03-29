@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Examination.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class storedProcedures : Migration
+    public partial class firstMigrationAfterDbScaffold : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -122,86 +122,108 @@ namespace Examination.DAL.Migrations
             migrationBuilder.Sql(@"
 IF NOT EXISTS (SELECT 1 FROM sys.procedures WHERE OBJECT_ID = OBJECT_ID('[Exam].[sp_Generate_Exam]'))
 BEGIN
-    EXEC('
-    CREATE PROC [Exam].[sp_Generate_Exam]
-        @ExamId INT,
-        @DepartmentId INT,
-        @NumsTS INT,
-        @NumsMCQ INT,
-        @CreatedBy INT,
-        @TakenDate DATE,
-        @TakenTime TIME
-    AS
-    BEGIN
-        SET NOCOUNT ON;
+Exec('
+  CREATE proc [Exam].[sp_Generate_Exam]
+  @ExamId int ,
+  @DepartmentId int ,
+  @BranchId int,
+  @NumsTS int ,
+  @NumsMCQ int ,
+  @CreatedBy int ,
+  @TakenDate Date,
+  @takenTime Time
 
-        DECLARE @GeneratedExamId INT;
-        DECLARE @QsOrder INT = 1;
-        DECLARE @TotalGrade INT = 0;
-        DECLARE @ExamName NVARCHAR(MAX) = '''';
-        DECLARE @ExamDepartmentId INT = 0;
+ as 
+ begin
+ Set Nocount On
 
-        BEGIN TRANSACTION;
+ declare @GeneratedExamId int ;
+ declare @QsOrder int =1;
+ declare @TotalGrade int =0;
+ declare @ExamName nvarchar(max)='';
+ declare @DepartmentBranchId int =0;
+ declare @BranchName nvarchar(max)='';
+ declare @DepartmentName nvarchar(max)='';
 
-        BEGIN TRY
-            -- Get ExamDepartmentId
-            SELECT @ExamDepartmentId = Id
-            FROM Exam_Department
-            WHERE DepartmentId = @DepartmentId AND ExamId = @ExamId;
 
-            PRINT ''ExamDepartmentId: '' + CAST(@ExamDepartmentId AS NVARCHAR);
+ begin transaction;
 
-            -- Generate ExamName
-            SELECT @ExamName = ISNULL(e.Name, ''Unknown Exam'') + '' - '' +
-                               ISNULL(d.Name, ''Unknown Department'') +
-                               '' ('' + CONVERT(NVARCHAR, @TakenDate, 23) + '' '' +
-                               CONVERT(NVARCHAR, @TakenTime, 108) + '')''
-            FROM Exam_Department ed
-            JOIN Exams e ON ed.ExamId = e.Id
-            JOIN Departments d ON ed.DepartmentId = d.Id
-            WHERE ed.Id = @ExamDepartmentId;
+ begin try
 
-            PRINT ''ExamName: '' + ISNULL(@ExamName, ''NULL'');
-            PRINT ''TakenDate: '' + ISNULL(CAST(@TakenDate AS NVARCHAR), ''NULL'');
-            PRINT ''TakenTime: '' + ISNULL(CAST(@TakenTime AS NVARCHAR), ''NULL'');
+    --1 get generateExam Name
+       select top 1 @DepartmentBranchId = BD.Id ,@DepartmentName=D.Name,@BranchName=B.Name
+        from Department_Branches BD join Departments D on BD.DepartmentId=D.Id 
+		join Branches B on B.Id=BD.BranchId
+        where DepartmentId = @DepartmentId and BranchId = @BranchId;
 
-            -- Insert a new generated exam
-            INSERT INTO Generated_Exams (ExamDepartmentId, ExamName, TakenDate, TakenTime, CreatedAt, CreatedBy, Grade)
-            VALUES (@ExamDepartmentId, @ExamName, @TakenDate, @TakenTime, GETDATE(), @CreatedBy, 0);
+		PRINT ''@DepartmentBranchId: '' + CAST(@DepartmentBranchId AS NVARCHAR);
 
-            SET @GeneratedExamId = SCOPE_IDENTITY();
+        -- Generate ExamName
+   SELECT @ExamName = ISNULL(e.Name, ''Unknown Exam'') + '' ( '' + 
+                      ISNULL(@DepartmentName, ''Unknown Department'') +'' - ''+
+					  ISNULL(@BranchName,''Unknown Branch'')+'' ) ''+
+                   '' ('' + CONVERT(NVARCHAR, @TakenDate, 23) + '' '' + 
+                       CONVERT(NVARCHAR, @TakenTime, 108) + '')''
+           from Exams e
 
-            -- Generate TS questions
-            INSERT INTO Generated_Exam_Qs (GeneratedExamId, ExamQsId, QsOrder)
-            SELECT @GeneratedExamId, Id, @QsOrder + ROW_NUMBER() OVER (ORDER BY NEWID()) - 1
-            FROM (SELECT TOP (@NumsTS) Id FROM Exam_Qs WHERE ExamId = @ExamId AND QuestionType = ''TF'' ORDER BY NEWID()) AS RandomTS;
+		PRINT ''ExamName: '' + ISNULL(@ExamName, ''NULL'');
+		PRINT ''TakenDate: '' + ISNULL(CAST(@TakenDate AS NVARCHAR), ''NULL'');
+        PRINT ''TakenTime: '' + ISNULL(CAST(@TakenTime AS NVARCHAR), ''NULL'');
 
-            -- Generate MCQ questions
-            SET @QsOrder = @QsOrder + @NumsTS;
+ -- 1 insert a new generated exam 
 
-            INSERT INTO Generated_Exam_Qs (GeneratedExamId, ExamQsId, QsOrder)
-            SELECT @GeneratedExamId, Id, @QsOrder + ROW_NUMBER() OVER (ORDER BY NEWID()) - 1
-            FROM (SELECT TOP (@NumsMCQ) Id FROM Exam_Qs WHERE ExamId = @ExamId AND QuestionType = ''MCQ'' ORDER BY NEWID()) AS RandomMCQ;
+ insert into  Generated_Exams (DepartmentBranchId,ExamName,TakenDate,TakenTime,CreatedAt,CreatedBy,ExamId,Grade)
+ values(
+ @DepartmentBranchId,
+ @ExamName,
+ @TakenDate,
+ @takenTime,
+ GETDATE(),
+ @CreatedBy,
+ @ExamId,
+ 0 -- temp 
+ )
 
-            -- Update grade in generated exam
-            SELECT @TotalGrade = SUM(e.Degree)
-            FROM Generated_Exam_Qs ge
-            JOIN Exam_Qs e ON ge.ExamQsId = e.Id;
+ set @GeneratedExamId=SCOPE_IDENTITY();
 
-            UPDATE Generated_Exams
-            SET Grade = @TotalGrade
-            WHERE Id = @GeneratedExamId;
 
-            COMMIT TRANSACTION;
-            RETURN @GeneratedExamId;
-        END TRY
-        BEGIN CATCH
-            ROLLBACK TRANSACTION;
-            RETURN -1;
-        END CATCH
-    END;
-    ')
+ -- 2 generate TS qs
+
+ insert into Generated_Exam_Qs (GeneratedExamId,ExamQsId,QsOrder)
+ select @GeneratedExamId, Id,  @QsOrder + ROW_NUMBER() over(order by NewID())-1
+ from (select top (@NumsTS) Id from Exam_Qs where ExamId=@ExamId and QuestionType=''TF'' order by NewID()) as RandomTS;
+
+
+ --3 generate MCQ qs
+  set @QsOrder=@QsOrder+@NumsTS;
+
+ insert into Generated_Exam_Qs(GeneratedExamId,ExamQsId,QsOrder)
+ select @GeneratedExamId ,Id, @QsOrder + ROW_NUMBER() over (order by NewID())-1
+ from (select top (@NumsMCQ) Id from Exam_Qs where ExamId=@ExamId and QuestionType=''MCQ'' order by NEWID()) as RandomMCQ;
+
+ --update grade in generated exam
+
+ select @TotalGrade=sum(e.Degree)
+ from Generated_Exam_Qs ge
+ join Exam_Qs e
+ on ge.ExamQsId=e.Id
+
+ update Generated_Exams
+ set Grade=@TotalGrade
+ where Id=@GeneratedExamId
+
+ commit transaction ;
+ return @GeneratedExamId
+ end try
+
+ begin catch
+  rollback transaction 
+  return -1;
+  end catch
+ end;
+')
 END;
+
 ");
 
 
@@ -261,13 +283,17 @@ END;");
 IF NOT EXISTS (SELECT 1 FROM sys.procedures WHERE OBJECT_ID = OBJECT_ID('Report.GetStudentsByDeptID'))
 BEGIN
     EXEC('
-    CREATE PROC Report.GetStudentsByDeptID
-        @DeptId INT
-    AS
-    BEGIN
-        SET NOCOUNT ON;
-        SELECT * FROM Students s WHERE s.DepartmentId = @DeptId;
-    END;
+  CREATE proc [Report].[GetStudentsByDeptID] 
+@DeptId int,
+@BranchId int 
+as
+begin
+set nocount on
+declare  @DepartmentBranchId int =0;
+select @DepartmentBranchId=Id from Department_Branches where DepartmentId=@DeptId and BranchId=@BranchId
+
+select * from Students s where s.DepartmentBranchId=@DepartmentBranchId
+end
     ')
 END;");
 
@@ -430,12 +456,13 @@ END;");
             ')
         END;
         ");
+
         }
-        
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.Sql("DROP PROCEDURE IF EXISTS Exam.sp_SubmitStudentAnswers");
             migrationBuilder.Sql("DROP PROCEDURE IF EXISTS Exam.sp_SubmitSingleStudentAnswer");
             migrationBuilder.Sql("DROP PROCEDURE IF EXISTS Exam.sp_CorrectStudentAnswers");

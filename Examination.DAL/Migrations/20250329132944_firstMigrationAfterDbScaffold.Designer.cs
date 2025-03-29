@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Examination.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250327002810_storedProcedures")]
-    partial class storedProcedures
+    [Migration("20250329132944_firstMigrationAfterDbScaffold")]
+    partial class firstMigrationAfterDbScaffold
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,29 @@ namespace Examination.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Examination.DAL.Entities.Branch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Branches__3214EC0765A92EC8");
+
+                    b.ToTable("Branches");
+                });
 
             modelBuilder.Entity("Examination.DAL.Entities.Course", b =>
                 {
@@ -100,6 +123,30 @@ namespace Examination.DAL.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("Examination.DAL.Entities.DepartmentBranch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Departme__3214EC078803B4B7");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Department_Branches", (string)null);
+                });
+
             modelBuilder.Entity("Examination.DAL.Entities.Exam", b =>
                 {
                     b.Property<int>("Id")
@@ -132,30 +179,6 @@ namespace Examination.DAL.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("Exams");
-                });
-
-            modelBuilder.Entity("Examination.DAL.Entities.ExamDepartment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExamId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id")
-                        .HasName("PK__Exam_Dep__3214EC07547C6E33");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("ExamId");
-
-                    b.ToTable("Exam_Department", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.ExamQ", b =>
@@ -288,7 +311,10 @@ namespace Examination.DAL.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("ExamDepartmentId")
+                    b.Property<int>("DepartmentBranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExamId")
                         .HasColumnType("int");
 
                     b.Property<string>("ExamName")
@@ -309,7 +335,9 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("ExamDepartmentId");
+                    b.HasIndex("DepartmentBranchId");
+
+                    b.HasIndex("ExamId");
 
                     b.ToTable("Generated_Exams", (string)null);
                 });
@@ -359,6 +387,9 @@ namespace Examination.DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("IsExternal")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -395,6 +426,9 @@ namespace Examination.DAL.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DepartmentBranchId")
+                        .HasColumnType("int");
+
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");
 
@@ -403,35 +437,12 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("CourseId");
 
+                    b.HasIndex("DepartmentBranchId");
+
                     b.HasIndex(new[] { "InstructorId", "CourseId" }, "UQ__Instruct__F193DD805F5B51C7")
                         .IsUnique();
 
                     b.ToTable("Instructor_Courses", (string)null);
-                });
-
-            modelBuilder.Entity("Examination.DAL.Entities.InstructorDepartment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InstructorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id")
-                        .HasName("PK__Instruct__3214EC073FE72C68");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex(new[] { "InstructorId", "DepartmentId" }, "UQ__Instruct__56217324A10C4FBE")
-                        .IsUnique();
-
-                    b.ToTable("Instructor_Department", (string)null);
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Student", b =>
@@ -445,7 +456,7 @@ namespace Examination.DAL.Migrations
                     b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int>("DepartmentBranchId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -480,7 +491,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Students__3214EC07875E9956");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("DepartmentBranchId");
 
                     b.HasIndex(new[] { "Email" }, "UQ__Students__A9D105341C9519F1")
                         .IsUnique();
@@ -553,6 +564,25 @@ namespace Examination.DAL.Migrations
                     b.Navigation("Topic");
                 });
 
+            modelBuilder.Entity("Examination.DAL.Entities.DepartmentBranch", b =>
+                {
+                    b.HasOne("Examination.DAL.Entities.Branch", "Branch")
+                        .WithMany("DepartmentBranches")
+                        .HasForeignKey("BranchId")
+                        .IsRequired()
+                        .HasConstraintName("FK__Departmen__Branc__3A4CA8FD");
+
+                    b.HasOne("Examination.DAL.Entities.Department", "Department")
+                        .WithMany("DepartmentBranches")
+                        .HasForeignKey("DepartmentId")
+                        .IsRequired()
+                        .HasConstraintName("FK__Departmen__Depar__395884C4");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Department");
+                });
+
             modelBuilder.Entity("Examination.DAL.Entities.Exam", b =>
                 {
                     b.HasOne("Examination.DAL.Entities.Course", "Course")
@@ -562,25 +592,6 @@ namespace Examination.DAL.Migrations
                         .HasConstraintName("FK__Exams__CourseId__160F4887");
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("Examination.DAL.Entities.ExamDepartment", b =>
-                {
-                    b.HasOne("Examination.DAL.Entities.Department", "Department")
-                        .WithMany("ExamDepartments")
-                        .HasForeignKey("DepartmentId")
-                        .IsRequired()
-                        .HasConstraintName("FK__Exam_Depa__Depar__0F624AF8");
-
-                    b.HasOne("Examination.DAL.Entities.Exam", "Exam")
-                        .WithMany("ExamDepartments")
-                        .HasForeignKey("ExamId")
-                        .IsRequired()
-                        .HasConstraintName("FK__Exam_Depa__ExamI__0E6E26BF");
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Exam");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.ExamQ", b =>
@@ -648,15 +659,23 @@ namespace Examination.DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__Generated__Creat__19DFD96B");
 
-                    b.HasOne("Examination.DAL.Entities.ExamDepartment", "ExamDepartment")
+                    b.HasOne("Examination.DAL.Entities.DepartmentBranch", "DepartmentBranch")
                         .WithMany("GeneratedExams")
-                        .HasForeignKey("ExamDepartmentId")
+                        .HasForeignKey("DepartmentBranchId")
                         .IsRequired()
-                        .HasConstraintName("FK__Generated__ExamD__18EBB532");
+                        .HasConstraintName("FK_Generated_Exams_DepartmentBranch");
+
+                    b.HasOne("Examination.DAL.Entities.Exam", "Exam")
+                        .WithMany("GeneratedExams")
+                        .HasForeignKey("ExamId")
+                        .IsRequired()
+                        .HasConstraintName("FK_GeneratedExams_Exam");
 
                     b.Navigation("CreatedByNavigation");
 
-                    b.Navigation("ExamDepartment");
+                    b.Navigation("DepartmentBranch");
+
+                    b.Navigation("Exam");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.GeneratedExamQ", b =>
@@ -686,6 +705,11 @@ namespace Examination.DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__Instructo__Cours__1BC821DD");
 
+                    b.HasOne("Examination.DAL.Entities.DepartmentBranch", "DepartmentBranch")
+                        .WithMany("InstructorCourses")
+                        .HasForeignKey("DepartmentBranchId")
+                        .HasConstraintName("FK_InstructorCourses_DepartmentBranch");
+
                     b.HasOne("Examination.DAL.Entities.Instructor", "Instructor")
                         .WithMany("InstructorCourses")
                         .HasForeignKey("InstructorId")
@@ -694,37 +718,20 @@ namespace Examination.DAL.Migrations
 
                     b.Navigation("Course");
 
-                    b.Navigation("Instructor");
-                });
-
-            modelBuilder.Entity("Examination.DAL.Entities.InstructorDepartment", b =>
-                {
-                    b.HasOne("Examination.DAL.Entities.Department", "Department")
-                        .WithMany("InstructorDepartments")
-                        .HasForeignKey("DepartmentId")
-                        .IsRequired()
-                        .HasConstraintName("FK__Instructo__Depar__1DB06A4F");
-
-                    b.HasOne("Examination.DAL.Entities.Instructor", "Instructor")
-                        .WithMany("InstructorDepartments")
-                        .HasForeignKey("InstructorId")
-                        .IsRequired()
-                        .HasConstraintName("FK__Instructo__Instr__1CBC4616");
-
-                    b.Navigation("Department");
+                    b.Navigation("DepartmentBranch");
 
                     b.Navigation("Instructor");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Student", b =>
                 {
-                    b.HasOne("Examination.DAL.Entities.Department", "Department")
+                    b.HasOne("Examination.DAL.Entities.DepartmentBranch", "DepartmentBranch")
                         .WithMany("Students")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("DepartmentBranchId")
                         .IsRequired()
-                        .HasConstraintName("FK__Students__Depart__208CD6FA");
+                        .HasConstraintName("Fk_Students_DepartmentBranch");
 
-                    b.Navigation("Department");
+                    b.Navigation("DepartmentBranch");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.StudentCourse", b =>
@@ -746,6 +753,11 @@ namespace Examination.DAL.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Examination.DAL.Entities.Branch", b =>
+                {
+                    b.Navigation("DepartmentBranches");
+                });
+
             modelBuilder.Entity("Examination.DAL.Entities.Course", b =>
                 {
                     b.Navigation("CourseTopics");
@@ -759,22 +771,22 @@ namespace Examination.DAL.Migrations
 
             modelBuilder.Entity("Examination.DAL.Entities.Department", b =>
                 {
-                    b.Navigation("ExamDepartments");
+                    b.Navigation("DepartmentBranches");
+                });
 
-                    b.Navigation("InstructorDepartments");
+            modelBuilder.Entity("Examination.DAL.Entities.DepartmentBranch", b =>
+                {
+                    b.Navigation("GeneratedExams");
+
+                    b.Navigation("InstructorCourses");
 
                     b.Navigation("Students");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Exam", b =>
                 {
-                    b.Navigation("ExamDepartments");
-
                     b.Navigation("ExamQs");
-                });
 
-            modelBuilder.Entity("Examination.DAL.Entities.ExamDepartment", b =>
-                {
                     b.Navigation("GeneratedExams");
                 });
 
@@ -802,8 +814,6 @@ namespace Examination.DAL.Migrations
                     b.Navigation("GeneratedExams");
 
                     b.Navigation("InstructorCourses");
-
-                    b.Navigation("InstructorDepartments");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Student", b =>

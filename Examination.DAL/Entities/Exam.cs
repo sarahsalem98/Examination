@@ -19,7 +19,7 @@ public partial class Exam
 
     public virtual Course Course { get; set; } = null!;
 
-    public virtual ICollection<ExamDepartment> ExamDepartments { get; set; } = new List<ExamDepartment>();
-
     public virtual ICollection<ExamQ> ExamQs { get; set; } = new List<ExamQ>();
+
+    public virtual ICollection<GeneratedExam> GeneratedExams { get; set; } = new List<GeneratedExam>();
 }

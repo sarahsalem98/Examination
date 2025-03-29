@@ -11,7 +11,7 @@ namespace Examination.BLL.Mapper
     {
         public MapperProfile()
         {
-            CreateMap<Examination.DAL.Entities.Student, Examination.BLL.ModelViews.StudentMV>().ReverseMap();
+           // CreateMap<Examination.DAL.Entities.Student, Examination.BLL.ModelViews.StudentMV>().ReverseMap();
           
 
         }

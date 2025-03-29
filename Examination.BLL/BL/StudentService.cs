@@ -10,30 +10,30 @@ using System.Threading.Tasks;
 
 namespace Examination.BLL.BL
 {
-    public class StudentService : IStudentService
-    {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public StudentService(IUnitOfWork unitOfWork, IMapper mapper)
-        {
+    //public class StudentService : IStudentService
+    //{
+    //    private readonly IUnitOfWork _unitOfWork;
+    //    private readonly IMapper _mapper;
+    //    public StudentService(IUnitOfWork unitOfWork, IMapper mapper)
+    //    {
 
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-        public int Add(StudentMV student)
-        {
-            int result = 0;
-            try
-            {
-                var std = _mapper.Map<Examination.DAL.Entities.Student>(student);
-                _unitOfWork.StudentRepo.Insert(std);
-                result = _unitOfWork.Save();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-        }
-    }
+    //        _unitOfWork = unitOfWork;
+    //        _mapper = mapper;
+    //    }
+    //    public int Add(StudentMV student)
+    //    {
+    //        int result = 0;
+    //        try
+    //        {
+    //            var std = _mapper.Map<Examination.DAL.Entities.Student>(student);
+    //            _unitOfWork.StudentRepo.Insert(std);
+    //            result = _unitOfWork.Save();
+    //            return result;
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            return 0;
+    //        }
+    //    }
+    //}
 }

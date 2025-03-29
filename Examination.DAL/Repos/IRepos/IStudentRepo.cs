@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Examination.DAL.Repos.IRepos
 {
-   public interface IStudentRepo: IRepo<Student>
-    {
-        public void Update(Student student);
-    }
+   //public interface IStudentRepo: IRepo<Student>
+   // {
+   //     public void Update(Student student);
+   // }
 }

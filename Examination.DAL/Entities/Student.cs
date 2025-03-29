@@ -7,7 +7,7 @@ public partial class Student
 {
     public int Id { get; set; }
 
-    public int DepartmentId { get; set; }
+    public int DepartmentBranchId { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -23,9 +23,12 @@ public partial class Student
 
     public DateTime? EnrollmentDate { get; set; }
 
+
+
+
     public int? Status { get; set; }
 
-    public virtual Department Department { get; set; } = null!;
+    public virtual DepartmentBranch DepartmentBranch { get; set; } = null!;
 
     public virtual ICollection<ExamStudentAnswer> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswer>();
 
