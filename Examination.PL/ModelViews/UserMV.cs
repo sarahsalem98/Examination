@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Examination.BLL.ModelViews
+﻿namespace Examination.PL.ModelViews
 {
+    public class AccountLoginMV
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
     public class UserMV
     {
         public int Id { get; set; }
@@ -32,13 +32,13 @@ namespace Examination.BLL.ModelViews
 
         public DateTime? UpdatedAt { get; set; }
 
-        public List<UserTypeMV> UserTypes { get; set; } 
+        public List<UserTypeMV> UserTypes { get; set; }
 
     }
 
     public class UserTypeMV
     {
         public int Id { get; set; }
-        public string TypeName {  get; set; } = null!;
+        public string TypeName { get; set; } = null!;
     }
 }

@@ -15,6 +15,7 @@ namespace Examination.BLL.Mapper
         {
             CreateMap<Student, StudentMV>().ReverseMap();
             CreateMap<User, UserMV>().ReverseMap();
+            CreateMap<UserType, UserTypeMV>().ReverseMap();
 
         }
     }

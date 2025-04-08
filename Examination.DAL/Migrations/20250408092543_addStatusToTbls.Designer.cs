@@ -4,6 +4,7 @@ using Examination.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Examination.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408092543_addStatusToTbls")]
+    partial class addStatusToTbls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +60,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Branches__3214EC0765A92EC8");
 
-                    b.ToTable("Branches", (string)null);
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Course", b =>
@@ -97,7 +100,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Courses__3214EC074391AACD");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.CourseTopic", b =>
@@ -162,7 +165,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Departme__3214EC0748EFB9B1");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.DepartmentBranch", b =>
@@ -235,7 +238,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.ExamQ", b =>
@@ -445,7 +448,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex(new[] { "UserId" }, "IX_Instructors_UserId");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.InstructorCourse", b =>
@@ -508,7 +511,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex(new[] { "UserId" }, "IX_Students_UserId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.StudentCourse", b =>
@@ -554,7 +557,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Topics__3214EC073196F110");
 
-                    b.ToTable("Topics", (string)null);
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.User", b =>
@@ -603,7 +606,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.UserType", b =>
@@ -620,7 +623,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTypes", (string)null);
+                    b.ToTable("UserTypes");
                 });
 
             modelBuilder.Entity("UserUserType", b =>

@@ -12,10 +12,12 @@ namespace Examination.DAL.Repos
     {
         private readonly AppDbContext _db;
         public IStudentRepo StudentRepo { get; private set; }
+        public IUserRepo UserRepo { get; private set; }
         public UnitOfWork(AppDbContext db)
         {
             _db = db;
             StudentRepo = new StudentRepo(_db);
+            UserRepo = new UserRepo(_db);
         }
         public int Save()
         {

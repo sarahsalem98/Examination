@@ -17,7 +17,8 @@ namespace Examination.BLL.ExtentionMethods
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            //services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IStudentService, StudentService>();
+           // services.AddScoped<IUserService,UserService>();  
             services.AddAutoMapper(typeof(MapperProfile));
             return services;
         }

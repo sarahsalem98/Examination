@@ -13,6 +13,13 @@ public partial class Course
 
     public int Hours { get; set; }
 
+    public int? Status { get; set; }
+
+    public int? CreatedBy { get; set; }
+    public int? UpdatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+
     public virtual ICollection<CourseTopic> CourseTopics { get; set; } = new List<CourseTopic>();
 
     public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
