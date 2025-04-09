@@ -28,7 +28,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         }
         public IActionResult List(StudentSearchMV studentSearch,int Page=1, int PageSize=10)
         {
-            ViewData["Title"] = "Students List";
+            ViewData["Title"] = "Students";
             var students = _studentService.GetAllPaginated(studentSearch,PageSize,Page);
             return View(students);
         }
