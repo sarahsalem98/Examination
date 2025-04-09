@@ -21,4 +21,6 @@ public partial class Department
     public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<DepartmentBranch> DepartmentBranches { get; set; } = new List<DepartmentBranch>();
+    public virtual ICollection<CourseDepartment> CourseDepartments { get; set; }= new List<CourseDepartment>();
+
 }

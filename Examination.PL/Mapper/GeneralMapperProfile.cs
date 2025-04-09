@@ -10,6 +10,10 @@ namespace Examination.PL.Mapper
         {
             CreateMap<UserMV,User>().ReverseMap();
             CreateMap<UserTypeMV, UserType>().ReverseMap();
+            CreateMap<BranchMV, Branch>().ReverseMap(); 
+            CreateMap<DepartmentMV, Department>().ReverseMap(); 
+            CreateMap<DepartmentBranchMV, DepartmentBranch>().ReverseMap();
+            CreateMap<StudentMV, Student>().ReverseMap();   
         }
 
     }

@@ -14,6 +14,17 @@
 
         public int UserId { get; set; }
 
-        public UserMV? UserMV { get; set; }
+        public UserMV? User { get; set; }
+        public DepartmentBranchMV? DepartmentBranch { get; set; } 
+    }
+
+    public class StudentSearchMV { 
+    
+        public string? Name { get; set; }
+        public int? Status { get; set; } 
+
+        public int? DepartmentId { get; set; }
+        public int? BranchId { get; set; }
+        public int? TrackType { get; set; }  
     }
 }

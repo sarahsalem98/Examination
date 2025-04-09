@@ -52,8 +52,12 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<UserType> UserTypes { get; set; }
 
     //after this is result of pure migrations
+
+    public virtual DbSet<CourseDepartment> CourseDepartments { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+
 
 
         //

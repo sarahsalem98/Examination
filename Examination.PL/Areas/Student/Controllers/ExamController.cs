@@ -15,5 +15,6 @@ namespace Examination.PL.Areas.Student.Controllers
         {
             return View();
         }
+
     }
 }

@@ -10,6 +10,8 @@ namespace Examination.DAL.Repos.IRepos
     {
         public IStudentRepo StudentRepo { get; }
         public IUserRepo UserRepo { get; }
+        public IBranchRepo BranchRepo { get; }
+        public IDepartmentRepo DepartmentRepo { get; }
         public int Save();
     }
 }

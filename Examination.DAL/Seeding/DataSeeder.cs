@@ -98,8 +98,37 @@ namespace Examination.DAL.Seeding
 
             }
 
+            
+
 
 
         }
+
+        //public void CourseSeeder()
+        //{
+        //    if (!_db.Courses.Any(c => c.Name == "C#"))
+        //    {
+        //        var course = new Course
+        //        {
+        //            Name = "C#",
+        //            Description = "C# Programming Language",
+        //            Status = 1,
+        //            CreatedBy = 1,
+        //            CreatedAt = DateTime.Now,
+        //        };
+        //        _db.Courses.Add(course);
+        //        _db.SaveChanges();
+        //    }
+        //    if (!_db.CourseDepartments.Any(cd => cd.CourseId == 1 && cd.DepartmentId == 1))
+        //    {
+        //        var courseDepartment = new CourseDepartment
+        //        {
+        //            CourseId = 1,
+        //            DepartmentId = 1,
+        //        };
+        //        _db.CourseDepartments.Add(courseDepartment);
+        //        _db.SaveChanges();
+        //    }
+        //} 
     }
 }

@@ -27,4 +27,6 @@ public partial class Course
     public virtual ICollection<InstructorCourse> InstructorCourses { get; set; } = new List<InstructorCourse>();
 
     public virtual ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
+
+    public virtual ICollection<CourseDepartment> CourseDepartments { get; set; } = new List<CourseDepartment>();
 }
