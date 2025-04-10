@@ -54,38 +54,38 @@ namespace Examination.PL.Areas.Admin.Controllers
 
         }
 
-        [HttpPost]
-        public IActionResult AddUpdate(StudentMV model)
-        {
-            if (ModelState.IsValid) { 
+       // [HttpPost]
+        //public IActionResult AddUpdate(StudentMV model)
+        //{
+        //    if (ModelState.IsValid) { 
              
-                if(model.Id > 0)
-                {
-                    // Update logic here
-                }
-                else
-                {
-                    var result = _studentService.Add(model);
-                    if (result > 0)
-                    {
-                        TempData["Success"] = "Student added successfully.";
-                        return RedirectToAction("List");
-                    }
-                    else
-                    {
-                        TempData["Error"] = "Failed to add student.";
-                    }
-                }
-            }
-            else
-            {
-                TempData["Error"] = "Invalid data.";
+        //        if(model.Id > 0)
+        //        {
+        //            // Update logic here
+        //        }
+        //        else
+        //        {
+        //            var result = _studentService.Add(model);
+        //            if (result > 0)
+        //            {
+        //                TempData["Success"] = "Student added successfully.";
+        //                return RedirectToAction("List");
+        //            }
+        //            else
+        //            {
+        //                TempData["Error"] = "Failed to add student.";
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        TempData["Error"] = "Invalid data.";
 
 
-            }
+        //    }
 
 
-        }
+        //}
 
     }
 }
