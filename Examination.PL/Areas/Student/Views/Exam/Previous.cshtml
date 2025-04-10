@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewData["Title"] = "PreviousExams";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
+}
+<div class="d-flex align-items-center gap-2 mb-3">
+    <!-- Advanced Search Dropdown -->
+    <div class="dropdown">
+        <button class="advanced-search-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            Advanced Search
+        </button>
+        <div class="dropdown-menu p-4 flex-start">
+            <!-- Dropdown content -->
+            <div class="mb-2">
+                <label for="courseName" class="form-label">Course Name:</label>
+                <input type="text" class="form-control" id="courseName" placeholder="Enter course name" />
+            </div>
+            <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                    <label for="dateFrom" class="form-label">Date From:</label>
+                    <input type="date" class="form-control" id="dateFrom" />
+                </div>
+                <div class="col-md-6">
+                    <label for="dateTo" class="form-label">Date To:</label>
+                    <input type="date" class="form-control" id="dateTo" />
+                </div>
+            </div>
+            <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                    <label for="examType" class="form-label">Exam Type:</label>
+                    <select class="form-select" id="examType">
+                        <option selected>Choose...</option>
+                        <option value="final">Finals</option>
+                        <option value="midterm">Midterm</option>
+                        <option value="quiz">Quiz</option>
+                        <option value="project">Project</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="status" class="form-label">Status:</label>
+                    <select class="form-select" id="status">
+                        <option value="" disabled selected>Choose...</option>
+                        <option value="passed">Passed</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="reset" class="btn btn-secondary w-100">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary w-100 btn-save">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <input class="form-control Animationsearch" type="search" placeholder="Search by name.."
+               aria-label="Search" />
+        <button class="btn searchbtn" type="submit">
+            <i class="bi bi-search"></i>
+        </button>
+    </div>
+</div>
+
+<table class="table data-table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Course Name</th>
+            <th scope="col" class="sort-arrows">
+                Date
+                <button class="sort-button" onclick="sortTable(2, true)">
+                    ↑
+                </button>
+                <button class="sort-button" onclick="sortTable(2, false)">
+                    ↓
+                </button>
+            </th>
+            <th scope="col" class="sort-arrows">
+                Grade
+                <button class="sort-button" onclick="sortTable(3, true)">
+                    ↑
+                </button>
+                <button class="sort-button" onclick="sortTable(3, false)">
+                    ↓
+                </button>
+            </th>
+            <th scope="col">Type</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Math 101</td>
+            <td>Jun 18, 2022</td>
+            <td>D+</td>
+            <td>Final</td>
+            <td>
+                <a href="results.html"><button class="btn btn-Results">Results</button></a>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Physics 201</td>
+            <td>Jun 24, 2022</td>
+            <td>C-</td>
+            <td>Midterm</td>
+            <td><button class="btn btn-Results">Results</button></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Chemistry 102</td>
+            <td>Jun 25, 2022</td>
+            <td>B</td>
+            <td>Quiz</td>
+            <td><button class="btn btn-Results">Results</button></td>
+        </tr>
+        <tr>
+            <th scope="row">4</th>
+            <td>Biology 103</td>
+            <td>Jun 26, 2022</td>
+            <td>A-</td>
+            <td>Final</td>
+            <td><button class="btn btn-Results">Results</button></td>
+        </tr>
+        <tr>
+            <th scope="row">5</th>
+            <td>Computer Science 104</td>
+            <td>Jun 27, 2022</td>
+            <td>F</td>
+            <td>Project</td>
+            <td><button class="btn btn-Results">Results</button></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+</div>
+
+@section Scripts{
+
+    <script src="~/js/student/Exams.js"></script>
+}
+

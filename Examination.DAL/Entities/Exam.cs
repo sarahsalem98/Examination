@@ -18,8 +18,14 @@ public partial class Exam
     public int CourseId { get; set; }
 
     public virtual Course Course { get; set; } = null!;
+    public int? Status { get; set; }
 
-    public virtual ICollection<ExamDepartment> ExamDepartments { get; set; } = new List<ExamDepartment>();
+    public int? CreatedBy { get; set; }
+    public int? UpdatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public virtual ICollection<ExamQ> ExamQs { get; set; } = new List<ExamQ>();
+
+    public virtual ICollection<GeneratedExam> GeneratedExams { get; set; } = new List<GeneratedExam>();
 }

@@ -13,9 +13,14 @@ public partial class Department
 
     public int Capacity { get; set; }
 
-    public virtual ICollection<ExamDepartment> ExamDepartments { get; set; } = new List<ExamDepartment>();
+    public int? Status { get; set; }
 
-    public virtual ICollection<InstructorDepartment> InstructorDepartments { get; set; } = new List<InstructorDepartment>();
+    public int? CreatedBy { get; set; }
+    public int? UpdatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
-    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
+    public virtual ICollection<DepartmentBranch> DepartmentBranches { get; set; } = new List<DepartmentBranch>();
+    public virtual ICollection<CourseDepartment> CourseDepartments { get; set; }= new List<CourseDepartment>();
+
 }

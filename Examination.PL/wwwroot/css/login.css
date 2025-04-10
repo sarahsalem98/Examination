@@ -1,0 +1,47 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.my-container {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 15px;
+    max-width: 960px;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.login-form-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+img.img-fluid {
+    max-height: 400px;
+}
+
+h1, h2 {
+    color: #32064a;
+}
+
+.loginBtn {
+    background-color: #32064a;
+    color: white;
+}
+
+    .loginBtn:hover {
+        background-color: #561576;
+        color: white;
+    }

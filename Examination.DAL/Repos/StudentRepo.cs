@@ -17,21 +17,19 @@ namespace Examination.DAL.Repos
         }
         public void Update(Student student)
         {
-
             var objFromDb = dbSet.FirstOrDefault(s => s.Id == student.Id);
             if (objFromDb != null)
             {
-                objFromDb.FirstName = student.FirstName;
-                objFromDb.Email = student.Email;
-                objFromDb.Phone = student.Phone;
-                objFromDb.DepartmentId = student.DepartmentId;
+                objFromDb.User.FirstName = student.User.FirstName;
+                objFromDb.User.Email = student.User.Email;
+                objFromDb.User.Phone = student.User.Phone;
+                objFromDb.DepartmentBranchId = student.DepartmentBranchId;
                 objFromDb.EnrollmentDate = student.EnrollmentDate;
-                objFromDb.LastName = student.LastName;
+                objFromDb.User.LastName = student.User.LastName;
                 objFromDb.DateOfBirth = student.DateOfBirth;
-                objFromDb.Status = student.Status;
-                objFromDb.Password = student.Password ?? objFromDb.Password;
+                objFromDb.User.Status = student.User.Status;
+                objFromDb.User.Password = student.User.Password ?? objFromDb.User.Password;
                 _db.Students.Update(objFromDb);
-         
             }
         }
 

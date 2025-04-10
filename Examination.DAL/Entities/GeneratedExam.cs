@@ -7,7 +7,7 @@ public partial class GeneratedExam
 {
     public int Id { get; set; }
 
-    public int ExamDepartmentId { get; set; }
+    public int DepartmentBranchId { get; set; }
 
     public string ExamName { get; set; } = null!;
 
@@ -21,9 +21,13 @@ public partial class GeneratedExam
 
     public int CreatedBy { get; set; }
 
+    public int ExamId { get; set; }
+
     public virtual Instructor CreatedByNavigation { get; set; } = null!;
 
-    public virtual ExamDepartment ExamDepartment { get; set; } = null!;
+    public virtual DepartmentBranch DepartmentBranch { get; set; } = null!;
+
+    public virtual Exam Exam { get; set; } = null!;
 
     public virtual ICollection<ExamStudentAnswer> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswer>();
 
