@@ -83,25 +83,24 @@
     z-index: 1;
 }
 
-.dropdown {
+.search-dropdown {
     position: relative; /* Ensure the dropdown container is relative */
 }
 
 
-
-.dropdown-menu {
-    position: absolute;
-    margin-top: 0;
-    top: 50px;
-    right: -30px !important;
-    left: -230px !important;
-    transform: translateY(0px) !important;
-    transform: translateX(230px) !important;
-    width: 600px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: auto;
-}
+    .search-dropdown .dropdown-menu {
+        position: absolute;
+        margin-top: 0;
+        top: 50px;
+        right: -30px !important;
+        left: -230px !important;
+        transform: translateY(0px) !important;
+        transform: translateX(230px) !important;
+        width: 600px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: auto;
+    }
 
 .rm-control, .form-select {
     width: 100%;
@@ -128,23 +127,23 @@
 
 .mb-2 {
     margin-bottom: 1rem;
-    /
 }
 
 
 /* Custom Pagination Colors */
 .pagination .page-link {
-    border-radius:0;
+    border-radius: 0;
     color: #40277b;
     background-color: #f6f6f6;
     border-color: #301e5a;
 }
 
-.pagination .page-link:hover {
+    .pagination .page-link:hover {
         color: #ffffff;
         background-color: #301e5a;
         border-color: #24143c;
- }
+    }
+
 .pagination .page-item .page-link {
     border-radius: 0;
 }
@@ -156,6 +155,41 @@
     background-color: #40277b;
     border-color: #24143c;
 }
+
 .list {
     min-height: 66vh;
 }
+
+.btn-add {
+    background-color:mediumseagreen ;
+    color: white;
+    border: none;
+    border-radius: 0px;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+    .btn-add:hover {
+        background-color: #f3722e;
+    }
+
+.actions-cell {
+    text-align: center;
+    padding: 10px;
+}
+
+.actions-cell a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+ }
+
+        /* Hover effects for icons */
+ .actions-cell a:hover {
+            color: green;
+ }
+
+ .actions-cell .delete-icon:hover {
+        color: red;
+  }
