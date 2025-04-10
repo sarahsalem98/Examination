@@ -26,13 +26,66 @@ namespace Examination.PL.Areas.Admin.Controllers
             ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
             return View();
         }
-        public IActionResult List(StudentSearchMV studentSearch,int Page=1, int PageSize=10)
+        public IActionResult List(StudentSearchMV studentSearch, int Page = 1, int PageSize = 10)
         {
-            ViewData["Title"] = "Students";
-            var students = _studentService.GetAllPaginated(studentSearch,PageSize,Page);
+            ViewData["Title"] = "Students List";
+            var students = _studentService.GetAllPaginated(studentSearch, PageSize, Page);
             return View(students);
         }
 
-       
+        [HttpGet]
+        public IActionResult AddUpdate(int id)
+        {
+            ViewData["Title"] = "Add Update Student";
+            var student = new StudentMV();
+            if (id > 0)
+            {
+                student = _studentService.GetById(id);
+                if (student == null)
+                {
+                    return NotFound();
+                }
+            }
+            ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
+            ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
+            ViewBag.TrackTypes = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
+            ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
+            return View(student);
+
+        }
+
+       // [HttpPost]
+        //public IActionResult AddUpdate(StudentMV model)
+        //{
+        //    if (ModelState.IsValid) { 
+             
+        //        if(model.Id > 0)
+        //        {
+        //            // Update logic here
+        //        }
+        //        else
+        //        {
+        //            var result = _studentService.Add(model);
+        //            if (result > 0)
+        //            {
+        //                TempData["Success"] = "Student added successfully.";
+        //                return RedirectToAction("List");
+        //            }
+        //            else
+        //            {
+        //                TempData["Error"] = "Failed to add student.";
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        TempData["Error"] = "Invalid data.";
+
+
+        //    }
+
+
+        //}
+
     }
 }

@@ -71,5 +71,45 @@
         AdminStudent.currentSearchData = {};
         AdminStudent.Fetch(1);
     },
+    ShowAddUpdateModal: function (id) {
+        console.log(id);
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Student/AddUpdate",
+            data: { id: id },
+            success: function (response) {
+                console.log(response);
+                $("#loader").removeClass("show");
+                $("#addUpdateModalView").html(response);
+                $('#addUpdateModal').modal('show');
+               // AdminStudent.SetUpValidation();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching student data:", error);
+            }
+        });
+    },
+    AddUpdata: function () {
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "POST",
+            url: "/Admin/Student/AddUpdate",
+            data: $("#studentForm").serialize(),
+            success: function (response) {
+                $("#loader").removeClass("show");
+                if (response.status) {
+                    AdminStudent.Fetch(1);
+                    $('#studentModal').modal('hide');
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding/updating student:", error);
+            }
+        });
+    } 
 
  }

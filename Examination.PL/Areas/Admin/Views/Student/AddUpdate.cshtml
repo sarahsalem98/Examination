@@ -1,0 +1,106 @@
+﻿@model StudentMV
+
+@{
+    Layout = null;
+}
+<form>
+    <div class="modal-body mx-3">
+
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="firstName" asp-for="User.FirstName" placeholder="Enter First Name" required>
+                <span asp-validation-for="User.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="lastName" asp-for="User.LastName" placeholder="Enter Last Name" required>
+                <span asp-validation-for="User.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="age" class="form-label">age</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="age" asp-for="User.Age" placeholder="Enter Last Name" required>
+                <span asp-validation-for="User.Age" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Email -->
+            <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control rounded-0 mb-1" id="email" asp-for="User.Email" placeholder="Enter Email" required>
+                <span asp-validation-for="User.Email" class="text-danger"></span>
+            </div>
+            <!-- Phone -->
+            <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="tel" class="form-control rounded-0 mb-1" id="phone" asp-for="User.Phone" placeholder="Enter Phone Number" required>
+                <span asp-validation-for="User.Phone" class="text-danger"></span>
+            </div>
+        </div>
+
+
+        <!-- Branch Details Section -->
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Student Details</h5>
+
+        <div class="row">
+            <!-- Branch Name -->
+            <div class="col-md-6 mb-3">
+                <label for="branchName" class="form-label">Branch </label>
+                <select class="form-select rounded-0 mb-1" asp-for="DepartmentBranch.BranchId">
+                    <option selected>select branch</option>
+                    @foreach (var branch in ViewBag.Branches)
+                    {
+                        <option value="@branch.Id">@branch.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="BranchId" class="text-danger"></span>
+            </div>
+            <!-- Department Name -->
+            <div class="col-md-6 mb-3">
+                <label for="departmentName" class="form-label">Department </label>
+                <select class="form-select rounded-0 mb-1" asp-for="DepartmentBranch.DepartmentId">
+                    <option selected value="null"> select department</option>
+                    @foreach (var department in ViewBag.Departments)
+                    {
+                        <option value="@department.Id">@department.Name</option>
+                    }
+
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Track Type -->
+            <div class="col-md-6 mb-3">
+                <label for="trackType" class="form-label">Track </label>
+                <select class="form-select rounded-0 mb-1" asp-for="TrackType">
+                    <option selected>select track</option>
+                    @foreach (var item in ViewBag.TrackTypes)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="TrackType" class="text-danger"></span>
+            </div>
+            <!-- Enrollment Date -->
+            <div class="col-md-6 mb-3">
+                <label for="enrollmentDate" class="form-label">Enrollment Date</label>
+                <input type="date" class="form-control rounded-0 mb-1" asp-for="EnrollmentDate" required>
+                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn advanced-search-btn">Save Data</button>
+    </div>
+</form>
+
+

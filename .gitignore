@@ -13,3 +13,4 @@ config.json
 Examination.PL/appSettings.json
 Examination.PL/appSettings.*.json
 
+/Examination.PL/Properties/PublishProfiles
