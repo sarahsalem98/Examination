@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Examination.DAL.Entities;
 using Examination.DAL.Repos.IRepos;
+using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 
@@ -23,13 +24,27 @@ namespace Examination.PL.BL
             int result = 0;
             try
             {
-                var std = _mapper.Map<Student>(student);
-                _unitOfWork.StudentRepo.Insert(std);
-                result = _unitOfWork.Save();
+                var newUser = _mapper.Map<User>(student.User);
+                newUser.CreatedAt = DateTime.Now;
+                newUser.CreatedBy = 1;
+                newUser.Status = (int)Status.Active;
+                _unitOfWork.UserRepo.Insert(newUser);
+                if(newUser.Id > 0)
+                {
+                    var newStudent = _mapper.Map<Student>(student);
+                    newStudent.UserId = newUser.Id;
+                    _unitOfWork.StudentRepo.Insert(newStudent);
+                    result = _unitOfWork.Save();
+                }
+                else
+                {
+                    return 0;
+                }
                 return result;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "error occuired while adding new student in admin area");
                 return 0;
             }
         }
@@ -71,6 +86,26 @@ namespace Examination.PL.BL
                 _logger.LogError(ex, "error occuired while retriving student data in admin area");
                 return null;
 
+            }
+        }
+
+        public StudentMV GetById(int id)
+        {
+            try
+            {
+                StudentMV studentMV = new StudentMV();
+                var student = _unitOfWork.StudentRepo.FirstOrDefault(s=>s.Id==id, "User,DepartmentBranch.Department,DepartmentBranch.Branch");
+                if (student == null)
+                {
+                    return studentMV;
+                }
+                 studentMV = _mapper.Map<StudentMV>(student);
+                return studentMV;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occuired while retriving student data in admin area");
+                return null;
             }
         }
     }

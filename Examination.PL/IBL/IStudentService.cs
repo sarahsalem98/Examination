@@ -9,6 +9,8 @@ namespace Examination.PL.IBL
 
         public int Add(StudentMV student);
         public PaginatedData<StudentMV> GetAllPaginated(StudentSearchMV studentSearch ,int PageSize = 10, int Page=1);
+        public StudentMV GetById(int id);
+
 
     }
 }
