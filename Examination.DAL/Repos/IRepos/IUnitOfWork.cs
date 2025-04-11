@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +14,11 @@ namespace Examination.DAL.Repos.IRepos
         public IUserRepo UserRepo { get; }
         public IBranchRepo BranchRepo { get; }
         public IDepartmentRepo DepartmentRepo { get; }
+        public IDepartmentBranch DepartmentBranchRepo { get; }
+        public IUserTypeRepo UserTypeRepo { get; }
         public int Save();
+        public IDbContextTransaction BeginTransaction();
+        
+
     }
 }

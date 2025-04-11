@@ -54,38 +54,84 @@ namespace Examination.PL.Areas.Admin.Controllers
 
         }
 
-       // [HttpPost]
-        //public IActionResult AddUpdate(StudentMV model)
-        //{
-        //    if (ModelState.IsValid) { 
-             
-        //        if(model.Id > 0)
-        //        {
-        //            // Update logic here
-        //        }
-        //        else
-        //        {
-        //            var result = _studentService.Add(model);
-        //            if (result > 0)
-        //            {
-        //                TempData["Success"] = "Student added successfully.";
-        //                return RedirectToAction("List");
-        //            }
-        //            else
-        //            {
-        //                TempData["Error"] = "Failed to add student.";
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        TempData["Error"] = "Invalid data.";
+        [HttpPost]
+        public IActionResult AddUpdate(StudentMV model)
+            {
+
+            ResponseMV response = new ResponseMV();
+            if (ModelState.IsValid)
+            {
+                //model.User?.UserTypes?.Add(new UserTypeMV { TypeName = Constants.UserTypes.Student });
+
+                if (model.Id > 0)
+                {
+                    // Update logic here
+                }
+                else
+                {
+                    var result = _studentService.Add(model);
+                    if (result > 0)
+                    {
+                        response.Success = true;
+                        response.Message = "Student added successfully";
+                        response.RedirectUrl = null;
+                    }else if (result == -1)
+                    {
+                        response.Success = false;
+                        response.Message = "Email is alraedy exist";
+                    }
+                    else
+                    {
+                        response.Success = false;
+                        response.Message = "Error occurred while adding student";
+
+                    }
+                  
+                }
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Invalid data";
 
 
-        //    }
+            }
+            return Json(response);
+
+        }
+
+        [HttpGet]
+        public IActionResult GetDepartmentsByBranchId(int BranchId)
+        {
+            ResponseMV response = new ResponseMV(); 
+            var departments = new List<DepartmentMV>();
+            if (BranchId > 0)
+            {
+                departments = _departmentService.GetByBranch(BranchId);
+                if (departments == null || departments.Count() == 0)
+                {
+                    response.Success = false;
+                    response.Message = "No departments found for this branch";
+                    response.Data = null;
+                }
+                else
+                {
+
+                    response.Success = true;
+                    response.Message = "Departments found";
+                    response.Data = departments;
+                }
 
 
-        //}
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Invalid branch id";
+                response.Data = null;
+            }
+            return Json(response);
+        }
 
     }
 }

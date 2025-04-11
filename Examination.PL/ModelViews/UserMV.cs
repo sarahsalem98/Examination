@@ -37,7 +37,7 @@ namespace Examination.PL.ModelViews
 
         public DateTime? UpdatedAt { get; set; }
 
-        public List<UserTypeMV> UserTypes { get; set; }
+        public List<UserTypeMV>? UserTypes { get; set; } = new List<UserTypeMV>();
 
     }
 

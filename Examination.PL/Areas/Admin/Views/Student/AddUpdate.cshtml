@@ -3,7 +3,9 @@
 @{
     Layout = null;
 }
-<form>
+<form id="admin-student-form">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserId" />
     <div class="modal-body mx-3">
 
         <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
@@ -50,7 +52,7 @@
             <!-- Branch Name -->
             <div class="col-md-6 mb-3">
                 <label for="branchName" class="form-label">Branch </label>
-                <select class="form-select rounded-0 mb-1" asp-for="DepartmentBranch.BranchId">
+                <select class="form-select rounded-0 mb-1" id="branchId" asp-for="BranchId" onchange="AdminStudent.GetDepartmentsByBranchId()">
                     <option selected>select branch</option>
                     @foreach (var branch in ViewBag.Branches)
                     {
@@ -62,12 +64,9 @@
             <!-- Department Name -->
             <div class="col-md-6 mb-3">
                 <label for="departmentName" class="form-label">Department </label>
-                <select class="form-select rounded-0 mb-1" asp-for="DepartmentBranch.DepartmentId">
+                <select class="form-select rounded-0 mb-1" asp-for="DepartmentId" id="departmentDropdown">
                     <option selected value="null"> select department</option>
-                    @foreach (var department in ViewBag.Departments)
-                    {
-                        <option value="@department.Id">@department.Name</option>
-                    }
+                    
 
                 </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
@@ -99,7 +98,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn advanced-search-btn">Save Data</button>
+        <button type="submit" class="btn advanced-search-btn" onclick="AdminStudent.AddUpdata(event)">Save Data</button>
     </div>
 </form>
 
