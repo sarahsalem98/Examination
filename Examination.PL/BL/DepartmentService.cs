@@ -35,5 +35,28 @@ namespace Examination.PL.BL
                  return null;
             }
         }
+
+        public List<DepartmentMV> GetByBranch(int branchId)
+        {
+            try
+            {
+                var departments = _unitOfWork.DepartmentRepo.GetAll(d => d.DepartmentBranches.Select(b => b.BranchId).Contains(branchId));
+                if (departments == null || !departments.Any())
+                {
+                    return new List<DepartmentMV>();
+                }
+                var departmentMVs = _mapper.Map<List<DepartmentMV>>(departments);
+                return departmentMVs;
+
+
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Error in GetByBranch DepartmentService");
+                return null;
+
+            }
+        
+        
+        }
     }
 }

@@ -2,7 +2,7 @@
     currentSearchData: {},
     totalPages: 1,
     currentPage: 1,
-    pageSize: 1,
+    pageSize: 10,
 
     Fetch: function (Page = 1) {
         $("#loader").addClass("show");
@@ -71,5 +71,72 @@
         AdminStudent.currentSearchData = {};
         AdminStudent.Fetch(1);
     },
+    GetDepartmentsByBranchId: function () {
+        var branchId = $('#branchId').val();
+        console.log(branchId);
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Student/GetDepartmentsByBranchId",
+            data: { BranchId: branchId },
+            success: function (response) {
+                console.log(response);
+                var departmentDropdown = $("#departmentDropdown");
+                departmentDropdown.empty(); 
+
+                departmentDropdown.append('<option selected>Select department</option>');
+
+                $.each(response.data, function (index, department) {
+                    departmentDropdown.append(`<option value="${department.id}">${department.name}</option>`);
+                });
+
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching student data:", error);
+            }
+        });
+
+    },
+    ShowAddUpdateModal: function (id) {
+        console.log(id);
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Student/AddUpdate",
+            data: { id: id },
+            success: function (response) {
+                console.log(response);
+                $("#loader").removeClass("show");
+                $("#addUpdateModalView").html(response);
+                $('#addUpdateModal').modal('show');
+               // AdminStudent.SetUpValidation();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching student data:", error);
+            }
+        });
+    },
+    AddUpdata: function (e) {
+        // $("#loader").addClass("show");
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/Admin/Student/AddUpdate",
+            data: $("#admin-student-form").serialize(),
+            success: function (response) {
+                // $("#loader").removeClass("show");
+                if (response.success) {
+                    AdminStudent.Fetch(1);
+                    //toastr.success(response.message);
+                    $('#addUpdateModal').modal('hide');
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding/updating student:", error);
+            }
+        });
+    } 
 
  }
