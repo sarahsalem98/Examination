@@ -52,7 +52,7 @@ namespace Examination.PL.BL
                 int TotalCounts = studentMVs.Count();   
                 if (TotalCounts > 0)
                 {
-                    studentMVs = studentMVs.Skip((Page - 1) * PageSize).Take(1).ToList();
+                    studentMVs = studentMVs.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
 
                 }
                 PaginatedData<StudentMV> paginatedData = new PaginatedData<StudentMV>
