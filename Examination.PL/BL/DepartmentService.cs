@@ -36,6 +36,7 @@ namespace Examination.PL.BL
             }
         }
 
+
         public List<DepartmentMV> GetByBranch(int branchId)
         {
             try

@@ -71,9 +71,10 @@
         AdminStudent.currentSearchData = {};
         AdminStudent.Fetch(1);
     },
-    GetDepartmentsByBranchId: function () {
+    GetDepartmentsByBranchId: function(departmentId) {
         var branchId = $('#branchId').val();
         console.log(branchId);
+
         $.ajax({
             type: "GET",
             url: "/Admin/Student/GetDepartmentsByBranchId",
@@ -83,11 +84,17 @@
                 var departmentDropdown = $("#departmentDropdown");
                 departmentDropdown.empty(); 
 
-                departmentDropdown.append('<option selected>Select department</option>');
+                departmentDropdown.append('<option selected >select department</option>');
 
                 $.each(response.data, function (index, department) {
+                    
                     departmentDropdown.append(`<option value="${department.id}">${department.name}</option>`);
                 });
+
+                if (departmentId) {
+                    departmentDropdown.val(departmentId); 
+                   
+                }
 
             },
             error: function (xhr, status, error) {
@@ -125,7 +132,7 @@
             success: function (response) {
                 // $("#loader").removeClass("show");
                 if (response.success) {
-                    AdminStudent.Fetch(1);
+                    AdminStudent.Fetch(currentPage);
                     //toastr.success(response.message);
                     $('#addUpdateModal').modal('hide');
                     toastr.success(response.message);
@@ -135,6 +142,24 @@
             },
             error: function (xhr, status, error) {
                 console.error("Error adding/updating student:", error);
+            }
+        });
+    },
+    ChangeStatus: function (id, status) {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/Student/ChangeStatus",
+            data: { id: id, status: status },
+            success: function (response) {
+                if (response.success) {
+                    AdminStudent.Fetch(AdminStudent.currentPage);
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error changing student status:", error);
             }
         });
     } 

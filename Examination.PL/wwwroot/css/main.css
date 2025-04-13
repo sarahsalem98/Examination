@@ -334,8 +334,12 @@ footer {
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-    .custom-loader.show {
+.custom-loader.show {
         opacity: 1;
         visibility: visible;
-    }
+}
+
+.sidebar-link {
+    background: rebeccapurple;
+}
 
