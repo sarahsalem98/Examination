@@ -66,6 +66,10 @@
                 <label for="departmentName" class="form-label">Department </label>
                 <select class="form-select rounded-0 mb-1" asp-for="DepartmentId" id="departmentDropdown">
                     <option selected value="null"> select department</option>
+                    @foreach (var dept in ViewBag.Departments)
+                    {
+                        <option value="@dept.Id">@dept.Name</option>
+                    }
                     
 
                 </select>
@@ -80,7 +84,7 @@
                     <option selected>select track</option>
                     @foreach (var item in ViewBag.TrackTypes)
                     {
-                        <option value="@item.Id">@item.Name</option>
+                        <option value="@item.Id" >@item.Name</option>
                     }
                 </select>
                 <span asp-validation-for="TrackType" class="text-danger"></span>
@@ -101,5 +105,15 @@
         <button type="submit" class="btn advanced-search-btn" onclick="AdminStudent.AddUpdata(event)">Save Data</button>
     </div>
 </form>
+
+    <script>
+        $(document).ready(function(){
+           var departmentId=@Model.DepartmentId;
+           console.log(departmentId)
+           AdminStudent.GetDepartmentsByBranchId(departmentId);
+        });
+    </script>
+
+
 
 

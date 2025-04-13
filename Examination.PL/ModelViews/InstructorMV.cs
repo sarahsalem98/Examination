@@ -11,8 +11,7 @@ namespace Examination.PL.ModelViews
 
         public int UserId { get; set; }
 
-        public InstructorCourseMV InstructorCourse { get; set; } = null!;
-
+        public List<InstructorCourseMV> InstructorCourses { get; set; } = new List<InstructorCourseMV>();
         public UserMV? User { get; set; }
     }
     public class InstructorSearchMV

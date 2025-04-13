@@ -17,6 +17,9 @@ namespace Examination.DAL.Repos
         public IUserRepo UserRepo { get; private set; }
         public IBranchRepo BranchRepo { get; private set; }
         public IDepartmentRepo DepartmentRepo { get; private set; }
+        public IInstructorRepo InstructorRepo { get; private set; }
+        public IUserTypeRepo UserTypeRepo { get; private set; }
+        public IDepartmentBranch DepartmentBranchRepo { get; private set; } 
         public UnitOfWork(AppDbContext db)
         {
             _db = db;
@@ -24,6 +27,9 @@ namespace Examination.DAL.Repos
             UserRepo = new UserRepo(_db);
             BranchRepo = new BranchRepo(_db);
             DepartmentRepo = new DepartmentRepo(_db);
+            InstructorRepo = new InstructorRepo(_db);
+            UserTypeRepo = new UserTypeRepo(_db);
+            DepartmentBranchRepo = new DepartmentBranchRepo(_db);
         }
         public int Save()
         {

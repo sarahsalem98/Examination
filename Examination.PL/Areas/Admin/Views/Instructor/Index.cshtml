@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Students";
+    ViewData["Title"] = "Instructors";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
 }
@@ -45,36 +45,35 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <label for="Status" class="form-label">Status:</label>
+                            <select class="form-select" id="Status">
+                                <option value="" selected>Choose...</option>
+                                @foreach (var item in ViewBag.Statuses)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        </div>
                         <div class="row g-2 mb-2">
                             <div class="col-md-6">
-                                <label for="TrackType" class="form-label">Track Type:</label>
-                                <select class="form-select" id="TrackType">
+                                <label for="InstructorType" class="form-label">Instructor Type:</label>
+                                <select class="form-select" id="InstructorType">
                                     <option selected value="">Choose...</option>
-                                    @foreach (var item in ViewBag.TrackTypes)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
+                                    <option value="false">Internal</option>
+                                    <option value="true">External</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
-                                <label for="Status" class="form-label">Status:</label>
-                                <select class="form-select" id="Status">
-                                    <option value="" selected>Choose...</option>
-                                    @foreach (var item in ViewBag.Statuses)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-                                </select>
-                            </div>
+                            
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="AdminStudent.Reset();">
+                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="AdminInstructor.Reset();">
                                     <i class="bi bi-arrow-counterclockwise"></i> Reset
                                 </button>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="AdminStudent.Search()">
+                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="AdminInstructor.Search()">
                                     <i class="bi bi-search"></i> Search
                                 </button>
                             </div>
@@ -85,10 +84,10 @@
                 <div class="d-flex ms-2">
                     <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.."
                            aria-label="Search" />
-                    <button class="btn searchbtn" type="submit" onclick="AdminStudent.Search();">
+                    <button class="btn searchbtn" type="submit" onclick="AdminInstructor.Search();">
                         <i class="bi bi-search"></i>
                     </button>
-                    <button class="btn searchbtn mx-2" type="submit" onclick="AdminStudent.Reset();">
+                    <button class="btn searchbtn mx-2" type="submit" onclick="AdminInstructor.Reset();">
                         <i class="bi bi-x"></i>
                     </button>
                 </div>
@@ -100,7 +99,7 @@
         </div>
 
 
-        <div class="table-responsive list" id="studentList"></div>
+        <div class="table-responsive list" id="instructorList"></div>
 
     </div>
 
@@ -109,3 +108,14 @@
     </div>
 
 </div>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script src="~/js/admin/instructor.js"></script>
+    <script>
+        $(document).ready(function () {
+          AdminInstructor.Fetch(1)
+        });
+    </script>
+}

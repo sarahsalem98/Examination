@@ -15,6 +15,7 @@ namespace Examination.DAL.Repos.IRepos
         public void Remove(int id);
         public void RemoveRange(IEnumerable<T> entites);
         public T FirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null);
+        public void Update(T entity);
     }
  
 }

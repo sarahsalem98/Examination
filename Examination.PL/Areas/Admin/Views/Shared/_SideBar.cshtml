@@ -9,18 +9,18 @@
     <ul class="nav flex-column mt-3">
         <!-- Calender -->
         <li class="nav-item">
-            <a href="Dashbord.html" class="nav-link text-white">
-                <i class="bi bi-calendar"></i> <span class="ms-2">Calendar</span>
+            <a  asp-controller="Student" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white">
+                <i class="bi bi-person"></i> <span class="ms-2">Students</span>
             </a>
         </li>
         <!-- Courses -->
-        <li class="nav-item">
+     @*    <li class="nav-item">
             <a href="courses.html" class="nav-link text-white">
                 <i class="bi bi-book"></i> <span class="ms-2">Courses</span>
             </a>
-        </li>
+        </li> *@
         <!-- Exams -->
-        <li class="nav-item">
+      @*   <li class="nav-item">
             <a href="" class="nav-link text-white d-flex align-items-center" data-bs-toggle="collapse"
                data-bs-target="#examDropdown" aria-expanded="false">
                 <i class="bi bi-pencil"></i> <span class="ms-2">Exams</span>
@@ -33,6 +33,6 @@
                 <li><a href="ComingExam.html" class="nav-link text-white">Coming Exams</a></li>
                 <li><a href="previous.html" class="nav-link text-white">Previous Exams</a></li>
             </ul>
-        </li>
+        </li> *@
     </ul>
 </nav>

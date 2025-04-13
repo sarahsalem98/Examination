@@ -1,0 +1,57 @@
+﻿@model PaginatedData<InstructorMV>
+@using Examination.PL.General;
+
+@{
+    Layout = null;
+
+}
+<input type="hidden" id="totalCount" value="@Model.TotalCount" />
+<table class="table data-table table-bordered table-hover mt-2">
+    <thead>
+        <tr>
+          
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col" class="sort-arrows">
+                Instructor Type
+
+            </th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class=" alert-info text-center">No data found</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                  
+                    <td>@item.User?.FirstName  @item.User?.LastName</td>
+                    <td>@item.User?.Email</td>
+                    <td>@item.User?.Phone</td>
+                    <td> @item.IsExternal</td>
+                    <td>@Enum.GetName(typeof(Status), item.User.Status)</td>
+                    <td class="actions-cell">
+                        <a href="#"><i class="bi bi-pencil"></i></a>
+                        <a href="#" class="delete-icon"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+
+            }
+        }
+
+
+
+    </tbody>
+</table>
+
+
+

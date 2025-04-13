@@ -77,5 +77,9 @@ namespace Examination.DAL.Repos
             }
             return query.FirstOrDefault();
         }
+        public void Update(T entity)
+        {
+            dbSet.Update(entity);
+        }
     }
 }
