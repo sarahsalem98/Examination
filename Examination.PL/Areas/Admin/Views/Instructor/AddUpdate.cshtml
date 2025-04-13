@@ -46,15 +46,16 @@
         <!-- InstructorType -->
         <div class="col-md-6">
             <label for="IsExternal" class="form-label">Instructor Type:</label>
-            <select class="form-select" id="IsExternal" asp-for="IsExternal" placeholder="Enter Instructor Type" required>
-                <option selected value="">Choose...</option>
-                <option value="false">Internal</option>
+            <select class="form-select" id="IsExternal" asp-for="IsExternal" >
+                <option value="">Select Instructor Type </option>
                 <option value="true">External</option>
+                <option value="false">Internal</option>
             </select>
+        
             <span asp-validation-for="IsExternal" class="text-danger"></span>
         </div>
 
-      </div>
+    </div>
 
     <partial name="_ValidationScriptsPartial" />
 
@@ -66,10 +67,9 @@
 
 <script>
     $(document).ready(function(){
-      
+       
     });
 </script>
-
 
 
 

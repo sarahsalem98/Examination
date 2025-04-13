@@ -96,7 +96,7 @@
             </div>
 
             <div>
-                <button class="btn btn-add rounded-0"> + create </button>
+                <button class="btn btn-add rounded-0" onclick="AdminInstructor.ShowAddUpdateModal()"> + Create </button>
             </div>
         </div>
 
@@ -109,6 +109,17 @@
         <ul id="pagination" class="pagination rounded-0"></ul>
     </div>
 
+</div>
+<div class="modal fade" id="addUpdateModal" tabindex="-1" aria-labelledby="addUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUpdateModal">Instructor Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="addUpdateModalView"></div>
+        </div>
+    </div>
 </div>
 
 

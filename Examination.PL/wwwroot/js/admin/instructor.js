@@ -57,8 +57,7 @@
         }
     },
     Search: function () {
-        console.log("Search clicked!");
-
+        console.log("Search clicked");
         AdminInstructor.SetAdvancedSearchData();
         AdminInstructor.Fetch(1);
         console.log(AdminInstructor.currentSearchData);
@@ -73,23 +72,67 @@
         AdminInstructor.currentSearchData = {};
         AdminInstructor.Fetch(1);
     },
-    ShowAddUpdateModal: function (id) {
+    ShowAddUpdateModal: function (id ) {
         console.log(id);
         $("#loader").addClass("show");
         $.ajax({
             type: "GET",
-            url: "/Admin/Instructor/AddUpdate",
+            url: "/Admin/instructor/AddUpdate",
             data: { id: id },
             success: function (response) {
                 console.log(response);
                 $("#loader").removeClass("show");
                 $("#addUpdateModalView").html(response);
                 $('#addUpdateModal').modal('show');
-              
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching instructor data:", error);
+                console.error("Error fetching Instructor data:", error);
             }
         });
     },
+
+    AddUpdate: function (e)
+    {
+        e.preventDefault();
+       
+        $.ajax({
+            type: "POST",
+            url: "/Admin/instructor/AddUpdate",
+            data: $("#admin-instructor-form").serialize(),
+            success: function (response) {
+                if (response.success) {
+                    AdminInstructor.Fetch(AdminInstructor.currentPage);
+                    $('#addUpdateModal').modal('hide');
+                    
+                    toastr.success(response.message);
+
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding/updating instructor:", error);
+            }
+        })
+    },
+    ChangeStatus: function (id, status) {
+        $.ajax({
+            type: "PUT",
+            url: "/Admin/instructor/ChangeStatus",
+            data: { id: id, status: status },
+            success: function(response)
+            {
+                if (response.success) {
+                    AdminInstructor.Fetch(AdminInstructor.currentPage);
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+            , error: function (xhr, status, error) {
+                console.error("Error changing student status:", error);
+            }
+        })
+    }
+
 }

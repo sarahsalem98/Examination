@@ -13,14 +13,94 @@ namespace Examination.PL.BL
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly ILogger<InstructorService> logger;
-        public InstructorService(IUnitOfWork _unitOfWork, IMapper _mapper, ILogger<InstructorService> _logger)
+        private readonly IHttpContextAccessor httpContextAccessor;
+        public InstructorService(IUnitOfWork _unitOfWork, IMapper _mapper, ILogger<InstructorService> _logger , IHttpContextAccessor _httpContextAccessor)
         {
 
             unitOfWork = _unitOfWork;
             mapper = _mapper;
             logger = _logger;
+            httpContextAccessor = _httpContextAccessor;
         }
+        public int ChangeStatus(int Id, int status)
+        {
+            try
+            {
 
+                var res = 0;
+                var instructor = unitOfWork.InstructorRepo.FirstOrDefault(i => i.Id == Id, "GeneratedExams,InstructorCourses,User");
+                if(instructor!=null)
+                {
+                    instructor.User.Status = status;
+                    instructor.User.UpdatedAt = DateTime.Now;
+                    instructor.User.UpdatedBy = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value); ;
+                    unitOfWork.InstructorRepo.Update(instructor);
+                    res = unitOfWork.Save();
+                    return res;
+                }
+                return -1;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while Adding instructor data.");
+                return 0;
+            }
+        }
+        public InstructorMV getById(int Id)
+        {
+            try
+            {
+                InstructorMV instructorMV = new InstructorMV();
+              var instructor=unitOfWork.InstructorRepo.FirstOrDefault(i => i.Id ==Id, "GeneratedExams,InstructorCourses,User");
+                if(instructor == null)
+                {
+                    return instructorMV;
+                }
+                else
+                {
+                    instructorMV=mapper.Map<InstructorMV>(instructor);
+                    return instructorMV;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while Adding instructor data.");
+                return null;
+            }
+        }
+        public int Update(InstructorMV instructor)
+        {
+            try
+            {
+                var res = 0;
+                var oldinstructor=unitOfWork.InstructorRepo.FirstOrDefault(i=>i.Id==instructor.Id, "GeneratedExams,InstructorCourses,User");
+                if (oldinstructor == null)
+                {
+                    return -1;
+                }
+                else
+                {
+
+                    oldinstructor.User.UpdatedAt = DateTime.Now;
+                    oldinstructor.User.UpdatedBy = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                    oldinstructor.User.Email = instructor.User.Email;
+                    oldinstructor.User.FirstName = instructor.User.FirstName;
+                    oldinstructor.User.LastName = instructor.User.LastName;
+                    oldinstructor.User.Phone = instructor.User.Phone;
+                    oldinstructor.User.Age = instructor.User.Age;
+                    oldinstructor.IsExternal = instructor.IsExternal;
+            
+                    unitOfWork.InstructorRepo.Update(oldinstructor);
+                    res = unitOfWork.Save();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while Updating instructor data.");
+                return 0;
+            }
+        }
         public int Add(InstructorMV instructor)
         {
             try
@@ -34,7 +114,7 @@ namespace Examination.PL.BL
                 {
                     var NewInstructor=mapper.Map<Instructor>(instructor); 
                     NewInstructor.User.CreatedAt = DateTime.Now;
-                    NewInstructor.User.CreatedBy = 1;
+                    NewInstructor.User.CreatedBy = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value); ;
                     NewInstructor.User.Email = instructor.User.Email;
                     NewInstructor.User.FirstName = instructor.User.FirstName;
                     NewInstructor.User.LastName = instructor.User.LastName;
@@ -42,6 +122,7 @@ namespace Examination.PL.BL
                     NewInstructor.User.Age = instructor.User.Age;
                     NewInstructor.User.Password=PasswordHelper.HashPassword("123456");
                     NewInstructor.IsExternal=instructor.IsExternal;
+                    NewInstructor.User.Status = (int)Status.Active;
                     NewInstructor.User.UserTypes.Add(unitOfWork.UserTypeRepo.FirstOrDefault(i=>i.TypeName==Constants.UserTypes.Instructor));
                     unitOfWork.InstructorRepo.Insert(NewInstructor);
                     res = unitOfWork.Save();
@@ -65,7 +146,6 @@ namespace Examination.PL.BL
 
                 var instructors = unitOfWork.InstructorRepo.GetAll(
                     i =>(InstructorSearch.IsExternal == null || i.IsExternal == (bool)InstructorSearch.IsExternal) &&
-                    (InstructorSearch.Status != (int)Status.Deleted ? i.User.Status != (int)Status.Deleted : i.User.Status == (int)Status.Deleted) &&
                    (InstructorSearch.Status==null||i.User.Status==(int)InstructorSearch.Status)&&
                      (string.IsNullOrEmpty(InstructorSearch.Name) ||
                    (!string.IsNullOrEmpty(i.User.FirstName) && i.User.FirstName.ToLower().Trim().Contains(InstructorSearch.Name.ToLower().Trim())) ||
