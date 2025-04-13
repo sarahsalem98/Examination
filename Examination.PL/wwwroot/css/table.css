@@ -162,11 +162,11 @@
 }
 
 .list {
-    min-height: 70vh;
+    min-height: 68vh;
 }
 
 .btn-add {
-    background-color:mediumseagreen ;
+    background-color: #f3722e;
     color: white;
     border: none;
     border-radius: 0px;
@@ -174,9 +174,11 @@
     cursor: pointer;
 }
 
-    .btn-add:hover {
-        background-color: #f3722e;
-    }
+ .btn-add:hover {
+    
+        color: var(--promary-color);
+       
+}
 
 .actions-cell {
     text-align: center;

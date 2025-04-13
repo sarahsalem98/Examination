@@ -1,4 +1,5 @@
-﻿using Examination.PL.General;
+﻿using Examination.PL.Attributes;
+using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [UserTypeAuthorize(Constants.UserTypes.Admin)]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
