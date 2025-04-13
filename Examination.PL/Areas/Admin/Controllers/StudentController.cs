@@ -1,4 +1,5 @@
-﻿using Examination.PL.General;
+﻿using Examination.PL.Attributes;
+using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [UserTypeAuthorize(Constants.UserTypes.Admin)]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
@@ -41,6 +43,8 @@ namespace Examination.PL.Areas.Admin.Controllers
             if (id > 0)
             {
                 student = _studentService.GetById(id);
+                student.DepartmentId = student.DepartmentBranch.DepartmentId;
+                student.BranchId = student.DepartmentBranch.BranchId;
                 if (student == null)
                 {
                     return NotFound();
@@ -49,7 +53,6 @@ namespace Examination.PL.Areas.Admin.Controllers
             ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
             ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
             ViewBag.TrackTypes = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
-            ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
             return View(student);
 
         }
@@ -61,11 +64,26 @@ namespace Examination.PL.Areas.Admin.Controllers
             ResponseMV response = new ResponseMV();
             if (ModelState.IsValid)
             {
-                //model.User?.UserTypes?.Add(new UserTypeMV { TypeName = Constants.UserTypes.Student });
 
                 if (model.Id > 0)
                 {
-                    // Update logic here
+                    var result = _studentService.Update(model);
+                    if(result > 0)
+                    {
+                        response.Success = true;
+                        response.Message = "Student updated successfully";
+                        response.RedirectUrl = null;
+                    }
+                    else if (result == -1)
+                    {
+                        response.Success = false;
+                        response.Message = "Email is already exist";
+                    }
+                    else
+                    {
+                        response.Success = false;
+                        response.Message = "Error occurred while updating student";
+                    }
                 }
                 else
                 {
@@ -97,6 +115,35 @@ namespace Examination.PL.Areas.Admin.Controllers
 
             }
             return Json(response);
+
+        }
+
+        [HttpPost]
+        public IActionResult ChangeStatus(int id , int status)
+        {
+            ResponseMV response = new ResponseMV();
+            if (id > 0)
+            {
+                var result = _studentService.ChangeStatus(id, status);
+                if (result > 0)
+                {
+                    response.Success = true;
+                    response.Message = "Student status changed successfully";
+                    response.RedirectUrl = null;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Error occurred while changing student status";
+                }
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Invalid student id";
+            }
+            return Json(response);
+
 
         }
 

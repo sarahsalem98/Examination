@@ -47,12 +47,14 @@ body {
     width: 30px;
 }
 
-.sidebar .nav-link:hover {
+.sidebar .nav-link:hover, .sidebar .active {
     background-color: var(--secondary-color);
     color: #f1f1f1 !important;
     border-radius: 8px;
     transition: background-color 0.5s ease;
 }
+
+
 
 .sidebar.collapsed .nav-link span,
 .sidebar.collapsed h2,
@@ -153,8 +155,8 @@ main {
     }
 
 .profile-img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
@@ -334,8 +336,12 @@ footer {
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-    .custom-loader.show {
+.custom-loader.show {
         opacity: 1;
         visibility: visible;
-    }
+}
+
+.sidebar-link {
+    background: rebeccapurple;
+}
 

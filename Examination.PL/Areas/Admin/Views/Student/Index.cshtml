@@ -63,6 +63,7 @@
                                     <option value="" selected>Choose...</option>
                                     @foreach (var item in ViewBag.Statuses)
                                     {
+                                      
                                         <option value="@item.Id">@item.Name</option>
                                     }
                                 </select>
@@ -101,7 +102,7 @@
         </div>
        
     
-        <div class="table-responsive list" id="studentList"></div>
+        <div class="table-responsive list mt-4" id="studentList"></div>
 
     </div>
 
@@ -130,7 +131,8 @@
     <script src="~/js/admin/student.js"></script>
     <script>
         $(document).ready(function () {
-          AdminStudent.Fetch(1)
+          AdminStudent.Fetch(1);
+
         });
     </script>
 }

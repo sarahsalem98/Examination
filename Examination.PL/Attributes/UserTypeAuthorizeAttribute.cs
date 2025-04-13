@@ -18,8 +18,9 @@ namespace Examination.PL.Attributes
 
             if (!isAuthenticated)
             {
-               
-                context.Result = new RedirectToActionResult("Login", "Account", new {area=""});
+               var requiest =context.HttpContext.Request;   
+                var returnUrl = requiest.Path + requiest.QueryString;
+                context.Result = new RedirectToActionResult("Login", "Account", new {area="",returnUrl});
                 return;
             }
 

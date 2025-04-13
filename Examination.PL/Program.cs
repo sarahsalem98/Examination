@@ -46,6 +46,8 @@ builder.Services.AddScoped<DataSeeder>();
 
 #endregion
 
+
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 
@@ -58,7 +60,7 @@ var app = builder.Build();
 //        var context = services.GetRequiredService<AppDbContext>();
 //        context.Database.Migrate();
 //        var dataSeeder = services.GetRequiredService<DataSeeder>();
-//        dataSeeder.StudentSeeder();
+//        dataSeeder.SuperAdminSeeder();
 //        var logger = services.GetRequiredService<ILogger<Program>>();
 //        logger.LogInformation("data seeded successfully");
 //    }
@@ -84,6 +86,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
     name: "areas",
