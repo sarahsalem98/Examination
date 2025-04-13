@@ -25,14 +25,15 @@ namespace Examination.PL.Areas.Admin.Controllers
             ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
             return View();
         }
-        public IActionResult List(InstructorSearchMV search, int page = 1, int pagesize = 10)
+        public IActionResult List(InstructorSearchMV InstructorSearch, int page = 1, int pagesize = 10)
         {
-            var instructors=InstructorService.GetAllPaginated(search, page, pagesize);
+
+            var instructors=InstructorService.GetAllPaginated(InstructorSearch, page, pagesize);
             return View(instructors);
         }
-        public IActionResult get(InstructorSearchMV search, int page = 1, int pagesize = 10)
+        public IActionResult get(InstructorSearchMV InstructorSearch, int page = 1, int pagesize = 10)
         {
-            var instructors = InstructorService.GetAllPaginated(search, page, pagesize);
+            var instructors = InstructorService.GetAllPaginated(InstructorSearch, page, pagesize);
             return Ok(instructors);
         }
     }

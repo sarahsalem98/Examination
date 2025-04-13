@@ -9,6 +9,7 @@
             type: "POST",
             url: "/Admin/Instructor/list",
             data: { InstructorSearch: AdminInstructor.currentSearchData, PageSize: AdminInstructor.pageSize, Page: Page },
+           
             success: function (response) {
                 $("#loader").removeClass("show");
                 $("#instructorList").html(response);
@@ -51,20 +52,44 @@
             Name: $("#Name").val(),
             BranchId: $("#BranchId").val(),
             DepartmentId: $("#DepartmentId").val(),
-            InstructorType: $("#InstructorType").val()
+            IsExternal: $("#IsExternal").val(),
+            Status: $("#Status").val()
         }
     },
     Search: function () {
+        console.log("Search clicked!");
+
         AdminInstructor.SetAdvancedSearchData();
         AdminInstructor.Fetch(1);
+        console.log(AdminInstructor.currentSearchData);
+
     },
     Reset: function () {
         $("#Name").val("");
         $("#DepartmentId").val("");
         $("#BranchId").val("");
-        $("#InstructorType").val("");
+        $("#IsExternal").val("");
+        $("#Status").val("");
         AdminInstructor.currentSearchData = {};
         AdminInstructor.Fetch(1);
     },
-
+    ShowAddUpdateModal: function (id) {
+        console.log(id);
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Instructor/AddUpdate",
+            data: { id: id },
+            success: function (response) {
+                console.log(response);
+                $("#loader").removeClass("show");
+                $("#addUpdateModalView").html(response);
+                $('#addUpdateModal').modal('show');
+              
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching instructor data:", error);
+            }
+        });
+    },
 }

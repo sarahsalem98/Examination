@@ -1,4 +1,5 @@
 ﻿using Examination.DAL.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
 
 namespace Examination.PL.ModelViews
@@ -7,6 +8,7 @@ namespace Examination.PL.ModelViews
     {
         public int Id { get; set; }
 
+        [Required]
         public bool IsExternal { get; set; }
 
         public int UserId { get; set; }
@@ -19,8 +21,7 @@ namespace Examination.PL.ModelViews
         public string? Name { get; set; }
         public int? DepartmentId { get; set; }
         public int? BranchId { get; set; }
-        public int? CourseId { get; set; }
-        public int? status { get; set; }
+        public int? Status { get; set; }
         public bool ? IsExternal { get; set; }
 
     }

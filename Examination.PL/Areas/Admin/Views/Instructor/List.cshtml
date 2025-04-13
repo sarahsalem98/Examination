@@ -37,7 +37,7 @@
                     <td>@item.User?.FirstName  @item.User?.LastName</td>
                     <td>@item.User?.Email</td>
                     <td>@item.User?.Phone</td>
-                    <td> @item.IsExternal</td>
+                    <td>@(item.IsExternal ? "External" : "Internal")</td>
                     <td>@Enum.GetName(typeof(Status), item.User.Status)</td>
                     <td class="actions-cell">
                         <a href="#"><i class="bi bi-pencil"></i></a>
