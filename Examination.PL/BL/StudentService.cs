@@ -13,12 +13,14 @@ namespace Examination.PL.BL
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<StudentService> _logger;
-        public StudentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<StudentService> logger)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public StudentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<StudentService> logger, IHttpContextAccessor httpContextAccessor)
         {
 
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
         public int Add(StudentMV student)
         {
@@ -39,7 +41,7 @@ namespace Examination.PL.BL
                     var newStudent = _mapper.Map<Student>(student);
                     newStudent.User.CreatedAt = DateTime.Now;
                     newStudent.User.Password = PasswordHelper.HashPassword("123456");
-                    newStudent.User.CreatedBy = 1;
+                    newStudent.User.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
                     newStudent.User.Status = (int)Status.Active;
                     newStudent.User.UserTypes.Add(_unitOfWork.UserTypeRepo.FirstOrDefault(s => s.TypeName == Constants.UserTypes.Student));
                     _unitOfWork.StudentRepo.Insert(newStudent);
@@ -55,7 +57,7 @@ namespace Examination.PL.BL
             catch (Exception ex)
             {
 
-                _logger.LogError(ex, "error occuired while adding new student in admin area");
+                _logger.LogError(ex, "error occuired while adding new student ");
                 return 0;
             }
         }
@@ -96,7 +98,7 @@ namespace Examination.PL.BL
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "error occuired while retriving student data in admin area");
+                _logger.LogError(ex, "error occuired while retriving student data ");
                 return null;
 
             }
@@ -117,7 +119,7 @@ namespace Examination.PL.BL
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "error occuired while retriving student data in admin area");
+                _logger.LogError(ex, "error occuired while retriving student data ");
                 return null;
             }
         }
@@ -151,7 +153,7 @@ namespace Examination.PL.BL
                         _mapper.Map(student, studentExist);
                         studentExist.DepartmentBranch = departmentBranch;
                         studentExist.User.UpdatedAt = DateTime.Now;
-                        studentExist.User.UpdatedBy = 1;
+                        studentExist.User.UpdatedBy =int.Parse( _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value) ;
                         studentExist.User.Id = studentExist.UserId;
                         studentExist.User.UserTypes.Add(_unitOfWork.UserTypeRepo.FirstOrDefault(u => u.TypeName == Constants.UserTypes.Student));
                         _unitOfWork.StudentRepo.Update(studentExist);
@@ -164,7 +166,7 @@ namespace Examination.PL.BL
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "error occuired while updating student data in admin area");
+                _logger.LogError(ex, "error occuired while updating student data ");
                 return 0;
             }
         }
@@ -177,6 +179,8 @@ namespace Examination.PL.BL
                 if (student != null)
                 {
                     student.User.Status = status;
+                    student.User.UpdatedAt = DateTime.Now;
+                    student.User.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
                     _unitOfWork.StudentRepo.Update(student);
                     return _unitOfWork.Save();
                 }
@@ -184,7 +188,7 @@ namespace Examination.PL.BL
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "error occuired while changing student status in admin area");
+                _logger.LogError(ex, "error occuired while changing student status ");
                 return 0;
             }
         }

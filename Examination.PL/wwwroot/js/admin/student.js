@@ -132,7 +132,7 @@
             success: function (response) {
                 // $("#loader").removeClass("show");
                 if (response.success) {
-                    AdminStudent.Fetch(currentPage);
+                    AdminStudent.Fetch(AdminStudent.currentPage);
                     //toastr.success(response.message);
                     $('#addUpdateModal').modal('hide');
                     toastr.success(response.message);

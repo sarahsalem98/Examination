@@ -17,9 +17,10 @@ namespace Examination.PL.Controllers
             _userService = userService;
 
         }
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
             ViewData["Title"] = "Login";
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -28,6 +29,7 @@ namespace Examination.PL.Controllers
         {
             UserMV userMV = _userService.GetUserByEmail(model.Email);
             ResponseMV responseMV=new ResponseMV();
+            string redirectUrl = "";
             if (userMV != null)
             {
                 if (PasswordHelper.VerifyPassword(model.Password, userMV.Password))
@@ -37,21 +39,30 @@ namespace Examination.PL.Controllers
                     if (userType != null) {
                         var claims = new List<Claim>
                          {
-                            new Claim(ClaimTypes.NameIdentifier, userMV.Id.ToString()),
+                            new Claim("UserId", userMV.Id.ToString()),
                             new Claim(ClaimTypes.Email, userMV.Email),
-                            new Claim(ClaimTypes.Name, userMV.FirstName),
+                            new Claim(ClaimTypes.Name,  userMV.FirstName+" "+ userMV.LastName),
                             new Claim("UserType", userType.TypeName)
                          };
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var principle= new ClaimsPrincipal(claimsIdentity);
                         HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principle).Wait();
 
-                        string redirectUrl= userType.TypeName switch
+                        if(model.ReturnUrl != null)
                         {
-                            Constants.UserTypes.Student => "/Student/Exam/Previous",
-                            
-                        };
+                            redirectUrl = model.ReturnUrl;  
+                        }
+                        else
+                        {
 
+                             redirectUrl = userType.TypeName switch
+                            {
+                                Constants.UserTypes.Student => "/Student/Exam/Previous",
+                                Constants.UserTypes.Admin => "/Admin/Student/Index",
+
+                            };
+
+                        }
                         responseMV =new ResponseMV
                         {
                             Success = true,
@@ -91,6 +102,13 @@ namespace Examination.PL.Controllers
 
             return Json(responseMV);
 
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
+            return RedirectToAction("Login", "Account");
         }
     }
 }
