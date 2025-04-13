@@ -29,4 +29,13 @@
         public DepartmentMV Department { get; set; } = null!;
         public BranchMV Branch { get; set; } = null!;
     }
+
+    public class DepartmentSearchMV
+    {
+        public string? Name { get; set; }
+        public int? Status { get; set; }
+
+        public int? BranchId { get; set; }
+
+    }
 }
