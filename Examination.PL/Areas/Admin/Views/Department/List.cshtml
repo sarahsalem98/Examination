@@ -1,5 +1,89 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PaginatedData<DepartmentMV>
+@using Examination.PL.General;
+
 @{
+    Layout = null;
+    var i = 1;
 }
+
+<input type="hidden" id="totalCount" value="@Model.TotalCount" />
+
+<table class="table data-table table-bordered table-hover mt-2">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Branches</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items == null || !Model.Items.Any())
+        {
+            <tr>
+                <td colspan="6" class="alert-info text-center">No departments found</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var dept in Model.Items)
+            {
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@dept.Name</td>
+                    <td>@dept.Capacity</td>
+                    <td>
+                        @if (dept.BranchNames != null && dept.BranchNames.Any())
+                        {
+                            @string.Join(", ", dept.BranchNames)
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </td>
+                    <td class="@(dept.Status == (int)Status.Active ? "text-success" : "text-danger")">
+                        @Enum.GetName(typeof(Status), dept.Status)
+                    </td>
+                    <td class="actions-cell">
+                        <a href="javascript:void(0);" onclick="AdminDepartment.ShowAddUpdateModal(@dept.Id);">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+
+                        @if (dept.Status != (int)Status.Deleted)
+                        {
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Deleted))" class="delete-icon">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        }
+
+                        @if (dept.Status == (int)Status.Deleted)
+                        {
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Inactive))" class="inactive-icon">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Active))" class="active-icon">
+                                <i class="bi bi-check-circle"></i>
+                            </a>
+                        }
+                        else if (dept.Status != (int)Status.Inactive)
+                        {
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Inactive))" class="inactive-icon">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        }
+                        else if (dept.Status != (int)Status.Active)
+                        {
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Active))" class="active-icon">
+                                <i class="bi bi-check-circle"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>

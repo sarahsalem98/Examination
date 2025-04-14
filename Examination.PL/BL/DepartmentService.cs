@@ -3,6 +3,7 @@ using Examination.DAL.Entities;
 using Examination.DAL.Repos.IRepos;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
+using System.Drawing.Printing;
 
 namespace Examination.PL.BL
 {
@@ -80,36 +81,77 @@ namespace Examination.PL.BL
             }
         }
 
-        public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV search, int pageSize, int page)
+        //public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV Departmentsearch, int pageSize, int page)
+        //{
+        //    try
+        //    {
+        //        List<DepartmentMV> departmentMVs = new List<DepartmentMV>();
+        //        List<Department> data = _unitOfWork.DepartmentRepo.GetAll(
+        //    d =>
+        //        (string.IsNullOrEmpty(Departmentsearch.Name) || d.Name.ToLower().Trim().Contains(Departmentsearch.Name.ToLower().Trim())) &&
+        //        (Departmentsearch.Status == null || d.Status == Departmentsearch.Status) &&
+        //        (Departmentsearch.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == Departmentsearch.BranchId)),
+        //           "DepartmentBranches"
+        //         )
+        //         .OrderByDescending(d => d.CreatedAt)
+        //         .ToList();
+
+        //        departmentMVs = _mapper.Map<List<DepartmentMV>>(data);
+        //        int totalCount = departmentMVs.Count;
+
+        //        if (totalCount > 0)
+        //        {
+        //            departmentMVs = departmentMVs
+        //            .Skip((page - 1) * pageSize)
+        //            .Take(pageSize).ToList();
+
+        //        }
+
+        //        return new PaginatedData<DepartmentMV>
+        //        {
+        //            Items = departmentMVs,
+        //            TotalCount = totalCount,
+        //            PageSize = pageSize,
+        //            CurrentPage = page
+        //        };
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error in GetAllPaginated DepartmentService");
+        //        return new PaginatedData<DepartmentMV>();
+        //    }
+        //}
+
+
+
+        public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV search, int pageSize = 10, int page = 1)
         {
             try
             {
-                var query = _unitOfWork.DepartmentRepo
-                    .GetAll(includeProperties: "DepartmentBranches")
-                    .AsQueryable();
+                var data = _unitOfWork.DepartmentRepo.GetAll(
+                    d =>
+                        (string.IsNullOrEmpty(search.Name) || d.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim())) &&
+                        (search.Status == null || d.Status == search.Status) &&
+                        (search.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == search.BranchId)),
+                    "DepartmentBranches.Branch" 
+                )
+                .OrderByDescending(d => d.CreatedAt)
+                .ToList();
 
-                if (!string.IsNullOrEmpty(search.Name))
-                    query = query.Where(d => d.Name.Contains(search.Name));
+                var mapped = _mapper.Map<List<DepartmentMV>>(data);
 
-                if (search.Status != null)
-                    query = query.Where(d => d.Status == search.Status);
+                int totalCount = mapped.Count;
 
-                if (search.BranchId != null)
-                    query = query.Where(d => d.DepartmentBranches.Any(b => b.BranchId == search.BranchId));
-
-                int totalCount = query.Count();
-
-                var paginated = query
-                    .OrderByDescending(d => d.CreatedAt)
+                var paged = mapped
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToList();
 
-                var mapped = _mapper.Map<List<DepartmentMV>>(paginated);
-
                 return new PaginatedData<DepartmentMV>
                 {
-                    Items = mapped,
+                    Items = paged,
                     TotalCount = totalCount,
                     PageSize = pageSize,
                     CurrentPage = page

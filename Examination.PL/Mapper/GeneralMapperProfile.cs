@@ -13,7 +13,13 @@ namespace Examination.PL.Mapper
             CreateMap<BranchMV, Branch>().ReverseMap(); 
             CreateMap<DepartmentMV, Department>().ReverseMap(); 
             CreateMap<DepartmentBranchMV, DepartmentBranch>().ReverseMap();
-            CreateMap<StudentMV, Student>().ReverseMap();   
+            CreateMap<StudentMV, Student>().ReverseMap();
+
+            CreateMap<Department, DepartmentMV>()
+         .ForMember(dest => dest.BranchNames, opt => opt.MapFrom(src =>
+         src.DepartmentBranches.Select(b => b.Branch.Name).ToList()))
+              .ReverseMap();
+
         }
 
     }

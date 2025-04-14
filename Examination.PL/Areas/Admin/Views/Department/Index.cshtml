@@ -20,20 +20,8 @@
                         Advanced Search
                     </button>
                     <div class="dropdown-menu p-4 flex-start">
-                        <!-- Dropdown content -->
 
                         <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <label for="DepartmentId" class="form-label">Department</label>
-                                <select class="form-select rounded-0" id="DepartmentId">
-                                    <option selected value="null"> Choose...</option>
-                                    @foreach (var department in ViewBag.Departments)
-                                    {
-                                        <option value="@department.Id">@department.Name</option>
-                                    }
-
-                                </select>
-                            </div>
                             <div class="col-md-6">
                                 <label for="BranchId" class="form-label">Branch</label>
                                 <select class="form-select rounded-0" id="BranchId">
@@ -41,18 +29,6 @@
                                     @foreach (var branch in ViewBag.Branches)
                                     {
                                         <option value="@branch.Id">@branch.Name</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <label for="TrackType" class="form-label">Track Type:</label>
-                                <select class="form-select" id="TrackType">
-                                    <option selected value="">Choose...</option>
-                                    @foreach (var item in ViewBag.TrackTypes)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
                                     }
                                 </select>
                             </div>
@@ -67,14 +43,15 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6">
-                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="AdminStudent.Reset();">
+                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="AdminDepartment.Reset();">
                                     <i class="bi bi-arrow-counterclockwise"></i> Reset
                                 </button>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="AdminStudent.Search()">
+                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="AdminDepartment.Search()">
                                     <i class="bi bi-search"></i> Search
                                 </button>
                             </div>
@@ -83,43 +60,47 @@
                 </div>
 
                 <div class="d-flex ms-2">
-                    <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.."
-                           aria-label="Search" />
-                    <button class="btn searchbtn" type="submit" onclick="AdminStudent.Search();">
+                    <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.." aria-label="Search" />
+                    <button class="btn searchbtn" type="submit" onclick="AdminDepartment.Search();">
                         <i class="bi bi-search"></i>
                     </button>
-                    <button class="btn searchbtn mx-2" type="submit" onclick="AdminStudent.Reset();">
+                    <button class="btn searchbtn mx-2" type="submit" onclick="AdminDepartment.Reset();">
                         <i class="bi bi-x"></i>
                     </button>
                 </div>
             </div>
 
             <div>
-                <button class="btn btn-add rounded-0" onclick="AdminStudent.ShowAddUpdateModal();"> + Create </button>
+                <button class="btn btn-add rounded-0" onclick="AdminDepartment.ShowAddUpdateModal();"> + Create </button>
             </div>
         </div>
 
-
-        <div class="table-responsive list" id="studentList"></div>
-
+        <div class="table-responsive list mt-4" id="departmentList"></div>
     </div>
 
     <div class="d-flex justify-content-center">
         <ul id="pagination" class="pagination rounded-0"></ul>
     </div>
-
 </div>
 
-
-<!-- Modal  -->
 <div class="modal fade" id="addUpdateModal" tabindex="-1" aria-labelledby="addUpdateModal" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addUpdateModal">Create New Exam</h5>
+                <h5 class="modal-title">Create or Update Department</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="addUpdateModalView"></div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script src="~/js/admin/department.js"></script>
+    <script>
+        $(document).ready(function () {
+            AdminDepartment.Fetch(1);
+        });
+    </script>
+}
