@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 
 namespace Examination.DAL.Repos
 {
-   public class UnitOfWork: IUnitOfWork
+
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _db;
         public IStudentRepo StudentRepo { get; private set; }
         public IUserRepo UserRepo { get; private set; }
         public IBranchRepo BranchRepo { get; private set; }
         public IDepartmentRepo DepartmentRepo { get; private set; }
+        public ICourseRepo CourseRepo { get; private set; }
+
         public UnitOfWork(AppDbContext db)
         {
             _db = db;
@@ -22,11 +25,12 @@ namespace Examination.DAL.Repos
             UserRepo = new UserRepo(_db);
             BranchRepo = new BranchRepo(_db);
             DepartmentRepo = new DepartmentRepo(_db);
+            CourseRepo = new CourseRepo(_db);
         }
         public int Save()
         {
             return _db.SaveChanges();
         }
     }
-   
+
 }

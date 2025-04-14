@@ -1,4 +1,4 @@
-﻿var AdminStudent = {
+﻿var Courses = {
     currentSearchData: {},
     totalPages: 1,
     currentPage: 1,
@@ -8,8 +8,8 @@
         $("#loader").addClass("show");
         $.ajax({
             type: "POST",
-            url: "/Admin/Student/list",
-            data: { studentSearch: AdminStudent.currentSearchData, PageSize: AdminStudent.pageSize, Page: Page },
+            url: "/Admin/course/list",
+            data: { studentSearch: Courses.currentSearchData, PageSize: Courses.pageSize, Page: Page },
             success: function (response) {
                 $("#loader").removeClass("show");
                 $("#studentList").html(response);
@@ -21,8 +21,8 @@
                         $('#pagination').hide();
                         return;
                     }
-                    AdminStudent.totalPages = Math.ceil(totalCounts / AdminStudent.pageSize);
-                    AdminStudent.InitializePagination()
+                    Courses.totalPages = Math.ceil(totalCounts / Courses.pageSize);
+                    Courses.InitializePagination()
                 }
             },
             error: function (xhr, status, error) {
@@ -35,41 +35,17 @@
         $('#pagination').twbsPagination('destroy');
 
         $('#pagination').twbsPagination({
-            totalPages: AdminStudent.totalPages,
+            totalPages: Courses.totalPages,
             visiblePages: 5,
             startPage: 1,
             initiateStartPageClick: false,
             onPageClick: function (event, page) {
-                if (page != AdminStudent.currentPage) {
-                    AdminStudent.currentPage = page;
-                    AdminStudent.Fetch(page);
+                if (page != Courses.currentPage) {
+                    Courses.currentPage = page;
+                    Courses.Fetch(page);
                 }
             }
         });
-    },
-    SetAdvancedSearchData: function () {
-        AdminStudent.currentSearchData = {
-            Name: $("#Name").val(),
-            Status: $("#Status").val(),
-            DepartmentId: $("#DepartmentId").val(),
-            BranchId: $("#BranchId").val(),
-            TrackType: $("#TrackType").val(),
-
-        };
-
-    },
-    Search: function () {
-        AdminStudent.SetAdvancedSearchData();
-        AdminStudent.Fetch(1);
-    },
-    Reset: function () {
-        $("#Name").val("");
-        $("#Status").val("");
-        $("#DepartmentId").val("");
-        $("#BranchId").val("");
-        $("#TrackType").val("");
-        AdminStudent.currentSearchData = {};
-        AdminStudent.Fetch(1);
-    },
+    }
 
 }

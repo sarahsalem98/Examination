@@ -26,13 +26,13 @@ namespace Examination.PL.Areas.Admin.Controllers
             ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
             return View();
         }
-        public IActionResult List(StudentSearchMV studentSearch,int Page=1, int PageSize=10)
+        public IActionResult List(StudentSearchMV studentSearch, int Page = 1, int PageSize = 10)
         {
             ViewData["Title"] = "Students List";
-            var students = _studentService.GetAllPaginated(studentSearch,PageSize,Page);
+            var students = _studentService.GetAllPaginated(studentSearch, PageSize, Page);
             return View(students);
         }
 
-       
+
     }
 }
