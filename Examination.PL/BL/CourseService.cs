@@ -24,7 +24,10 @@ namespace Examination.PL.BL
             try
             {
                 var courses = unitOfWork.CourseRepo.GetAll(
-                  c => c.CourseDepartments.Select(d => d.DepartmentId).Contains(id), "CourseDepartments");
+                    c => c.CourseDepartments.Select(d => d.DepartmentId).Contains(id),
+                           "CourseDepartments");
+
+
 
 
                 if (courses==null)

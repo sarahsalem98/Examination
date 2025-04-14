@@ -60,7 +60,7 @@
 
        
         <div class="mb-3">
-            <table class="table table-bordered" id="assignTable">
+            <table class="table table-bordered" id="InstructorAssignmentTable">
                 <thead>
                     <tr>
                         <th>Branch</th>
@@ -72,7 +72,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <select class="form-select branch">
+                            <select class="form-select branch" name="instructorCourses[0].branchId">
                                 <option value="">Choose...</option>
                                 @foreach (var branch in ViewBag.Branches)
                                 {
@@ -81,12 +81,12 @@
                             </select>
                         </td>
                         <td>
-                            <select class="form-select department">
+                            <select class="form-select department" name="instructorCourses[0].departmentId">
                                 <option value="">Choose...</option>
                             </select>
                         </td>
                         <td>
-                            <select class="form-select course">
+                            <select class="form-select course" name="instructorCourses[0].courseId">
                                 <option value="">Choose...</option>
                             </select>
                         </td>
@@ -108,7 +108,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn advanced-search-btn" onclick="AdminInstructor.AddUpdate(event)">Save Data</button>
+        <button  class="btn advanced-search-btn" onclick="AdminInstructor.AddUpdate(event)">Save Data</button>
     </div>
 </form>
 
