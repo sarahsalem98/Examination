@@ -32,6 +32,8 @@ namespace Examination.DAL.Repos
             InstructorRepo = new InstructorRepo(_db);
             UserTypeRepo = new UserTypeRepo(_db);
             DepartmentBranchRepo = new DepartmentBranchRepo(_db);
+            UserTypeRepo = new UserTypeRepo(_db);
+            ExamRepo = new ExamRepo(_db);
         }
         public int Save()
         {

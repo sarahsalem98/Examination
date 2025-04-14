@@ -94,13 +94,14 @@
     AddUpdate: function (e)
     {
         e.preventDefault();
-       
         $.ajax({
             type: "POST",
             url: "/Admin/instructor/AddUpdate",
             data: $("#admin-instructor-form").serialize(),
             success: function (response) {
+                debugger
                 if (response.success) {
+
                     AdminInstructor.Fetch(AdminInstructor.currentPage);
                     $('#addUpdateModal').modal('hide');
                     

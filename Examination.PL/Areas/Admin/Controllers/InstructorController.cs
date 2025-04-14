@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Examination.DAL.Repos;
+using Examination.PL.Attributes;
 using Examination.PL.BL;
 using Examination.PL.General;
 using Examination.PL.IBL;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [UserTypeAuthorize(Constants.UserTypes.Admin)]
     public class InstructorController : Controller
     {
         private readonly IInstructorService InstructorService;
@@ -64,6 +66,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                     {
                         response.Success = true;
                         response.Message = "Instructor Updated successfully";
+                        response.Data = instructor;
                     }
                     else
                     {
@@ -78,6 +81,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                     {
                         response.Success = true;
                         response.Message = "Instructor Added successfully";
+                        response.Data = instructor;
                     }
                     else if (res==-1)
                     {
@@ -126,6 +130,7 @@ namespace Examination.PL.Areas.Admin.Controllers
             {
                 response.Success = true;
                 response.Message = $"instructor Status Changed Successfully";
+              
             }
 
             return Json(response);
