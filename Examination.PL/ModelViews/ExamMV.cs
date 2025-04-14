@@ -23,10 +23,10 @@ namespace Examination.PL.ModelViews
 
     public class ExamSearchMV
     {
-        public int CourseId { get; set; }
-        public int Status {  get; set; }
-        public string Type { get; set; }
-        public string Name { get; set; }
+        public int? CourseId { get; set; }
+        public int? Status {  get; set; }
+        public string? Type { get; set; }
+        public string? Name { get; set; }
 
     }
 }

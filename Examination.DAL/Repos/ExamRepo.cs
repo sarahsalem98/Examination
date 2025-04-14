@@ -1,4 +1,5 @@
-﻿using Examination.DAL.Repos.IRepos;
+﻿using Examination.DAL.Entities;
+using Examination.DAL.Repos.IRepos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Examination.DAL.Repos
 {
-    public class ExamRepo : Repo<ExamRepo>, IExamRepo
+    public class ExamRepo : Repo<Exam>, IExamRepo
     {
-        public ExamRepo(Entities.AppDbContext db) : base(db)
+        public ExamRepo(AppDbContext db) : base(db)
         {
         }
     }
