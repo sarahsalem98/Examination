@@ -21,6 +21,7 @@ namespace Examination.DAL.Repos
         public IUserTypeRepo UserTypeRepo { get; private set; }
         public IExamRepo ExamRepo { get; private set; }
         public IDepartmentBranch DepartmentBranchRepo { get; private set; } 
+        public ICourseRepo CourseRepo { get; private set; }
         public UnitOfWork(AppDbContext db)
         {
             _db = db;
