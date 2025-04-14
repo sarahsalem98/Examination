@@ -104,6 +104,45 @@ namespace Examination.DAL.Seeding
 
         }
 
+        public void SuperAdminSeeder()
+        {
+            var userPassword = "123456";
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userPassword);
+            if (!_db.UserTypes.Any(u => u.TypeName == "SuperAdmin"))
+            {
+                var userType = new UserType
+                {
+                    TypeName = "SuperAdmin"
+                };
+                _db.UserTypes.Add(userType);
+                _db.SaveChanges();
+            }
+            var AdminUserType = _db.UserTypes.FirstOrDefault(u => u.TypeName == "SuperAdmin");
+            if (!_db.Users.Any(u => u.Email == "superAdmin@gmail.com"))
+            {
+                var user = new User
+                {
+
+                    FirstName = "Super",
+                    LastName = "Admin",
+                    Email = "superAdmin@gmail.com",
+                    Phone = "0101000000",
+                    Password = hashedPassword,
+                    Age = 25,
+                    Status = 1,
+                    CreatedBy = 1,
+                    CreatedAt = DateTime.Now,
+
+                };
+                user.UserTypes.Add(AdminUserType);
+                _db.Users.Add(user);
+                _db.SaveChanges();
+
+
+
+            }
+        }
+
         //public void CourseSeeder()
         //{
         //    if (!_db.Courses.Any(c => c.Name == "C#"))

@@ -1,4 +1,6 @@
-﻿namespace Examination.PL.ModelViews
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Examination.PL.ModelViews
 {
     public class StudentMV
     {
@@ -8,14 +10,20 @@
 
         public DateOnly? DateOfBirth { get; set; }
 
+        [Required]   
         public DateTime? EnrollmentDate { get; set; }
-
+        [Required]
         public int? TrackType { get; set; }
 
         public int UserId { get; set; }
 
         public UserMV? User { get; set; }
+        [Required]
+        public int DepartmentId { get; set; }
+        [Required]
+        public int BranchId { get; set; }
         public DepartmentBranchMV? DepartmentBranch { get; set; } 
+
     }
 
     public class StudentSearchMV { 
