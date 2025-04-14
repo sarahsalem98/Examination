@@ -7,6 +7,12 @@
         Deleted = -1
 
     }
+    public enum InstructorType
+    {
+        External=0,
+        Internal =1
+
+    }
 
     public enum TrackType
     {

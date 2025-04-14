@@ -38,6 +38,7 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IBranchService,BranchService>();   
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IExamService, ExamService>();
+builder.Services.AddScoped<IInstructorService, InstructorService>();
 
 #endregion
 
