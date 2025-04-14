@@ -18,9 +18,16 @@ namespace Examination.PL.ModelViews
         public int? UpdatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public InstructorCourseMV InstructorCourses { get; set; } = null!;
+        public List< InstructorCourseMV> InstructorCourses { get; set; } = null!;
+        public List< CourseDepartmentMV> CourseDepartments { get; set; } = null!;
 
-     
+
+    }
+    public class CourseDepartmentMV
+    {
+        public int Id { get; set; }
+        public int CourseId { get; set; }
+        public int DepartmentId { get; set; }
     }
     public class InstructorCourseMV
     {

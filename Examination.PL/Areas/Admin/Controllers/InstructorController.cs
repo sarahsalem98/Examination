@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Examination.DAL.Repos;
+using Examination.PL.Attributes;
 using Examination.PL.BL;
 using Examination.PL.General;
 using Examination.PL.IBL;
@@ -9,16 +10,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [UserTypeAuthorize(Constants.UserTypes.Admin)]
     public class InstructorController : Controller
     {
         private readonly IInstructorService InstructorService;
         private readonly IDepartmentService departmentService;
         private readonly IBranchService branchService;
-        public InstructorController(IInstructorService _InstructorService, IDepartmentService _departmentService, IBranchService _branchService)
+        private readonly ICourseService courseService;
+        public InstructorController(IInstructorService _InstructorService, IDepartmentService _departmentService, IBranchService _branchService, ICourseService _courseService)
         {
             InstructorService = _InstructorService;
             branchService = _branchService;
             departmentService = _departmentService;
+            courseService = _courseService;
         }
         public IActionResult Index()
         {
@@ -37,6 +41,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         public IActionResult AddUpdate(int id)
         {
             ViewData["Title"] = "Add Update Student";
+            ViewBag.branches = branchService.GetByStatus((int)Status.Active);
             var instructor = new InstructorMV();
             if(id>0)
             {
@@ -61,6 +66,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                     {
                         response.Success = true;
                         response.Message = "Instructor Updated successfully";
+                        response.Data = instructor;
                     }
                     else
                     {
@@ -75,6 +81,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                     {
                         response.Success = true;
                         response.Message = "Instructor Added successfully";
+                        response.Data = instructor;
                     }
                     else if (res==-1)
                     {
@@ -123,10 +130,69 @@ namespace Examination.PL.Areas.Admin.Controllers
             {
                 response.Success = true;
                 response.Message = $"instructor Status Changed Successfully";
+              
             }
 
             return Json(response);
         }
-       
+        public IActionResult GetCoursesByDepartmenID(int DepartmentId)
+        {
+            ResponseMV response = new ResponseMV();
+            var courses=new List<CourseMV>();
+            if (DepartmentId > 0)
+            {
+                courses=courseService.GetCoursesByDeaprtment(DepartmentId);
+                if(courses==null)
+                {
+                    response.Success = false;
+                    response.Message = "no courses found";
+                    response.Data = null;
+                }else
+                {
+                    response.Success = true;
+                    response.Message = "AllCourses";
+                    response.Data = courses;
+                }
+
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "some thing went wrong";
+                response.Data = null;
+            }
+            return Json(response);
+        }
+        public IActionResult GetDepartmentsByBranchId(int BranchId)
+        {
+            ResponseMV response = new ResponseMV();
+            var departments = new List<DepartmentMV>();
+            if (BranchId > 0)
+            {
+                departments = departmentService.GetByBranch(BranchId);
+                if (departments == null || departments.Count() == 0)
+                {
+                    response.Success = false;
+                    response.Message = "No departments found for this branch";
+                    response.Data = null;
+                }
+                else
+                {
+
+                    response.Success = true;
+                    response.Message = "All Departments";
+                    response.Data = departments;
+                }
+
+
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "some thing went wrong";
+                response.Data = null;
+            }
+            return Json(response);
+        }
     }
 }

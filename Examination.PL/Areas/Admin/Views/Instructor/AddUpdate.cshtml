@@ -44,7 +44,7 @@
             </div>
         </div>
         <!-- InstructorType -->
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4">
             <label for="IsExternal" class="form-label">Instructor Type:</label>
             <select class="form-select" id="IsExternal" asp-for="IsExternal" >
                 <option value="">Select Instructor Type </option>
@@ -54,6 +54,53 @@
         
             <span asp-validation-for="IsExternal" class="text-danger"></span>
         </div>
+        <h5 class="mb-2" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Assign Instructor</h5>
+       
+        <button type="button" id="assignBtn" class="btn btn-add rounded-0 mb-3">Assign</button>
+
+       
+        <div class="mb-3">
+            <table class="table table-bordered" id="assignTable">
+                <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-select branch">
+                                <option value="">Choose...</option>
+                                @foreach (var branch in ViewBag.Branches)
+                                {
+                                    <option value="@branch.Id">@branch.Name</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select department">
+                                <option value="">Choose...</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select course">
+                                <option value="">Choose...</option>
+                            </select>
+                        </td>
+                        <td>
+                            <a href="#" class="remove-row">
+                                <i class="bi bi-x-circle text-danger"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+       
 
     </div>
 
@@ -67,7 +114,11 @@
 
 <script>
     $(document).ready(function(){
-       
+  
+        AdminInstructor.HandleDropDownChanges();
+        AdminInstructor.HandleAssignRow();
+        AdminInstructor.HandleDeleteRow();
+    
     });
 </script>
 

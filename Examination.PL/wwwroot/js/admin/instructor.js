@@ -80,7 +80,7 @@
             url: "/Admin/instructor/AddUpdate",
             data: { id: id },
             success: function (response) {
-                console.log(response);
+            
                 $("#loader").removeClass("show");
                 $("#addUpdateModalView").html(response);
                 $('#addUpdateModal').modal('show');
@@ -94,13 +94,14 @@
     AddUpdate: function (e)
     {
         e.preventDefault();
-       
         $.ajax({
             type: "POST",
             url: "/Admin/instructor/AddUpdate",
             data: $("#admin-instructor-form").serialize(),
             success: function (response) {
+                debugger
                 if (response.success) {
+
                     AdminInstructor.Fetch(AdminInstructor.currentPage);
                     $('#addUpdateModal').modal('hide');
                     
@@ -133,6 +134,110 @@
                 console.error("Error changing student status:", error);
             }
         })
-    }
+    },
+    HandleDropDownChanges: function () {
+        $(document).on("change", ".branch", function () {
+            var branchId = $(this).val();
+            var row = $(this).closest("tr");
+            var dept = row.find(".department");
+            var course = row.find(".course");
+          
+            dept.empty().append('<option value="">Choose...</option>');
+            course.empty().append('<option value="">Choose...</option>');
+         
+            if (branchId && branchId !== "null") {
+                AdminInstructor.GetDepartmentsByBranchId(branchId, dept);
+            }
+        });
 
-}
+        $(document).on("change", ".department", function () {
+            var deptId = $(this).val();
+            console.log("Selected Department ID:", deptId); 
+
+            var row = $(this).closest("tr");
+            var course = row.find(".course");
+            course.empty().append('<option value="">Choose...</option>');
+
+            if (deptId && deptId !== "null") {
+                console.log("Fetching courses..."); 
+                AdminInstructor.GetCoursesByDepartmentID(deptId, course);
+            }
+        });
+    },
+
+    GetDepartmentsByBranchId: function (branchId, dropdown) {
+        $.ajax({
+            type: "GET",
+            url: "/Admin/instructor/GetDepartmentsByBranchId",
+            data: { BranchId: branchId },
+            success: function (response) {
+                if (response.success) {
+                    $.each(response.data, function (index, department) {
+                        dropdown.append(`<option value="${department.id}">${department.name}</option>`);
+                    });
+                }
+            },
+            error: function () {
+                console.error("Error loading departments");
+            }
+        });
+    },
+    GetCoursesByDepartmentID: function (deptId, dropdown) {
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Instructor/GetCoursesByDepartmenID",
+            data: {DepartmentId: deptId },
+            success: function (response) {
+                console.log("Courses Response:", response);
+                if (response.success) {
+                    $.each(response.data, function (index, course) {
+                        console.log("Course:", course);
+                        dropdown.append(`<option value="${course.id}">${course.name}</option>`);
+                    });
+                } else {
+                    console.warn("No success in response");
+                }
+            },
+            error: function () {
+                console.error("Error loading courses");
+            }
+        });
+    }
+,
+
+    HandleAssignRow: function () {
+        $("#assignBtn").click(function () {
+            var newRow = `
+                <tr>
+                    <td>
+                        <select class="form-select branch">
+                         
+                            ${$("#BranchId").html()}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select department">
+                            <option value="">Choose...</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select course">
+                            <option value="">Choose...</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a href="#" class="removeRow"><i class="bi bi-x-circle"></i></a>
+                    </td>
+                </tr>`;
+            $("#assignTable tbody").append(newRow);
+        });
+    },
+
+    HandleDeleteRow: function () {
+        $(document).on("click", ".removeRow", function (e) {
+            e.preventDefault();
+            $(this).closest("tr").remove();
+        });
+    }
+};
+
