@@ -17,7 +17,6 @@ namespace Examination.DAL.Repos.IRepos
         public IInstructorRepo InstructorRepo { get; }
         public IUserTypeRepo UserTypeRepo { get; }
         public IDepartmentBranch DepartmentBranchRepo { get; }
-        public ICourseRepo CourseRepo { get; }
         public int Save();
         public IDbContextTransaction BeginTransaction();
         
