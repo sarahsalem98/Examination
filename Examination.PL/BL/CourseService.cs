@@ -44,5 +44,28 @@ namespace Examination.PL.BL
 
             }
         }
+
+        public List<CourseMV> GetCourseByStatus(int status)
+        {
+            try
+            {
+                var courses = unitOfWork.CourseRepo.GetAll(c => c.Status == status);
+                if (courses == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var coursesMV = mapper.Map<List<CourseMV>>(courses);
+                    return coursesMV;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error in fetch Courses in status ");
+                return null;
+            }
+        }
     }
 }

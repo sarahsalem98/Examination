@@ -18,6 +18,7 @@ namespace Examination.PL.ModelViews
         public int? UpdatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public CourseMV? Course { get; set; } = null!;
 
     }
 
