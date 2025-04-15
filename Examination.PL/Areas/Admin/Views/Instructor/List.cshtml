@@ -1,0 +1,80 @@
+﻿@model PaginatedData<InstructorMV>
+@using Examination.PL.General;
+
+@{
+    Layout = null;
+
+}
+<input type="hidden" id="totalCount" value="@Model.TotalCount" />
+<table class="table data-table table-bordered table-hover mt-2">
+    <thead>
+        <tr>
+
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col" class="sort-arrows">
+                Instructor Type
+
+            </th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class=" alert-info text-center">No data found</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+
+                    <td>@item.User?.FirstName  @item.User?.LastName</td>
+                    <td>@item.User?.Email</td>
+                    <td>@item.User?.Phone</td>
+                    <td>@(item.IsExternal ? "External" : "Internal")</td>
+                    <td class="@((item.User.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.User?.Status)</td>
+                    <td class="actions-cell">
+                        <a href="#" onclick="AdminInstructor.ShowAddUpdateModal(@item.Id)"><i class="bi bi-pencil"></i></a>
+                        @if (item.User.Status == (int)Status.Active)
+                        {
+                            <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Inactive))"><i class="bi bi-x-circle"></i></a>
+                            <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
+                        }
+                        else if (item.User.Status == (int)Status.Inactive)
+                        {
+                            <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Active))">
+                                <i class="bi bi-check-circle"></i>
+
+                            </a>
+                            <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
+                        }
+                        else if (item.User.Status == (int)Status.Deleted)
+                        {
+                            <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Inactive))">
+                                <i class="bi bi-x-circle"></i>
+
+                            </a>
+                            <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Active))">
+                                <i class="bi bi-check-circle"></i>
+
+                            </a>
+                        }
+                    </td>
+                </tr>
+
+            }
+        }
+
+
+
+    </tbody>
+</table>
+
+
+

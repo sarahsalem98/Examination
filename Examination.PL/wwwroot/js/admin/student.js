@@ -15,7 +15,7 @@
                 $("#studentList").html(response);
                 if (Page == 1) {
                     const $html = $($.parseHTML(response));
-                    const $totalInput = $html.filter('#totalCount');
+                    const $totalInput = $html.filter('#totalCount'); 
                     const totalCounts = parseInt($totalInput.val());
                     if (totalCounts === 0) {
                         $('#pagination').hide();
@@ -32,7 +32,7 @@
 
     },
     InitializePagination: function () {
-        $('#pagination').twbsPagination('destroy');
+        $('#pagination').twbsPagination('destroy'); 
 
         $('#pagination').twbsPagination({
             totalPages: AdminStudent.totalPages,
@@ -41,8 +41,8 @@
             initiateStartPageClick: false,
             onPageClick: function (event, page) {
                 if (page != AdminStudent.currentPage) {
-                    AdminStudent.currentPage = page;
-                    AdminStudent.Fetch(page);
+                AdminStudent.currentPage = page;
+                AdminStudent.Fetch(page);
                 }
             }
         });
@@ -54,9 +54,9 @@
             DepartmentId: $("#DepartmentId").val(),
             BranchId: $("#BranchId").val(),
             TrackType: $("#TrackType").val(),
-
+          
         };
-
+       
     },
     Search: function () {
         AdminStudent.SetAdvancedSearchData();
@@ -164,4 +164,4 @@
         });
     } 
 
-}
+ }

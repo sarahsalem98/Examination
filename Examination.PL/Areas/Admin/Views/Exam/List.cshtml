@@ -1,4 +1,4 @@
-﻿@model PaginatedData<StudentMV>
+﻿@model PaginatedData<ExamMV>
 @using Examination.PL.General;
 
 @{
@@ -13,14 +13,13 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col" class="sort-arrows">
-                tracktype
+                Type
 
             </th>
             <th scope="col" class="sort-arrows">
-                Department
+                Course
 
             </th>
-            <th scope="col">Branch</th>
             <th scope="col">Status</th>
             <th scope="col">Actions</th>
         </tr>
@@ -29,7 +28,7 @@
         @if (Model.Items.Count() == 0)
         {
             <tr>
-                <td colspan="6" class=" alert-info text-center">No data found</td>
+                <td colspan="5" class=" alert-info text-center">No data found</td>
             </tr>
         }
         else
@@ -40,28 +39,27 @@
 
                 <tr>
                     <th scope="row">@i</th>
-                    <td>@(item.User.FirstName+" "+ item.User.LastName )</td>
-                    <td> @Enum.GetName(typeof(TrackType),item.TrackType)</td>
-                    <td>@item.DepartmentBranch.Department.Name</td>
-                    <td>@item.DepartmentBranch.Branch.Name</td>
-                    <td class="@((item.User.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.User?.Status)</td>
+                    <td>@item.Name</td>
+                    <td> @item.Type</td>
+                    <td>@item.Course.Name</td>
+                    <td class="@((item?.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.Status)</td>
                     <td class="actions-cell">
                         <a href="javascript:void(0);" onclick="AdminStudent.ShowAddUpdateModal(@item.Id);"><i class="bi bi-pencil"></i></a>
-                        @if (item.User.Status != (int)Status.Deleted)
+                        @if (item.Status != (int)Status.Deleted)
                         {
-                        <a href="javascript:void(0);" onclick="AdminStudent.ChangeStatus(@item.Id,@((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
-                            
+                            <a href="javascript:void(0);" onclick="AdminStudent.ChangeStatus(@item.Id,@((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
+
                         }
 
-                         @if (item.User.Status !=(int) Status.Inactive )
+                        @if (item.Status != (int)Status.Inactive)
                         {
                             <a href="javascript:void(0);" onclick="AdminStudent.ChangeStatus(@item.Id,@((int)Status.Inactive))" class="inactive-icon"><i class="bi bi-x-circle"></i></a>
 
                         }
-                        @if (item.User.Status != (int)Status.Active)
+                        @if (item.Status != (int)Status.Active)
                         {
                             <a href="javascript:void(0);" onclick="AdminStudent.ChangeStatus(@item.Id,@((int)Status.Active))" class="active-icon"><i class="bi bi-check-circle"></i></a>
-                            
+
                         }
                     </td>
                 </tr>

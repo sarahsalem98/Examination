@@ -1,0 +1,173 @@
+﻿@model InstructorMV
+
+@{
+    Layout = null;
+}
+<form id="admin-instructor-form">
+    <input type="hidden" asp-for="Id" id="Id" />
+    <input type="hidden" asp-for="UserId"  id="UserId"/>
+    <div class="modal-body mx-3">
+
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="firstName" asp-for="User.FirstName" placeholder="Enter First Name" required>
+                <span asp-validation-for="User.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="lastName" asp-for="User.LastName" placeholder="Enter Last Name" required>
+                <span asp-validation-for="User.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="age" class="form-label">age</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="age" asp-for="User.Age" placeholder="Enter age" required>
+                <span asp-validation-for="User.Age" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Email -->
+            <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control rounded-0 mb-1" id="email" asp-for="User.Email" placeholder="Enter Email" required>
+                <span asp-validation-for="User.Email" class="text-danger"></span>
+            </div>
+            <!-- Phone -->
+            <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="tel" class="form-control rounded-0 mb-1" id="phone" asp-for="User.Phone" placeholder="Enter Phone Number" required>
+                <span asp-validation-for="User.Phone" class="text-danger"></span>
+            </div>
+        </div>
+        <!-- InstructorType -->
+        <div class="col-md-6 mb-4">
+            <label for="IsExternal" class="form-label">Instructor Type:</label>
+            <select class="form-select" id="IsExternal" asp-for="IsExternal" >
+                <option value="">Select Instructor Type </option>
+                <option value="true">External</option>
+                <option value="false">Internal</option>
+            </select>
+
+            <span asp-validation-for="IsExternal" class="text-danger"></span>
+        </div>
+        <h5 class="mb-2" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Assign Instructor</h5>
+
+        <button type="button" id="assignBtn" class="btn btn-add rounded-0 mb-3">Assign</button>
+
+
+        <div class="mb-3">
+            <table class="table table-bordered" id="InstructorAssignmentTable">
+                <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.InstructorCourses.Count() > 0)
+                    {
+                        @for(int i =0; i<Model.InstructorCourses.Count();i++)
+                        {
+                        <tr>
+                               
+                                    <input type="hidden" class="instructorCourseBranchId" asp-for=InstructorCourses[i].Id name="instructorCourses[0].id" />
+                            <td>
+                                    <select class="form-select branch" asp-for=InstructorCourses[i].DepartmentBranch.BranchId name="instructorCourses[0].branchId" onchange="AdminInstructor.HandleDropDownDepartments(this)">
+                                    <option value="">Choose...</option>
+                                    @foreach (var branch in ViewBag.Branches)
+                                    {
+                                        <option value="@branch.Id">@branch.Name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                    <select class="form-select department" asp-for=InstructorCourses[i].DepartmentBranch.DepartmentId name="instructorCourses[0].departmentId" onchange="AdminInstructor.HandelDropDownCourses(this)">
+                                    <option value="">Choose...</option>
+                                        @foreach (var dept in ViewBag.departments)
+                                        {
+                                            <option value="@dept.Id">@dept.Name</option>
+                                        }
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select course" asp-for=InstructorCourses[i].CourseId name="instructorCourses[0].courseId">
+                                    <option value="">Choose...</option>
+                                        @foreach (var course in ViewBag.courses)
+                                        {
+                                            <option value="@course.Id">@course.Name</option>
+                                        }
+                                </select>
+                            </td>
+                            <td>
+                                    <a href="javascript:void(0)" class="remove-row" onclick="AdminInstructor.HandleDeleteRow(this)">
+                                    <i class="bi bi-x-circle text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        
+                    }
+                        
+                    }else{
+                        <tr>
+                            <td>
+                                <select class="form-select branch" name="instructorCourses[0].branchId" onchange="AdminInstructor.HandleDropDownDepartments(this)">
+                                    <option value="">Choose...</option>
+                                    @foreach (var branch in ViewBag.Branches)
+                                    {
+                                        <option value="@branch.Id">@branch.Name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select department" name="instructorCourses[0].departmentId" onchange="AdminInstructor.HandelDropDownCourses(this)">
+                                    <option value="">Choose...</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select course" name="instructorCourses[0].courseId">
+                                    <option value="">Choose...</option>
+                                </select>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" class="remove-row" >
+                                    <i class="bi bi-x-circle text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+             
+                 
+                </tbody>
+            </table>
+        </div>
+
+       
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button  class="btn advanced-search-btn" onclick="AdminInstructor.AddUpdate(event)">Save Data</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function(){
+  
+        //AdminInstructor.HandleDropDownChanges();
+        AdminInstructor.HandleAssignRow();
+        //AdminInstructor.HandleDeleteRow();
+    
+    });
+</script>
+
+
+

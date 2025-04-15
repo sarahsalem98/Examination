@@ -8,13 +8,10 @@ using System.Threading.Tasks;
 
 namespace Examination.DAL.Repos
 {
-    public class CourseRepo : Repo<Course>, ICourseRepo
+    public class ExamRepo : Repo<Exam>, IExamRepo
     {
-        private readonly AppDbContext _db;
-        public CourseRepo(AppDbContext db) : base(db)
+        public ExamRepo(AppDbContext db) : base(db)
         {
-            _db = db;
         }
     }
-
 }

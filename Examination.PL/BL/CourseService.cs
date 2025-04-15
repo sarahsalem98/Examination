@@ -34,9 +34,9 @@ namespace Examination.PL.BL
                 _unitOfWork.CourseRepo.Insert(crs);
                 result = _unitOfWork.Save();
                 return result;
-            }
+        }
             catch (Exception ex)
-            {
+        {
                 _logger.LogError(ex, "error Occurred while adding new Course ");
                 return 0;
             }
@@ -54,6 +54,9 @@ namespace Examination.PL.BL
                 {
                     CourseMVs = CourseMVs.Skip((Page - 1) * PageSize).Take(1).ToList();
 
+                if (courses==null)
+                {
+                    return null;
                 }
                 PaginatedData<CourseMV> paginatedData = new PaginatedData<CourseMV>
                 {
@@ -65,7 +68,7 @@ namespace Examination.PL.BL
                 return paginatedData;
 
 
-            }
+             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "error occuired while retriving student data in admin area");

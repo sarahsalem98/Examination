@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Examination.DAL.Repos.IRepos;
-
-public interface ICourseRepo : IRepo<Course>
+namespace Examination.DAL.Repos.IRepos
+{
+    public interface IExamRepo : IRepo<Exam>
     {
+
     }
 }

@@ -7,9 +7,15 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
+<<<<<<< HEAD
       <am:Version>17.13.35825.156</am:Version>
     </am:UpdatedBy>
     <am:LastModifiedTimestamp>2025-03-29T19:58:23.8834961Z</am:LastModifiedTimestamp>
+=======
+      <am:Version>17.12.35707.178</am:Version>
+    </am:UpdatedBy>
+    <am:LastModifiedTimestamp>2025-03-29T23:20:04.2254282Z</am:LastModifiedTimestamp>
+>>>>>>> 8add31934bab73936e7334be2c86369806029b2d
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -425,7 +431,11 @@
     </ReportParameter>
     <ReportParameter Name="StudentId">
       <DataType>Integer</DataType>
+<<<<<<< HEAD
       <Prompt>Student Id</Prompt>
+=======
+      <Prompt>Student Name</Prompt>
+>>>>>>> 8add31934bab73936e7334be2c86369806029b2d
       <ValidValues>
         <DataSetReference>
           <DataSetName>Studnets</DataSetName>
