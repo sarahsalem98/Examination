@@ -1,0 +1,75 @@
+﻿@model InstructorMV
+
+@{
+    Layout = null;
+}
+<form id="admin-instructor-form">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserId" />
+    <div class="modal-body mx-3">
+
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="firstName" asp-for="User.FirstName" placeholder="Enter First Name" required>
+                <span asp-validation-for="User.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="lastName" asp-for="User.LastName" placeholder="Enter Last Name" required>
+                <span asp-validation-for="User.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="age" class="form-label">age</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="age" asp-for="User.Age" placeholder="Enter age" required>
+                <span asp-validation-for="User.Age" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Email -->
+            <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control rounded-0 mb-1" id="email" asp-for="User.Email" placeholder="Enter Email" required>
+                <span asp-validation-for="User.Email" class="text-danger"></span>
+            </div>
+            <!-- Phone -->
+            <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="tel" class="form-control rounded-0 mb-1" id="phone" asp-for="User.Phone" placeholder="Enter Phone Number" required>
+                <span asp-validation-for="User.Phone" class="text-danger"></span>
+            </div>
+        </div>
+        <!-- InstructorType -->
+        <div class="col-md-6">
+            <label for="IsExternal" class="form-label">Instructor Type:</label>
+            <select class="form-select" id="IsExternal" asp-for="IsExternal" >
+                <option value="">Select Instructor Type </option>
+                <option value="true">External</option>
+                <option value="false">Internal</option>
+            </select>
+        
+            <span asp-validation-for="IsExternal" class="text-danger"></span>
+        </div>
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn advanced-search-btn" onclick="AdminInstructor.AddUpdate(event)">Save Data</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function(){
+       
+    });
+</script>
+
+
+

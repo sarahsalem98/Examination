@@ -1,0 +1,88 @@
+﻿@model DepartmentMV
+
+@{
+    Layout = null;
+}
+
+<form id="admin-department-form">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="modal-body mx-3">
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">
+            Main Info
+        </h5>
+
+        <div class="row">
+            <!-- Name -->
+            <div class="col-md-6 mb-3">
+                <label for="Name" class="form-label">Department Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="Name" asp-for="Name" placeholder="Enter department name" required>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <!-- Capacity -->
+            <div class="col-md-6 mb-3">
+                <label for="Capacity" class="form-label">Capacity</label>
+                <input type="number" class="form-control rounded-0 mb-1" id="Capacity" asp-for="Capacity" placeholder="Enter capacity" required>
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Description -->
+            <div class="col-md-12 mb-3">
+                <label for="Description" class="form-label">Description</label>
+                <textarea class="form-control rounded-0" asp-for="Description" rows="3" placeholder="Enter description..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Branch Selection -->
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">
+            Department Branches
+        </h5>
+
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="branchSelection" class="form-label">Branches</label>
+                <select multiple class="form-select rounded-0 mb-1" id="BranchIds" name="BranchIds">
+                    @foreach (var branch in ViewBag.Branches)
+                    {
+                        <option value="@branch.Id">@branch.Name</option>
+                    }
+                </select>
+                <small class="text-muted">Hold Ctrl (or Cmd) to select multiple branches.</small>
+            </div>
+        </div>
+
+        <!-- Status (Optional) -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="Status" class="form-label">Status</label>
+                <select class="form-select rounded-0 mb-1" asp-for="Status">
+                    <option value="" selected>Select status</option>
+                    @foreach (var item in ViewBag.Statuses)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn advanced-search-btn" onclick="AdminDepartment.AddUpdate(event)">Save Data</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        // preload selected branches if editing
+        var selectedBranches = @Html.Raw(Json.Serialize(ViewBag.SelectedBranchIds ?? new List<int>()));
+        $("#BranchIds").val(selectedBranches);
+    });
+</script>

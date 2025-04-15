@@ -12,7 +12,7 @@ namespace Examination.PL.IBL
         PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV search, int pageSize, int page);
 
         int Add(DepartmentMV department);
-     //   int Update(DepartmentMV department);
+      int Update(DepartmentMV department);
       //  int Delete(int id);
     }
 }

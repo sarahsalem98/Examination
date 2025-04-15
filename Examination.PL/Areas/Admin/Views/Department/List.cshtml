@@ -1,37 +1,25 @@
-﻿@model PaginatedData<DepartmentMV>
-@using Examination.PL.General;
+﻿@using Examination.PL.General;
+@model PaginatedData<DepartmentMV>
 
-@{
-    Layout = null;
-    var i = 1;
-}
-
-<input type="hidden" id="totalCount" value="@Model.TotalCount" />
-
-<table class="table data-table table-bordered table-hover mt-2">
-    <thead>
+<table class="table table-hover table-bordered">
+    <thead class="thead-light">
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Capacity</th>
-            <th scope="col">Branches</th>
-            <th scope="col">Status</th>
-            <th scope="col">Actions</th>
+            <th>#</th>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Branches</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model.Items == null || !Model.Items.Any())
+        @if (Model.Items != null && Model.Items.Any())
         {
-            <tr>
-                <td colspan="6" class="alert-info text-center">No departments found</td>
-            </tr>
-        }
-        else
-        {
-            @foreach (var dept in Model.Items)
+            int index = 1 + (Model.CurrentPage - 1) * Model.PageSize;
+            foreach (var dept in Model.Items)
             {
                 <tr>
-                    <th scope="row">@i</th>
+                    <td>@index</td>
                     <td>@dept.Name</td>
                     <td>@dept.Capacity</td>
                     <td>
@@ -41,12 +29,26 @@
                         }
                         else
                         {
-                            <span class="text-muted">-</span>
+                            <span class="text-muted">Unknown</span>
                         }
                     </td>
-                    <td class="@(dept.Status == (int)Status.Active ? "text-success" : "text-danger")">
-                        @Enum.GetName(typeof(Status), dept.Status)
+                    <td>
+                        @if (dept.Status == (int)Status.Active)
+                        {
+                            <span class="badge text-success">Active</span>
+                        }
+                        else if (dept.Status == (int)Status.Inactive)
+                        {
+                            <span class="badge text-danger">Inactive</span>
+                        }
+                        else
+                        {
+                            <span class="badge  text-secondary">Unknown</span>
+                        }
                     </td>
+                  
+
+
                     <td class="actions-cell">
                         <a href="javascript:void(0);" onclick="AdminDepartment.ShowAddUpdateModal(@dept.Id);">
                             <i class="bi bi-pencil"></i>
@@ -59,22 +61,14 @@
                             </a>
                         }
 
-                        @if (dept.Status == (int)Status.Deleted)
-                        {
-                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Inactive))" class="inactive-icon">
-                                <i class="bi bi-x-circle"></i>
-                            </a>
-                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Active))" class="active-icon">
-                                <i class="bi bi-check-circle"></i>
-                            </a>
-                        }
-                        else if (dept.Status != (int)Status.Inactive)
+                        @if (dept.Status != (int)Status.Inactive)
                         {
                             <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Inactive))" class="inactive-icon">
                                 <i class="bi bi-x-circle"></i>
                             </a>
                         }
-                        else if (dept.Status != (int)Status.Active)
+
+                        @if (dept.Status != (int)Status.Active)
                         {
                             <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Active))" class="active-icon">
                                 <i class="bi bi-check-circle"></i>
@@ -82,8 +76,31 @@
                         }
                     </td>
                 </tr>
-                i++;
+                index++;
             }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted">No departments found.</td>
+            </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        function deleteDepartment(id) {
+            if (confirm("Are you sure you want to delete this department?")) {
+                $.post('/Admin/Department/Delete', { id: id }, function (res) {
+                    if (res.success) {
+                        toastr.success(res.message);
+                        location.reload();
+                    } else {
+                        toastr.error(res.message);
+                    }
+                });
+            }
+        }
+    </script>
+}

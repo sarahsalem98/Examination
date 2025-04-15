@@ -135,7 +135,7 @@ namespace Examination.PL.BL
                         (string.IsNullOrEmpty(search.Name) || d.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim())) &&
                         (search.Status == null || d.Status == search.Status) &&
                         (search.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == search.BranchId)),
-                    "DepartmentBranches.Branch" 
+                     "DepartmentBranches.Branch" 
                 )
                 .OrderByDescending(d => d.CreatedAt)
                 .ToList();
@@ -192,28 +192,28 @@ namespace Examination.PL.BL
         }
 
 
-        //public int Update(DepartmentMV department)
-        //{
-        //    try
-        //    {
-        //        var existing = _unitOfWork.DepartmentRepo
-        //            .FirstOrDefault(d => d.Id != department.Id && d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
-        //        if (existing != null)
-        //        {
-        //            return -1; //already exists
-        //        }
-        //        var updatedDepartment = _mapper.Map<Department>(department);
-        //        updatedDepartment.UpdatedAt = DateTime.Now;
-        //        updatedDepartment.UpdatedBy = 1; // Replace with current user ID
-        //        _unitOfWork.DepartmentRepo.Update(updatedDepartment);
-        //        return _unitOfWork.Save();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error occurred while updating department");
-        //        return 0;
-        //    }
-        //}   
+        public int Update(DepartmentMV department)
+        {
+            try
+            {
+                var existing = _unitOfWork.DepartmentRepo
+                    .FirstOrDefault(d => d.Id != department.Id && d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
+                if (existing != null)
+                {
+                    return -1; //already exists
+                }
+                var updatedDepartment = _mapper.Map<Department>(department);
+                updatedDepartment.UpdatedAt = DateTime.Now;
+                updatedDepartment.UpdatedBy = 1; // Replace with current user ID
+                _unitOfWork.DepartmentRepo.Update(updatedDepartment);
+                return _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating department");
+                return 0;
+            }
+        }
 
 
 
