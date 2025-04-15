@@ -53,7 +53,7 @@ namespace Examination.PL.BL
             try
             {
                 InstructorMV instructorMV = new InstructorMV();
-              var instructor=unitOfWork.InstructorRepo.FirstOrDefault(i => i.Id ==Id, "GeneratedExams,InstructorCourses,User");
+              var instructor=unitOfWork.InstructorRepo.FirstOrDefault(i => i.Id ==Id, "GeneratedExams,InstructorCourses.DepartmentBranch,User");
                 if(instructor == null)
                 {
                     return instructorMV;
@@ -75,7 +75,19 @@ namespace Examination.PL.BL
             try
             {
                 var res = 0;
+                var resUpdateInstuctorCourses = 0;
+                var newInstuctorCoursesList= new  List<InstructorCourse>(){}; 
                 var oldinstructor=unitOfWork.InstructorRepo.FirstOrDefault(i=>i.Id==instructor.Id, "GeneratedExams,InstructorCourses,User");
+                //if (instructor.InstructorCourses.Count() > 0)
+                //{
+                    resUpdateInstuctorCourses=this.UpdateInstructorCourses(instructor.InstructorCourses, oldinstructor.Id);
+                //}
+
+                if (resUpdateInstuctorCourses == 0)
+                {
+                    return -2;
+                }
+
                 if (oldinstructor == null)
                 {
                     return -1;
@@ -90,8 +102,7 @@ namespace Examination.PL.BL
                     oldinstructor.User.LastName = instructor.User.LastName;
                     oldinstructor.User.Phone = instructor.User.Phone;
                     oldinstructor.User.Age = instructor.User.Age;
-                    oldinstructor.IsExternal = instructor.IsExternal;
-            
+                    oldinstructor.IsExternal = instructor.IsExternal;            
                     unitOfWork.InstructorRepo.Update(oldinstructor);
                     res = unitOfWork.Save();
                     return res;
@@ -118,7 +129,12 @@ namespace Examination.PL.BL
                     return -1;
                 }else
                 {
-                    var NewInstructor=mapper.Map<Instructor>(instructor); 
+                    var NewInstructor=mapper.Map<Instructor>(instructor);
+                    var instructorCourses = unitOfWork.InstructorRepo.GetInstructorCoursesWithDepartmentBranchId(mapper.Map<List<InstructorCourse>>(instructor.InstructorCourses));
+                    if(instructorCourses.Count()==0 && instructor.InstructorCourses.Count() != 0)
+                    {
+                        return -2;
+                    }
                     NewInstructor.User.CreatedAt = DateTime.Now;
                     NewInstructor.User.CreatedBy = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value); ;
                     NewInstructor.User.Email = instructor.User.Email;
@@ -128,28 +144,11 @@ namespace Examination.PL.BL
                     NewInstructor.User.Age = instructor.User.Age;
                     NewInstructor.User.Password=PasswordHelper.HashPassword("123456");
                     NewInstructor.IsExternal=instructor.IsExternal;
+                    NewInstructor.InstructorCourses = instructorCourses;
                     NewInstructor.User.Status = (int)Status.Active;
                     NewInstructor.User.UserTypes.Add(unitOfWork.UserTypeRepo.FirstOrDefault(i=>i.TypeName==Constants.UserTypes.Instructor));
                     unitOfWork.InstructorRepo.Insert(NewInstructor);
-                    foreach (var instructorcourses in instructor.InstructorCourses)
-                    {
-                        var departmentbranch = unitOfWork.DepartmentBranchRepo.FirstOrDefault(d => d.BranchId == instructorcourses.DepartmentBranch.BranchId && d.DepartmentId == instructorcourses.DepartmentBranch.DepartmentId);
-                        if(departmentbranch.Id != null)
-                        {
-                            var newInstructorCoursses = new InstructorCourse
-                            {
-                                Instructor =NewInstructor,
-                                CourseId = instructorcourses.CourseId,
-                                DepartmentBranchId = departmentbranch.Id,
-
-                            };
-                            NewInstructor.InstructorCourses.Add(newInstructorCoursses);
-                        }else
-                        {
-                            logger.LogError("***Invalid Branch-Department combination.");
-                        }
-                    }
-                    unitOfWork.InstructorRepo.Insert(NewInstructor);
+                
 
                     res = unitOfWork.Save();
                     return res;
@@ -207,6 +206,21 @@ namespace Examination.PL.BL
                 return null;
             }
         }
-       
+
+        public int UpdateInstructorCourses(List<InstructorCourseMV> newInstructorCourses , int InstructorId)
+        {
+            try
+            {
+                var res = 0;
+                res=unitOfWork.InstructorRepo.UpdateCourses( mapper.Map<List<InstructorCourse>>(newInstructorCourses), InstructorId);  
+                return res;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while Updating instructor courses data.");
+                return 0;
+            }
+        }
+
     }
 }

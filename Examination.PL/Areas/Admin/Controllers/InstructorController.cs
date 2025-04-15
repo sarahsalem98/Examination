@@ -42,6 +42,8 @@ namespace Examination.PL.Areas.Admin.Controllers
         {
             ViewData["Title"] = "Add Update Student";
             ViewBag.branches = branchService.GetByStatus((int)Status.Active);
+            ViewBag.departments = departmentService.GetByStatus((int)Status.Active);
+            ViewBag.courses = courseService.GetCourseByStatus((int)Status.Active);
             var instructor = new InstructorMV();
             if (id > 0)
             {
@@ -66,6 +68,12 @@ namespace Examination.PL.Areas.Admin.Controllers
                     response.Success = true;
                     response.Message = "Instructor Updated successfully";
                     response.Data = instructor;
+                }else if (res == -2)
+                {
+                    response.Success = false;
+                    response.Message = "this courses in this department already assigned to another instructor";
+                    response.Data = null;
+
                 }
                 else
                 {
@@ -88,6 +96,12 @@ namespace Examination.PL.Areas.Admin.Controllers
                     response.Success = false;
                     response.Message = "Instructor Already Exsists";
                     response.Data = instructor;
+                }else if (res == -2)
+                {
+                    response.Success = false;
+                    response.Message = "this courses in this department already assigned to another instructor";
+                    response.Data = instructor;
+
                 }
                 else
                 {
