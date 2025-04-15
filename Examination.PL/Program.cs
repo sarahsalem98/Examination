@@ -26,6 +26,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -34,9 +35,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #region RegisterServices
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IStudentService, StudentService>();  
-builder.Services.AddScoped<IBranchService,BranchService>();   
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 #endregion
 
@@ -46,6 +48,8 @@ builder.Services.AddScoped<DataSeeder>();
 
 #endregion
 
+
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 
@@ -58,7 +62,7 @@ var app = builder.Build();
 //        var context = services.GetRequiredService<AppDbContext>();
 //        context.Database.Migrate();
 //        var dataSeeder = services.GetRequiredService<DataSeeder>();
-//        dataSeeder.StudentSeeder();
+//        dataSeeder.SuperAdminSeeder();
 //        var logger = services.GetRequiredService<ILogger<Program>>();
 //        logger.LogInformation("data seeded successfully");
 //    }
@@ -84,6 +88,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
     name: "areas",

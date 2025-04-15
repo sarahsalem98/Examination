@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Students";
+    ViewData["Title"] = "Courses";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
 }
@@ -13,7 +13,7 @@
         <div class="d-flex align-items-center justify-content-between gap-lg-3 mb-3 mt-3">
 
             <!-- Advanced Search Dropdown -->
-            <div class="search d-flex align-items-center ">
+            @*             <div class="search d-flex align-items-center ">
 
                 <div class="search-dropdown">
                     <button class="advanced-search-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -63,7 +63,6 @@
                                     <option value="" selected>Choose...</option>
                                     @foreach (var item in ViewBag.Statuses)
                                     {
-                                      
                                         <option value="@item.Id">@item.Name</option>
                                     }
                                 </select>
@@ -96,19 +95,20 @@
                 </div>
             </div>
 
+            <div> *@
             <div>
-                <button class="btn btn-add rounded-0" onclick="AdminStudent.ShowAddUpdateModal();"> + Create </button>
+                <button class="btn btn-add rounded-0" onclick="Courses.ShowAddUpdateModal();"> + Create </button>
             </div>
         </div>
-       
-    
-        <div class="table-responsive list mt-4" id="studentList"></div>
-
     </div>
 
-    <div class="d-flex justify-content-center">
-        <ul id="pagination" class="pagination rounded-0"></ul>
-    </div>
+    <div class="table-responsive list" id="studentList"></div>
+
+</div>
+
+<div class="d-flex justify-content-center">
+    <ul id="pagination" class="pagination rounded-0"></ul>
+</div>
 
 </div>
 
@@ -116,10 +116,10 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addUpdateModal">Create New Exam</h5>
+                <h5 class="modal-title" id="addUpdateModal">Create New Course</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          <div id="addUpdateModalView"></div>
+            <div id="addUpdateModalView"></div>
         </div>
     </div>
 </div>
@@ -128,11 +128,10 @@
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
-    <script src="~/js/admin/student.js"></script>
+    <script src="~/js/admin/Course.js"></script>
     <script>
         $(document).ready(function () {
-          AdminStudent.Fetch(1);
-
+          Courses.Fetch(1)
         });
     </script>
 }

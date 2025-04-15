@@ -6,9 +6,10 @@
         public string Message { get; set; } = null!;
 
         public string? RedirectUrl { get; set; }
-
+        public object? Data { get; set; }
 
     }
+
     public class PaginatedData<T> where T : class
     {
         public IEnumerable<T> Items { get; set; } = null!;
