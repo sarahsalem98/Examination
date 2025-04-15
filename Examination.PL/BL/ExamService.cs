@@ -129,7 +129,29 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
+        public ExamMV GetById(int id)
+        {
+            try
+            {
+                ExamMV examMV=new ExamMV();
 
+                var  exam=_unitOfWork.ExamRepo.FirstOrDefault(d=>d.Id==id, "Course");
+                if(exam == null)
+                {
+                    return examMV;
+                }else
+                {
+                    examMV = _mapper.Map<ExamMV>(exam);
+                    return examMV;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occuired while Updating exam");
+                return null;
+            }
+        }
         public PaginatedData<ExamMV> GetAllPaginated(ExamSearchMV SearchModel, int PageSize = 10, int Page = 1)
         {
 
