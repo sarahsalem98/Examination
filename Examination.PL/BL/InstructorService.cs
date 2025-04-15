@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal.Mappers;
 using Examination.DAL.Entities;
 using Examination.DAL.Repos.IRepos;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 using System.Drawing.Printing;
+using System.Linq;
 
 namespace Examination.PL.BL
 {
@@ -105,6 +107,10 @@ namespace Examination.PL.BL
         {
             try
             {
+                if (instructor?.User == null)
+                {
+                   logger.LogError("User data is required.");
+                }
                 var res = 0;
                 var user = unitOfWork.UserRepo.FirstOrDefault(u => u.Email == instructor.User.Email);
                 if (user != null)
@@ -125,6 +131,26 @@ namespace Examination.PL.BL
                     NewInstructor.User.Status = (int)Status.Active;
                     NewInstructor.User.UserTypes.Add(unitOfWork.UserTypeRepo.FirstOrDefault(i=>i.TypeName==Constants.UserTypes.Instructor));
                     unitOfWork.InstructorRepo.Insert(NewInstructor);
+                    foreach (var instructorcourses in instructor.InstructorCourses)
+                    {
+                        var departmentbranch = unitOfWork.DepartmentBranchRepo.FirstOrDefault(d => d.BranchId == instructorcourses.DepartmentBranch.BranchId && d.DepartmentId == instructorcourses.DepartmentBranch.DepartmentId);
+                        if(departmentbranch.Id != null)
+                        {
+                            var newInstructorCoursses = new InstructorCourse
+                            {
+                                Instructor =NewInstructor,
+                                CourseId = instructorcourses.CourseId,
+                                DepartmentBranchId = departmentbranch.Id,
+
+                            };
+                            NewInstructor.InstructorCourses.Add(newInstructorCoursses);
+                        }else
+                        {
+                            logger.LogError("***Invalid Branch-Department combination.");
+                        }
+                    }
+                    unitOfWork.InstructorRepo.Insert(NewInstructor);
+
                     res = unitOfWork.Save();
                     return res;
                 }
@@ -146,7 +172,9 @@ namespace Examination.PL.BL
 
                 var instructors = unitOfWork.InstructorRepo.GetAll(
                     i =>(InstructorSearch.IsExternal == null || i.IsExternal == (bool)InstructorSearch.IsExternal) &&
-                   (InstructorSearch.Status==null||i.User.Status==(int)InstructorSearch.Status)&&
+                   (InstructorSearch.DepartmentId==null|| i.InstructorCourses.Any(ic=>ic.DepartmentBranch!=null&&ic.DepartmentBranch.DepartmentId==InstructorSearch.DepartmentId))&&
+                    (InstructorSearch.BranchId == null ||i.InstructorCourses.Any(ic => ic.DepartmentBranch != null && ic.DepartmentBranch.BranchId == InstructorSearch.BranchId))&&
+                  (InstructorSearch.Status==null||i.User.Status==(int)InstructorSearch.Status)&&
                      (string.IsNullOrEmpty(InstructorSearch.Name) ||
                    (!string.IsNullOrEmpty(i.User.FirstName) && i.User.FirstName.ToLower().Trim().Contains(InstructorSearch.Name.ToLower().Trim())) ||
                   (!string.IsNullOrEmpty(i.User.LastName) && i.User.LastName.ToLower().Trim().Contains(InstructorSearch.Name.ToLower().Trim()))

@@ -34,7 +34,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         public IActionResult List(InstructorSearchMV InstructorSearch, int page = 1, int pagesize = 10)
         {
 
-            var instructors=InstructorService.GetAllPaginated(InstructorSearch, page, pagesize);
+            var instructors = InstructorService.GetAllPaginated(InstructorSearch, page, pagesize);
             return View(instructors);
         }
         [HttpGet]
@@ -43,7 +43,7 @@ namespace Examination.PL.Areas.Admin.Controllers
             ViewData["Title"] = "Add Update Student";
             ViewBag.branches = branchService.GetByStatus((int)Status.Active);
             var instructor = new InstructorMV();
-            if(id>0)
+            if (id > 0)
             {
                 instructor = InstructorService.getById(id);
                 if (instructor == null)
@@ -54,59 +54,49 @@ namespace Examination.PL.Areas.Admin.Controllers
             return View(instructor);
         }
         [HttpPost]
-        public IActionResult AddUpdate(InstructorMV instructor)
+        public IActionResult AddUpdate([FromBody] InstructorMV instructor)
         {
-           ResponseMV response = new ResponseMV();
-            if (ModelState.IsValid)
+            ResponseMV response = new ResponseMV();
+
+            if (instructor.Id > 0)
             {
-                if(instructor.Id>0)
+                var res = InstructorService.Update(instructor);
+                if (res > 0)
                 {
-                    var res=InstructorService.Update(instructor);
-                    if (res > 0)
-                    {
-                        response.Success = true;
-                        response.Message = "Instructor Updated successfully";
-                        response.Data = instructor;
-                    }
-                    else
-                    {
-                        response.Success = false;
-                        response.Message = "something wont wrong";
-                    }
+                    response.Success = true;
+                    response.Message = "Instructor Updated successfully";
+                    response.Data = instructor;
                 }
                 else
                 {
-                   var res= InstructorService.Add(instructor);
-                    if(res>0)
-                    {
-                        response.Success = true;
-                        response.Message = "Instructor Added successfully";
-                        response.Data = instructor;
-                    }
-                    else if (res==-1)
-                    {
-                        response.Success = false;
-                        response.Message = "Instructor Already Exsists";
-                    }
-                    else
-                    {
-                        response.Success = false;
-                        response.Message = "something wont wrong";
-                    }
+                    response.Success = false;
+                    response.Message = "something wont wrong";
+                    response.Data = instructor;
                 }
             }
             else
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-                foreach (var error in errors)
+                var res = InstructorService.Add(instructor);
+                if (res > 0)
                 {
-                    Console.WriteLine(error.ErrorMessage);
+                    response.Success = true;
+                    response.Message = "Instructor Added successfully";
+                    response.Data = instructor;
                 }
-
-               
-                response.Success = false;
-                response.Message = "Invalid Data";
+                else if (res == -1)
+                {
+                    response.Success = false;
+                    response.Message = "Instructor Already Exsists";
+                    response.Data = instructor;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "something wont wrong";
+                    response.Data = instructor;
+                }
             }
+        
 
             return Json(response);
         }

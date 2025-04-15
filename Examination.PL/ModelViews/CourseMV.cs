@@ -31,9 +31,9 @@ namespace Examination.PL.ModelViews
     }
     public class InstructorCourseMV
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
-        public int InstructorId { get; set; }
+        public int? InstructorId { get; set; }
 
         public int CourseId { get; set; }
 

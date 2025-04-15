@@ -26,7 +26,7 @@ namespace Examination.DAL.Repos
         {
 
             _db = db;
-           // StudentRepo = new StudentRepo(_db);
+            //StudentRepo = new StudentRepo(_db);
             //UserRepo = new UserRepo(_db);
             //BranchRepo = new BranchRepo(_db);
             //DepartmentRepo = new DepartmentRepo(_db);

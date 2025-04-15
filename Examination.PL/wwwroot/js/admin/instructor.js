@@ -72,7 +72,8 @@
         AdminInstructor.currentSearchData = {};
         AdminInstructor.Fetch(1);
     },
-    ShowAddUpdateModal: function (id ) {
+    ShowAddUpdateModal: function (id)
+    {
         console.log(id);
         $("#loader").addClass("show");
         $.ajax({
@@ -90,28 +91,57 @@
             }
         });
     },
-
+   
     AddUpdate: function (e)
     {
         e.preventDefault();
+        var instructorData = {
+            User: {
+                FirstName: $("#firstName").val(),
+                LastName: $("#lastName").val(),
+                Age: parseInt($("#age").val()),
+                Email: $("#email").val(),
+                Phone: $("#phone").val()
+            },
+           IsExternal :$("#IsExternal").val() === "true" ? true : false,
+            InstructorCourses: []
+        };
+        $("#InstructorAssignmentTable tbody tr").each(function () {
+            var branchId = $(this).find(".branch").val();
+            var departmentId = $(this).find(".department").val();
+            var courseId = $(this).find(".course").val();
+            if (branchId && departmentId && courseId) {
+                instructorData.InstructorCourses.push({
+                    CourseId: parseInt(courseId),
+                    DepartmentBranch: {
+                        BranchId: parseInt(branchId),
+                        DepartmentId: parseInt(departmentId)
+                    },
+                   
+                });
+            }
+        });
         $.ajax({
             type: "POST",
             url: "/Admin/instructor/AddUpdate",
-            data: $("#admin-instructor-form").serialize(),
+            contentType: "application/json",
+            data: JSON.stringify(instructorData), 
             success: function (response) {
-                debugger
+             
                 if (response.success) {
-
+                  
                     AdminInstructor.Fetch(AdminInstructor.currentPage);
                     $('#addUpdateModal').modal('hide');
                     
                     toastr.success(response.message);
 
-                } else {
+                 } else {
+                     console.log("Repsonse" + JSON.stringify( response.data));
                     toastr.error(response.message);
                 }
             },
             error: function (xhr, status, error) {
+
                 console.error("Error adding/updating instructor:", error);
             }
         })
@@ -152,8 +182,6 @@
 
         $(document).on("change", ".department", function () {
             var deptId = $(this).val();
-            console.log("Selected Department ID:", deptId); 
-
             var row = $(this).closest("tr");
             var course = row.find(".course");
             course.empty().append('<option value="">Choose...</option>');
@@ -188,7 +216,7 @@
             url: "/Admin/Instructor/GetCoursesByDepartmenID",
             data: {DepartmentId: deptId },
             success: function (response) {
-                console.log("Courses Response:", response);
+               
                 if (response.success) {
                     $.each(response.data, function (index, course) {
                         console.log("Course:", course);
@@ -202,34 +230,37 @@
                 console.error("Error loading courses");
             }
         });
-    }
-,
+    },
 
-    HandleAssignRow: function () {
+    HandleAssignRow : function () {
         $("#assignBtn").click(function () {
+            var rowCount = $("#InstructorAssignmentTable tbody tr").length;
             var newRow = `
-                <tr>
-                    <td>
-                        <select class="form-select branch">
-                         
-                            ${$("#BranchId").html()}
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select department">
-                            <option value="">Choose...</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select course">
-                            <option value="">Choose...</option>
-                        </select>
-                    </td>
-                    <td>
-                        <a href="#" class="removeRow"><i class="bi bi-x-circle"></i></a>
-                    </td>
-                </tr>`;
-            $("#assignTable tbody").append(newRow);
+
+    <tr>
+        <td>
+            <select class="form-select branch" name="instructorCourses[${rowCount}].branchId">
+                ${$("#BranchId").html()}
+            </select>
+        </td>
+        <td>
+            <select class="form-select department" name="instructorCourses[${rowCount}].departmentId">
+                  <option value="">Choose...</option>
+            </select>
+        </td>
+        <td>
+            <select class="form-select course" name="instructorCourses[${rowCount}].courseId">
+                 <option value="">Choose...</option>
+            </select>
+        </td>
+        <td>
+            <a href="#" class="removeRow">
+                <i class="bi bi-x-circle text-danger"></i>
+            </a>
+        </td>
+    </tr>
+`;
+            $("#InstructorAssignmentTable tbody").append(newRow);
         });
     },
 
