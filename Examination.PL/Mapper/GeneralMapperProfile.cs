@@ -14,7 +14,11 @@ namespace Examination.PL.Mapper
             CreateMap<DepartmentMV, Department>().ReverseMap();
             CreateMap<DepartmentBranchMV, DepartmentBranch>().ReverseMap();
             CreateMap<StudentMV, Student>().ReverseMap();
-            CreateMap<Course, CourseMV>().ReverseMap();
+            CreateMap<ExamMV, Exam>().ReverseMap();
+            CreateMap<CourseMV, Course>().ReverseMap();
+            CreateMap<InstructorMV, Instructor>().ReverseMap();
+            CreateMap<InstructorCourseMV, InstructorCourse>().ReverseMap();
+            CreateMap<CourseDepartmentMV, CourseDepartment>().ReverseMap();
         }
 
     }

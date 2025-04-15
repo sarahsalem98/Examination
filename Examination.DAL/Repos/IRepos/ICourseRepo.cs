@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 namespace Examination.DAL.Repos.IRepos;
 
 public interface ICourseRepo : IRepo<Course>
-    {
-    }
+{
 }
+

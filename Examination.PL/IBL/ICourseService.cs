@@ -2,11 +2,12 @@
 
 namespace Examination.PL.IBL;
 
-    public interface ICourseService
-    {
-        public List<CourseMV> GetCoursesByDeaprtment(int id);
-        public List<CourseMV> GetCourseByStatus(int status);
-    }
+public interface ICourseService
+{
+    public List<CourseMV> GetCoursesByDeaprtment(int id);
+    public List<CourseMV> GetCourseByStatus(int status);
+    public CourseMV GetCourseByID(int id);
+
     public int Add(CourseMV course);
     public PaginatedData<CourseMV> GetAllPaginated(string searchName, int PageSize = 10, int Page = 1);
 

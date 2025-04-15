@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Examination.DAL.Entities;
+using Examination.DAL.Repos;
 using Examination.DAL.Repos.IRepos;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
@@ -34,9 +35,9 @@ namespace Examination.PL.BL
                 _unitOfWork.CourseRepo.Insert(crs);
                 result = _unitOfWork.Save();
                 return result;
-        }
+            }
             catch (Exception ex)
-        {
+            {
                 _logger.LogError(ex, "error Occurred while adding new Course ");
                 return 0;
             }
@@ -54,9 +55,6 @@ namespace Examination.PL.BL
                 {
                     CourseMVs = CourseMVs.Skip((Page - 1) * PageSize).Take(1).ToList();
 
-                if (courses==null)
-                {
-                    return null;
                 }
                 PaginatedData<CourseMV> paginatedData = new PaginatedData<CourseMV>
                 {
@@ -68,12 +66,64 @@ namespace Examination.PL.BL
                 return paginatedData;
 
 
-             }
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "error occuired while retriving student data in admin area");
                 return null;
 
+            }
+        }
+
+        public List<CourseMV> GetCoursesByDeaprtment(int id)
+        {
+            try
+            {
+                var courses = _unitOfWork.CourseRepo.GetAll(
+                    c => c.CourseDepartments.Select(d => d.DepartmentId).Contains(id),
+                           "CourseDepartments");
+
+
+
+
+                if (courses == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var coursesMV = _mapper.Map<List<CourseMV>>(courses);
+                    return coursesMV;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in fetch Courses ");
+                return null;
+
+            }
+        }
+
+        public List<CourseMV> GetCourseByStatus(int status)
+        {
+            try
+            {
+                var courses = _unitOfWork.CourseRepo.GetAll(c => c.Status == status);
+                if (courses == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var coursesMV = _mapper.Map<List<CourseMV>>(courses);
+                    return coursesMV;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in fetch Courses in status ");
+                return null;
             }
         }
 
@@ -97,6 +147,23 @@ namespace Examination.PL.BL
             {
                 _logger.LogError(e.Message, "error occurred while updating Course data ");
                 return 0;
+            }
+        }
+
+        public CourseMV GetCourseByID(int id)
+        {
+            try
+            {
+                var course = _unitOfWork.CourseRepo.FirstOrDefault(i => i.Id == id);
+                if (course == null)
+                    return null;
+                var courseMv = _mapper.Map<CourseMV>(course);
+                return courseMv;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error in fetch Courses ");
+                return null;
             }
         }
     }

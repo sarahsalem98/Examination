@@ -11,11 +11,11 @@
         <tr>
             <th scope="col">Id</th>
             <th scope="col">Name</th>
-            <th scope="col">Status</th>
             <th scope="col">Hours</th>
             <th scope="col">Description</th>
             <th scope="col">CreatedAt</th>
             <th scope="col">CreatedBy</th>
+            <th scope="col">Status</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -33,11 +33,27 @@
                 <tr>
                     <th scope="row">@item.Id</th>
                     <td>@item.Name</td>
-                    <td>@item.Status</td>
                     <td>@item.Hours</td>
                     <td>@item.Description</td>
                     <td>@item.CreatedAt</td>
                     <td>@item.CreatedBy</td>
+
+                    @if ((int)Status.Active == item.Status)
+                    {
+                        <td>@(Status.Active.ToString())</td>
+                    }
+                    else if ((int)Status.Inactive == item.Status)
+                    {
+                        <td>@(Status.Inactive.ToString())</td>
+                    }
+                    else
+                    {
+                        <td>@(Status.Deleted.ToString())</td>
+                    }
+
+
+
+
                     <td class="actions-cell">
                         <a href="javascript:void(0);" onclick="Courses.ShowAddUpdateModal(@item.Id);"><i class="bi bi-pencil"></i></a>
                         <a href="#" class="delete-icon"><i class="bi bi-trash"></i></a>

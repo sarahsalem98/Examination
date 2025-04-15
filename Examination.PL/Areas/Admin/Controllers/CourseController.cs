@@ -39,14 +39,14 @@ namespace Examination.PL.Areas.Admin.Controllers
         {
             ViewData["Title"] = "Add Update Course";
             var course = new CourseMV();
-            course = _courseService.GetAllPaginated("", 1, 10).Items.First();
+
             if (id > 0)
             {
-                //student = _courseService.GetById(id);
-                //if (student == null)
-                //{
-                //    return NotFound();
-                //}
+                course = _courseService.GetCourseByID(id);
+                if (course == null)
+                {
+                    return NotFound();
+                }
             }
 
             return View(course);
