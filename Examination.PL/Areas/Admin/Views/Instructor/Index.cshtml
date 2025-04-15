@@ -37,7 +37,7 @@
                             <div class="col-md-6">
                                 <label for="BranchId" class="form-label">Branch</label>
                                 <select class="form-select rounded-0" id="BranchId">
-                                    <option selected value="null">Choose...</option>
+                                    <option selected value="null" >Choose...</option>
                                     @foreach (var branch in ViewBag.Branches)
                                     {
                                         <option value="@branch.Id">@branch.Name</option>
@@ -124,10 +124,14 @@
 
 
 @section Scripts {
+    <script>
+        const allBranches=@Html.Raw(Json.Serialize(ViewBag.Branches));
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
     <script src="~/js/admin/instructor.js"></script>
     <script>
         $(document).ready(function () {
+          
           AdminInstructor.Fetch(1)
         });
     </script>

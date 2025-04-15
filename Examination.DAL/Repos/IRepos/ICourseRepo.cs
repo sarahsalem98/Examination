@@ -1,16 +1,13 @@
 ﻿using Examination.DAL.Entities;
-using Examination.DAL.Repos.IRepos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Examination.DAL.Repos
+namespace Examination.DAL.Repos.IRepos
 {
-    public class ExamRepo : Repo<Exam>, IExamRepo
+    public interface ICourseRepo:IRepo<Course>
     {
-        {
-        }
     }
 }

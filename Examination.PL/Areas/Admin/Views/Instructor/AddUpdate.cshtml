@@ -4,8 +4,8 @@
     Layout = null;
 }
 <form id="admin-instructor-form">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="Id" id="Id" />
+    <input type="hidden" asp-for="UserId"  id="UserId"/>
     <div class="modal-body mx-3">
 
         <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
@@ -44,16 +44,110 @@
             </div>
         </div>
         <!-- InstructorType -->
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4">
             <label for="IsExternal" class="form-label">Instructor Type:</label>
             <select class="form-select" id="IsExternal" asp-for="IsExternal" >
                 <option value="">Select Instructor Type </option>
                 <option value="true">External</option>
                 <option value="false">Internal</option>
             </select>
-        
+
             <span asp-validation-for="IsExternal" class="text-danger"></span>
         </div>
+        <h5 class="mb-2" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Assign Instructor</h5>
+
+        <button type="button" id="assignBtn" class="btn btn-add rounded-0 mb-3">Assign</button>
+
+
+        <div class="mb-3">
+            <table class="table table-bordered" id="InstructorAssignmentTable">
+                <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Department</th>
+                        <th>Course</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.InstructorCourses.Count() > 0)
+                    {
+                        @for(int i =0; i<Model.InstructorCourses.Count();i++)
+                        {
+                        <tr>
+                               
+                                    <input type="hidden" class="instructorCourseBranchId" asp-for=InstructorCourses[i].Id name="instructorCourses[0].id" />
+                            <td>
+                                    <select class="form-select branch" asp-for=InstructorCourses[i].DepartmentBranch.BranchId name="instructorCourses[0].branchId" onchange="AdminInstructor.HandleDropDownDepartments(this)">
+                                    <option value="">Choose...</option>
+                                    @foreach (var branch in ViewBag.Branches)
+                                    {
+                                        <option value="@branch.Id">@branch.Name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                    <select class="form-select department" asp-for=InstructorCourses[i].DepartmentBranch.DepartmentId name="instructorCourses[0].departmentId" onchange="AdminInstructor.HandelDropDownCourses(this)">
+                                    <option value="">Choose...</option>
+                                        @foreach (var dept in ViewBag.departments)
+                                        {
+                                            <option value="@dept.Id">@dept.Name</option>
+                                        }
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select course" asp-for=InstructorCourses[i].CourseId name="instructorCourses[0].courseId">
+                                    <option value="">Choose...</option>
+                                        @foreach (var course in ViewBag.courses)
+                                        {
+                                            <option value="@course.Id">@course.Name</option>
+                                        }
+                                </select>
+                            </td>
+                            <td>
+                                    <a href="javascript:void(0)" class="remove-row" onclick="AdminInstructor.HandleDeleteRow(this)">
+                                    <i class="bi bi-x-circle text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        
+                    }
+                        
+                    }else{
+                        <tr>
+                            <td>
+                                <select class="form-select branch" name="instructorCourses[0].branchId" onchange="AdminInstructor.HandleDropDownDepartments(this)">
+                                    <option value="">Choose...</option>
+                                    @foreach (var branch in ViewBag.Branches)
+                                    {
+                                        <option value="@branch.Id">@branch.Name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select department" name="instructorCourses[0].departmentId" onchange="AdminInstructor.HandelDropDownCourses(this)">
+                                    <option value="">Choose...</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select course" name="instructorCourses[0].courseId">
+                                    <option value="">Choose...</option>
+                                </select>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" class="remove-row" >
+                                    <i class="bi bi-x-circle text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+             
+                 
+                </tbody>
+            </table>
+        </div>
+
+       
 
     </div>
 
@@ -61,13 +155,17 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn advanced-search-btn" onclick="AdminInstructor.AddUpdate(event)">Save Data</button>
+        <button  class="btn advanced-search-btn" onclick="AdminInstructor.AddUpdate(event)">Save Data</button>
     </div>
 </form>
 
 <script>
     $(document).ready(function(){
-       
+  
+        //AdminInstructor.HandleDropDownChanges();
+        AdminInstructor.HandleAssignRow();
+        //AdminInstructor.HandleDeleteRow();
+    
     });
 </script>
 
