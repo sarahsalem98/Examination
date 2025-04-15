@@ -1,0 +1,209 @@
+﻿@import url('table.css');
+.a {
+    text-decoration: none;
+}
+
+.Animationsearch {
+    width: 10px;
+    transition: width 0.8s ease-in-out;
+}
+
+    .Animationsearch:focus {
+        width: 200px;
+    }
+
+.form-control {
+    flex-grow: 1;
+    margin-right: 8px;
+}
+
+.btn {
+    white-space: nowrap;
+}
+
+.form-control, .btn {
+    height: 38px;
+}
+
+.searchbtn {
+    background-color: #40277b;
+    color: white;
+    border: none;
+    border-radius: 0px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.advanced-search-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.btn-Results {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+    .btn-Results:hover {
+        color: #f3722e;
+    }
+
+.btn-save {
+    background-color: #40277b;
+    color: white;
+    border-radius: 25px;
+    padding: 5px 10px;
+    border: none;
+}
+
+.sort-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #f9f9f9;
+    padding: 0;
+}
+
+.data-table thead th {
+    background-color: #40277b;
+    color: #ffffff;
+    font-weight: bold;
+}
+.data-table tbody td {
+    font-weight: 200;
+    font-size: 15px;
+}
+
+.advanced-search-btn {
+    position: relative;
+    z-index: 1;
+}
+
+.search-dropdown {
+    position: relative; /* Ensure the dropdown container is relative */
+}
+
+
+    .search-dropdown .dropdown-menu {
+        position: absolute;
+        margin-top: 0;
+        top: 50px;
+        right: -30px !important;
+        left: -230px !important;
+        transform: translateY(0px) !important;
+        transform: translateX(230px) !important;
+        width: 600px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: auto;
+    }
+
+.rm-control, .form-select {
+    width: 100%;
+}
+
+.btn-save {
+    background-color: #40277b;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 8px 16px;
+}
+
+    .btn-save:hover {
+        background-color: #301e5a;
+    }
+
+/* Label styling for clarity and better visual */
+.label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+
+/* Custom Pagination Colors */
+.pagination .page-link {
+    border-radius: 0;
+    color: #40277b;
+    background-color: #f6f6f6;
+    border-color: #301e5a;
+}
+
+    .pagination .page-link:hover {
+        color: #ffffff;
+        background-color: #301e5a;
+        border-color: #24143c;
+    }
+
+.pagination .page-item .page-link {
+    border-radius: 0;
+}
+
+
+.pagination .page-item.active .page-link {
+    border-radius: 0;
+    color: #ffffff;
+    background-color: #40277b;
+    border-color: #24143c;
+}
+
+.list {
+    min-height: 68vh;
+}
+
+.btn-add {
+    background-color: #f3722e;
+    color: white;
+    border: none;
+    border-radius: 0px;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+ .btn-add:hover {
+    
+        color: var(--promary-color);
+       
+}
+
+.actions-cell {
+    text-align: center;
+    padding: 10px;
+}
+
+.actions-cell a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+ }
+
+        /* Hover effects for icons */
+ .actions-cell a:hover {
+            color: var(--primary-color);
+ }
+
+ .actions-cell .delete-icon:hover {
+        color: red;
+  }
+
+  .actions-cell .active-icon:hover {
+        color:green ;
+    }
+ .actions-cell .inactive-icon:hover {
+        color:orangered;
+    }

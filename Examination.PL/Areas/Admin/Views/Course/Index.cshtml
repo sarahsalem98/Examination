@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Courses";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
+}
+
+<div class="d-flex flex-column">
+    <div class="container flex-grow-1">
+        <div class="d-flex align-items-center justify-content-between gap-lg-3 mb-3 mt-3">
+
+            <!-- Advanced Search Dropdown -->
+            @*             <div class="search d-flex align-items-center ">
+
+                <div class="search-dropdown">
+                    <button class="advanced-search-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Advanced Search
+                    </button>
+                    <div class="dropdown-menu p-4 flex-start">
+                        <!-- Dropdown content -->
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                <label for="DepartmentId" class="form-label">Department</label>
+                                <select class="form-select rounded-0" id="DepartmentId">
+                                    <option selected value="null"> Choose...</option>
+                                    @foreach (var department in ViewBag.Departments)
+                                    {
+                                        <option value="@department.Id">@department.Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="BranchId" class="form-label">Branch</label>
+                                <select class="form-select rounded-0" id="BranchId">
+                                    <option selected>Choose...</option>
+                                    @foreach (var branch in ViewBag.Branches)
+                                    {
+                                        <option value="@branch.Id">@branch.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                <label for="TrackType" class="form-label">Track Type:</label>
+                                <select class="form-select" id="TrackType">
+                                    <option selected value="">Choose...</option>
+                                    @foreach (var item in ViewBag.TrackTypes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Status" class="form-label">Status:</label>
+                                <select class="form-select" id="Status">
+                                    <option value="" selected>Choose...</option>
+                                    @foreach (var item in ViewBag.Statuses)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="AdminStudent.Reset();">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="AdminStudent.Search()">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex ms-2">
+                    <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.."
+                           aria-label="Search" />
+                    <button class="btn searchbtn" type="submit" onclick="AdminStudent.Search();">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <button class="btn searchbtn mx-2" type="submit" onclick="AdminStudent.Reset();">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div> *@
+            <div>
+                <button class="btn btn-add rounded-0" onclick="Courses.ShowAddUpdateModal();"> + Create </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive list" id="studentList"></div>
+
+</div>
+
+<div class="d-flex justify-content-center">
+    <ul id="pagination" class="pagination rounded-0"></ul>
+</div>
+
+</div>
+
+<div class="modal fade" id="addUpdateModal" tabindex="-1" aria-labelledby="addUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUpdateModal">Create New Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="addUpdateModalView"></div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script src="~/js/admin/Course.js"></script>
+    <script>
+        $(document).ready(function () {
+          Courses.Fetch(1)
+        });
+    </script>
+}
