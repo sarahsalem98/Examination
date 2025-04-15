@@ -9,7 +9,7 @@
             type: "POST",
             url: "/Admin/Instructor/list",
             data: { InstructorSearch: AdminInstructor.currentSearchData, PageSize: AdminInstructor.pageSize, Page: Page },
-           
+
             success: function (response) {
                 $("#loader").removeClass("show");
                 $("#instructorList").html(response);
@@ -72,8 +72,7 @@
         AdminInstructor.currentSearchData = {};
         AdminInstructor.Fetch(1);
     },
-    ShowAddUpdateModal: function (id)
-    {
+    ShowAddUpdateModal: function (id) {
         console.log(id);
         $("#loader").addClass("show");
         $.ajax({
@@ -81,7 +80,7 @@
             url: "/Admin/instructor/AddUpdate",
             data: { id: id },
             success: function (response) {
-            
+
                 $("#loader").removeClass("show");
                 $("#addUpdateModalView").html(response);
                 $('#addUpdateModal').modal('show');
@@ -91,22 +90,26 @@
             }
         });
     },
-   
-    AddUpdate: function (e)
-    {
+
+    AddUpdate: function (e) {
         e.preventDefault();
+        var DepartmentBranchIdSelectedId = 0;
         var instructorData = {
             User: {
+                Id: $("#UserId").val() ? parseInt($("#UserId").val()) : 0,
                 FirstName: $("#firstName").val(),
                 LastName: $("#lastName").val(),
                 Age: parseInt($("#age").val()),
                 Email: $("#email").val(),
                 Phone: $("#phone").val()
             },
-           IsExternal :$("#IsExternal").val() === "true" ? true : false,
+            IsExternal: $("#IsExternal").val() === "true" ? true : false,
+            UserId: $("#UserId").val() ? parseInt($("#UserId").val()) : 0,
+            Id: $("#Id").val() ? parseInt($("#Id").val()) : 0,
             InstructorCourses: []
         };
         $("#InstructorAssignmentTable tbody tr").each(function () {
+            var instructorCourseBranchId = $(this).find(".instructorCourseBranchId").val();
             var branchId = $(this).find(".branch").val();
             var departmentId = $(this).find(".department").val();
             var courseId = $(this).find(".course").val();
@@ -117,26 +120,29 @@
                         BranchId: parseInt(branchId),
                         DepartmentId: parseInt(departmentId)
                     },
-                   
+                    InstructorId: instructorData.Id,
+                    Id: parseInt(instructorCourseBranchId)
+
                 });
             }
         });
+        debugger;
         $.ajax({
             type: "POST",
             url: "/Admin/instructor/AddUpdate",
             contentType: "application/json",
-            data: JSON.stringify(instructorData), 
+            data: JSON.stringify(instructorData),
             success: function (response) {
-             
+
                 if (response.success) {
-                  
+
                     AdminInstructor.Fetch(AdminInstructor.currentPage);
                     $('#addUpdateModal').modal('hide');
-                    
+
                     toastr.success(response.message);
 
-                 } else {
-                     console.log("Repsonse" + JSON.stringify( response.data));
+                } else {
+                    console.log("Repsonse" + JSON.stringify(response.data));
                     toastr.error(response.message);
                 }
             },
@@ -151,8 +157,7 @@
             type: "PUT",
             url: "/Admin/instructor/ChangeStatus",
             data: { id: id, status: status },
-            success: function(response)
-            {
+            success: function (response) {
                 if (response.success) {
                     AdminInstructor.Fetch(AdminInstructor.currentPage);
                     toastr.success(response.message);
@@ -165,33 +170,37 @@
             }
         })
     },
-    HandleDropDownChanges: function () {
-        $(document).on("change", ".branch", function () {
-            var branchId = $(this).val();
-            var row = $(this).closest("tr");
+    HandleDropDownDepartments: function (e) {
+      
+            var branchId = $(e).val();
+            var row = $(e).closest("tr");
             var dept = row.find(".department");
             var course = row.find(".course");
-          
+
             dept.empty().append('<option value="">Choose...</option>');
             course.empty().append('<option value="">Choose...</option>');
-         
+
             if (branchId && branchId !== "null") {
                 AdminInstructor.GetDepartmentsByBranchId(branchId, dept);
             }
-        });
+       
 
-        $(document).on("change", ".department", function () {
-            var deptId = $(this).val();
-            var row = $(this).closest("tr");
+    },
+    HandelDropDownCourses: function (e) {
+     
+            var deptId = $(e).val();
+            var row = $(e).closest("tr");
             var course = row.find(".course");
             course.empty().append('<option value="">Choose...</option>');
 
             if (deptId && deptId !== "null") {
-                console.log("Fetching courses..."); 
+                console.log("Fetching courses...");
                 AdminInstructor.GetCoursesByDepartmentID(deptId, course);
             }
-        });
+    
     },
+
+
 
     GetDepartmentsByBranchId: function (branchId, dropdown) {
         $.ajax({
@@ -214,9 +223,9 @@
         $.ajax({
             type: "GET",
             url: "/Admin/Instructor/GetCoursesByDepartmenID",
-            data: {DepartmentId: deptId },
+            data: { DepartmentId: deptId },
             success: function (response) {
-               
+
                 if (response.success) {
                     $.each(response.data, function (index, course) {
                         console.log("Course:", course);
@@ -232,19 +241,31 @@
         });
     },
 
-    HandleAssignRow : function () {
+    HandleAssignRow: function () {
         $("#assignBtn").click(function () {
+            debugger;
             var rowCount = $("#InstructorAssignmentTable tbody tr").length;
+            var selectedBranchIds = [];
+            $("#InstructorAssignmentTable tbody tr .branch").each(function () {
+                var val = $(this).val();
+                if (val) selectedBranchIds.push(val);
+            });
+            var availableBranches = allBranches.filter(b => !selectedBranchIds.includes(b.id.toString()));
+            var branchOptions = '<option value="">Choose...</option>';
+            availableBranches.forEach(b => {
+                branchOptions += `<option value="${b.id}">${b.name}</option>`;
+            });
+        
             var newRow = `
 
     <tr>
         <td>
-            <select class="form-select branch" name="instructorCourses[${rowCount}].branchId">
-                ${$("#BranchId").html()}
+            <select class="form-select branch" name="instructorCourses[${rowCount}].branchId" onchange="AdminInstructor.HandleDropDownDepartments(this)">
+                ${branchOptions}
             </select>
         </td>
         <td>
-            <select class="form-select department" name="instructorCourses[${rowCount}].departmentId">
+            <select class="form-select department" name="instructorCourses[${rowCount}].departmentId" onchange="AdminInstructor.HandelDropDownCourses(this)">
                   <option value="">Choose...</option>
             </select>
         </td>
@@ -254,7 +275,7 @@
             </select>
         </td>
         <td>
-            <a href="#" class="removeRow">
+            <a href="javascriot:void(0);" class="removeRow" onclick="AdminInstructor.HandleDeleteRow(this)">
                 <i class="bi bi-x-circle text-danger"></i>
             </a>
         </td>
@@ -264,11 +285,12 @@
         });
     },
 
-    HandleDeleteRow: function () {
-        $(document).on("click", ".removeRow", function (e) {
-            e.preventDefault();
-            $(this).closest("tr").remove();
-        });
+    HandleDeleteRow: function (e) {
+        debugger;
+        console.log("777");
+        var data = $(e).closest("tr");
+        data.remove();
+
     }
 };
 
