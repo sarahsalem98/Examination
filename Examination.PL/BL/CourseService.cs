@@ -11,12 +11,14 @@ namespace Examination.PL.BL
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<CourseService> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CourseService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<CourseService> logger)
+        public CourseService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<CourseService> logger, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public int Add(CourseMV course)
@@ -25,12 +27,17 @@ namespace Examination.PL.BL
             try
             {
                 var crs = _mapper.Map<Course>(course);
+                crs.CreatedAt = DateTime.Now;
+                // Should be the id of the Admin  
+                if (crs.CreatedBy == 0)
+                    crs.CreatedBy = 1;
                 _unitOfWork.CourseRepo.Insert(crs);
                 result = _unitOfWork.Save();
                 return result;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "error Occurred while adding new Course ");
                 return 0;
             }
         }
@@ -64,6 +71,29 @@ namespace Examination.PL.BL
                 _logger.LogError(ex, "error occuired while retriving student data in admin area");
                 return null;
 
+            }
+        }
+
+        public int Update(CourseMV course)
+        {
+            try
+            {
+                int result = 0;
+                var courseExist = _unitOfWork.CourseRepo.FirstOrDefault(c => c.Id == course.Id);
+                if (courseExist == null)
+                    return result = -1;
+                _mapper.Map(course, courseExist);
+                courseExist.UpdatedAt = DateTime.Now;
+                //courseExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                courseExist.UpdatedBy = 0;
+                _unitOfWork.CourseRepo.Update(courseExist);
+                result = _unitOfWork.Save();
+                return result;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, "error occurred while updating Course data ");
+                return 0;
             }
         }
     }

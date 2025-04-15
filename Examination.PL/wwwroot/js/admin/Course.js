@@ -46,6 +46,50 @@
                 }
             }
         });
+    },
+    ShowAddUpdateModal: function (id) {
+        console.log(id);
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Course/AddUpdate",
+            data: { id: id },
+            success: function (response) {
+                console.log(response);
+                $("#loader").removeClass("show");
+                $("#addUpdateModalView").html(response);
+                $('#addUpdateModal').modal('show');
+                // AdminStudent.SetUpValidation();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching student data:", error);
+            }
+        });
+    }, AddUpdata: function (e) {
+        // $("#loader").addClass("show");
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/Admin/course/AddUpdate",
+            data: $("#admin-Course-form").serialize(),
+            success: function (response) {
+                // $("#loader").removeClass("show");
+                if (response.success) {
+                    Courses.Fetch(Courses.currentPage);
+                    //toastr.success(response.message);
+                    $('#addUpdateModal').modal('hide');
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding/updating Course:", error);
+            }
+        });
     }
 
+
 }
+
+
