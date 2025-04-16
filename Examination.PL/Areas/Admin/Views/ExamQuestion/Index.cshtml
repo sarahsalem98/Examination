@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Exam Questions";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/ExamQuestion.css" asp-append-version="true" />
+}
+
+
+    <nav class="breadcrumb">
+        <a href="َQuestions.html">Questions Bank</a>/<span>Add Question</span>
+    </nav>
+
+
+    <!-- section1 -->
+    <div class="card">
+        <div class="card-body">
+        <a class="btn bi bi-1-square-fill active" id="detailsButton"  > Details</a>
+        <a class="btn bi bi-2-square-fill" id="settingsButton"> Settings</a>
+        </div>
+    </div>
+<div class="card">
+    <form class="form-card" id="questionForm">
+        <div id="Loading">
+
+        </div>
+        <button type="submit" class="save-button mt-5">Save Setting</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin/ExamQuestion.js"></script>
+    <script>
+        $(document).ready(function () {
+
+          AdminExamQs.ShowAddUpdate();
+        });
+    </script>
+}
