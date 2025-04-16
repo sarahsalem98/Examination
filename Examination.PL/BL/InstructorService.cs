@@ -173,7 +173,8 @@ namespace Examination.PL.BL
                     i =>(InstructorSearch.IsExternal == null || i.IsExternal == (bool)InstructorSearch.IsExternal) &&
                    (InstructorSearch.DepartmentId==null|| i.InstructorCourses.Any(ic=>ic.DepartmentBranch!=null&&ic.DepartmentBranch.DepartmentId==InstructorSearch.DepartmentId))&&
                     (InstructorSearch.BranchId == null ||i.InstructorCourses.Any(ic => ic.DepartmentBranch != null && ic.DepartmentBranch.BranchId == InstructorSearch.BranchId))&&
-                  (InstructorSearch.Status==null||i.User.Status==(int)InstructorSearch.Status)&&
+                 (InstructorSearch.Status!=(int)Status.Deleted?i.User.Status!= (int)Status.Deleted:i.User.Status== (int)Status.Deleted) &&
+                    (InstructorSearch.Status==null||i.User.Status==(int)InstructorSearch.Status)&&
                      (string.IsNullOrEmpty(InstructorSearch.Name) ||
                    (!string.IsNullOrEmpty(i.User.FirstName) && i.User.FirstName.ToLower().Trim().Contains(InstructorSearch.Name.ToLower().Trim())) ||
                   (!string.IsNullOrEmpty(i.User.LastName) && i.User.LastName.ToLower().Trim().Contains(InstructorSearch.Name.ToLower().Trim()))
