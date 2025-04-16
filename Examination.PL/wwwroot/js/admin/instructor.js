@@ -8,7 +8,10 @@
         $.ajax({
             type: "POST",
             url: "/Admin/Instructor/list",
-            data: { InstructorSearch: AdminInstructor.currentSearchData, PageSize: AdminInstructor.pageSize, Page: Page },
+            data: {
+                InstructorSearch: AdminInstructor.currentSearchData,
+                PageSize: AdminInstructor.pageSize, Page: Page
+            },
 
             success: function (response) {
                 $("#loader").removeClass("show");

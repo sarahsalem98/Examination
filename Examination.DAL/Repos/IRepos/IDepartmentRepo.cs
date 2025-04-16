@@ -9,7 +9,7 @@ namespace Examination.DAL.Repos.IRepos
 {
     public interface IDepartmentRepo:IRepo<Department>
     {
-     
+
 
     }
 }

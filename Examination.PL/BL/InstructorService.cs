@@ -103,6 +103,7 @@ namespace Examination.PL.BL
                     oldinstructor.User.Phone = instructor.User.Phone;
                     oldinstructor.User.Age = instructor.User.Age;
                     oldinstructor.IsExternal = instructor.IsExternal;            
+            
                     unitOfWork.InstructorRepo.Update(oldinstructor);
                     res = unitOfWork.Save();
                     return res;
