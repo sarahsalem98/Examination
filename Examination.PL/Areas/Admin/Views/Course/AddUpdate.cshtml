@@ -2,7 +2,10 @@
 @using Examination.PL.General
 
 @{
+
     Layout = null;
+
+    SelectList DeptsList = new SelectList(ViewBag.Departments, "Id", "Name");
 }
 <form id="admin-Course-form">
     <input type="hidden" asp-for="Id" />
@@ -51,12 +54,16 @@
                 <textarea type="text" class="form form-control rounded-0 mb-1" id="Description" asp-for="Description" placeholder="Enter Course Description" required></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <!-- CreatedBy -->
-            @*             <div class="col-md-6 mb-3">
-                <label for="CreatedBy" class="form-label">CreatedBy</label>
-                <input type="text" class="form-control rounded-0 mb-1" id="CreatedBy" asp-for="CreatedBy" placeholder="Enter The Creator" required>
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div> *@
+
+            <div class="col-md-6 mb-3">
+                <label for="depts" class="form-label">Departments</label>
+                <select asp-for="DepartmentsIds" asp-items="@DeptsList" class="form form-control" required multiple>
+                    <option value="0">Select Department</option>
+                </select>
+                <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
+            </div>
+
+
         </div>
 
     </div>

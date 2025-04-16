@@ -16,10 +16,22 @@ public class CourseMV
     public int? UpdatedBy { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+
+    public List<int> DepartmentsIds { get; set; }
     public List<InstructorCourseMV>? InstructorCourses { get; set; } = null!;
     public List<CourseDepartmentMV>? CourseDepartments { get; set; } = null!;
 
 
+}
+
+public class CourseSearchMV
+{
+
+    public string? Name { get; set; }
+    public int? Status { get; set; }
+    public int? DepartmentId { get; set; }
+    public int? BranchId { get; set; }
+    public int? TrackType { get; set; }
 }
 public class CourseDepartmentMV
 {

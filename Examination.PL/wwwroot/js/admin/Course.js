@@ -2,14 +2,14 @@
     currentSearchData: {},
     totalPages: 1,
     currentPage: 1,
-    pageSize: 1,
+    pageSize: 10,
 
     Fetch: function (Page = 1) {
         $("#loader").addClass("show");
         $.ajax({
             type: "POST",
             url: "/Admin/course/list",
-            data: { studentSearch: Courses.currentSearchData, PageSize: Courses.pageSize, Page: Page },
+            data: { courseSearch: Courses.currentSearchData, PageSize: Courses.pageSize, Page: Page },
             success: function (response) {
                 $("#loader").removeClass("show");
                 $("#studentList").html(response);
@@ -26,7 +26,7 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching student data:", error);
+                console.error("Error fetching Course data:", error);
             }
         });
 
@@ -48,7 +48,12 @@
         });
     },
     ShowAddUpdateModal: function (id) {
-        console.log(id);
+        if (id > 0) {
+            $('#addUpdateModal .modal-title').text('Edit Course');
+        } else {
+            $('#addUpdateModal .modal-title').text('Create New Course');
+        }
+
         $("#loader").addClass("show");
         $.ajax({
             type: "GET",
@@ -65,7 +70,8 @@
                 console.error("Error fetching student data:", error);
             }
         });
-    }, AddUpdata: function (e) {
+    },
+    AddUpdata: function (e) {
         // $("#loader").addClass("show");
         e.preventDefault();
         $.ajax({
@@ -87,7 +93,33 @@
                 console.error("Error adding/updating Course:", error);
             }
         });
-    }
+
+    },
+    SetAdvancedSearchData: function () {
+        Courses.currentSearchData = {
+            Name: $("#Name").val(),
+            Status: $("#Status").val(),
+            DepartmentId: $("#DepartmentId").val(),
+            BranchId: $("#BranchId").val(),
+            TrackType: $("#TrackType").val(),
+
+        };
+        console.log("Values Are " + Courses.currentSearchData)
+
+    },
+    Search: function () {
+        Courses.SetAdvancedSearchData();
+        Courses.Fetch(1);
+    },
+    Reset: function () {
+        $("#Name").val("");
+        $("#Status").val("");
+        $("#DepartmentId").val("");
+        $("#BranchId").val("");
+        $("#TrackType").val("");
+        Courses.currentSearchData = {};
+        Courses.Fetch(1);
+    },
 
 
 }

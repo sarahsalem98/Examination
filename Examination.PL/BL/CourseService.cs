@@ -2,6 +2,7 @@
 using Examination.DAL.Entities;
 using Examination.DAL.Repos;
 using Examination.DAL.Repos.IRepos;
+using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 
@@ -29,10 +30,21 @@ namespace Examination.PL.BL
             {
                 var crs = _mapper.Map<Course>(course);
                 crs.CreatedAt = DateTime.Now;
-                // Should be the id of the Admin  
+                // Should be the id of the Logged User  
                 if (crs.CreatedBy == 0)
                     crs.CreatedBy = 1;
                 _unitOfWork.CourseRepo.Insert(crs);
+                _unitOfWork.Save();
+                foreach (var dep in course.DepartmentsIds)
+                {
+                    //var courseDept = new CourseDepartment() { CourseId = crs.Id, DepartmentId = dep };
+                    //_unitOfWork.CourseDepartmentRepo.Insert(courseDept);
+                    _unitOfWork.CourseDepartmentRepo.Insert(new CourseDepartment
+                    {
+                        CourseId = crs.Id,
+                        DepartmentId = dep
+                    });
+                }
                 result = _unitOfWork.Save();
                 return result;
             }
@@ -43,17 +55,40 @@ namespace Examination.PL.BL
             }
         }
 
-        public PaginatedData<CourseMV> GetAllPaginated(string searchName, int PageSize = 10, int Page = 1)
+        public PaginatedData<CourseMV> GetAllPaginated(CourseSearchMV courseSearch, int PageSize = 10, int Page = 1)
         {
             try
             {
                 List<CourseMV> CourseMVs = new List<CourseMV>();
-                List<Course> data = _unitOfWork.CourseRepo.GetAll().ToList();
+                List<Course> data = _unitOfWork.CourseRepo.GetAll(
+                    s =>
+                    //(courseSearch.BranchId == null || s.DepartmentBranch.BranchId == courseSearch.BranchId) &&
+                    //(courseSearch.BranchId == null || s.InstructorCourses.Any(i=>i.DepartmentBranch.BranchId==courseSearch.BranchId)) &&
+
+                    //1
+                                       (courseSearch.BranchId == null ||
+                    s.InstructorCourses != null &&
+                    s.InstructorCourses.Any(i =>
+                        i.DepartmentBranch != null &&
+                        i.DepartmentBranch.BranchId == courseSearch.BranchId)) &&
+                    //2
+                    (courseSearch.Status != (int)Status.Deleted ? s.Status != (int)Status.Deleted : s.Status == (int)Status.Deleted) &&
+                    //3
+                    (courseSearch.Status == null || s.Status == courseSearch.Status) &&
+
+                    //4
+                    (courseSearch.DepartmentId == null || courseSearch.DepartmentId.Value == s.CourseDepartments.FirstOrDefault(c =>
+                                             c.DepartmentId == courseSearch.DepartmentId.Value).DepartmentId) &&
+
+                    //5
+                    (String.IsNullOrEmpty(courseSearch.Name) ||
+                    (!String.IsNullOrEmpty(s.Name) && s.Name.ToLower().Trim().Contains(courseSearch.Name)))
+                    , "CourseDepartments,InstructorCourses.DepartmentBranch").OrderByDescending(s => s.CreatedAt).ToList();
                 CourseMVs = _mapper.Map<List<CourseMV>>(data);
                 int TotalCounts = CourseMVs.Count();
                 if (TotalCounts > 0)
                 {
-                    CourseMVs = CourseMVs.Skip((Page - 1) * PageSize).Take(1).ToList();
+                    CourseMVs = CourseMVs.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
 
                 }
                 PaginatedData<CourseMV> paginatedData = new PaginatedData<CourseMV>

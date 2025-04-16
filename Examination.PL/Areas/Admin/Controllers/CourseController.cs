@@ -1,4 +1,5 @@
-﻿using Examination.PL.BL;
+﻿using Examination.DAL.Repos.IRepos;
+using Examination.PL.BL;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
@@ -12,23 +13,33 @@ namespace Examination.PL.Areas.Admin.Controllers
     {
 
         private readonly ICourseService _courseService;
+        private readonly IDepartmentService _departmentService;
+        private readonly IBranchService _branchService;
 
-        public CourseController(ICourseService courseService)
+
+        public CourseController(ICourseService courseService, IUnitOfWork unitOfWork, IDepartmentService departmentService, IBranchService branchService)
         {
             _courseService = courseService;
+            _departmentService = departmentService;
+            _branchService = branchService;
         }
 
         public IActionResult Index()
         {
             ViewData["Title"] = "Courses";
+            ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
+            ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
+            ViewBag.TrackTypes = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
+            ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
 
             return View();
         }
 
-        public IActionResult List(string courseSearch, int Page = 1, int PageSize = 10)
+        public IActionResult List(CourseSearchMV courseSearch, int Page = 1, int PageSize = 10)
         {
             ViewData["Title"] = "Students List";
-            var courses = _courseService.GetAllPaginated(courseSearch, PageSize, Page);
+
+            var courses = _courseService.GetAllPaginated(courseSearch, PageSize: 10, Page);
             return View(courses);
         }
 
@@ -38,6 +49,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         public IActionResult AddUpdate(int id)
         {
             ViewData["Title"] = "Add Update Course";
+            ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
             var course = new CourseMV();
 
             if (id > 0)
