@@ -22,6 +22,53 @@ namespace Examination.PL.BL
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
+        public PaginatedData<StudentMV> GetStudentsByInstructorPaginated(StudentSearchMV studentSearch, int PageSize = 10, int Page = 1)
+        {
+            try
+            {
+                int loggedinInstructor = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                List<StudentMV> studentsMV = new List<StudentMV>();
+                List<Student> data = _unitOfWork.StudentRepo.GetAll((s => s.DepartmentBranch.InstructorCourses.Any(c => c.Instructor.UserId == loggedinInstructor) &&
+                (studentSearch.DepartmentId == null || s.DepartmentBranch.DepartmentId == studentSearch.DepartmentId) &&
+               (studentSearch.BranchId == null || s.DepartmentBranch.BranchId == studentSearch.BranchId) &&
+               (studentSearch.TrackType == null || s.TrackType == studentSearch.TrackType) &&
+               (studentSearch.courseId == null || s.StudentCourses.Any(sc => sc.CourseId == studentSearch.courseId))&&
+
+               (String.IsNullOrEmpty(studentSearch.Name) ||
+                (!String.IsNullOrEmpty(s.User.FirstName) && s.User.FirstName.ToLower().Trim().Contains(studentSearch.Name)) ||
+                (!String.IsNullOrEmpty(s.User.LastName) && s.User.LastName.ToLower().Trim().Contains(studentSearch.Name)))
+
+                ),
+            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,StudentCourses").GroupBy(s => s.Id).Select(s => s.First()).Where(s=>s.User.Status==(int)Status.Active).ToList();
+                studentsMV =_mapper.Map<List< StudentMV>>(data);
+                int TotalCounts = studentsMV.Count();
+                if (TotalCounts > 0)
+                {
+                    studentsMV = studentsMV.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
+
+                }
+                PaginatedData<StudentMV> paginatedData = new PaginatedData<StudentMV>
+                {
+                    Items = studentsMV,
+                    TotalCount = TotalCounts,
+                    PageSize = PageSize,
+                    CurrentPage = Page
+                };
+                return paginatedData;
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "error occuired while Fetching Students by instructor ID ");
+                return null;
+                
+            }
+
+        }
+
+
+
         public int Add(StudentMV student)
         {
             int result = 0;

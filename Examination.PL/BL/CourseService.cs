@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Examination.DAL.Entities;
 using Examination.DAL.Repos.IRepos;
+using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 
@@ -18,6 +20,24 @@ namespace Examination.PL.BL
             mapper = _mapper;
             logger = _logger;
             httpContextAccessor = _httpContextAccessor;
+        }
+        public List<CourseMV> GetCourseByInstructor()
+        {
+            try
+            {
+                int loggedinInstructor = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                List< CourseMV> courseMV = new List<CourseMV>();
+                List<Course> data=unitOfWork.CourseRepo.GetAll(c=>c.InstructorCourses.Select(c=>c.Instructor.UserId).Contains(loggedinInstructor),
+                    "InstructorCourses").Where(c=>c.Status==(int)Status.Active).ToList();
+                courseMV=mapper.Map<List< CourseMV>>(data);
+                return courseMV;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error in fetch Courses ");
+                return null;
+
+            }
         }
         public List<CourseMV> GetCoursesByDeaprtment(int id)
         {
