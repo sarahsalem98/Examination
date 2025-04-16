@@ -10,7 +10,7 @@ using Examination.PL.Attributes;
 namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
-   // [UserTypeAuthorize(Constants.UserTypes.Admin)] // ✅ Enforce admin-only access like StudentController
+    [UserTypeAuthorize(Constants.UserTypes.Admin)]
 
     public class DepartmentController : Controller
     {
@@ -51,91 +51,6 @@ namespace Examination.PL.Areas.Admin.Controllers
 
 
 
-        //[HttpPost]
-        //public IActionResult AddUpdate(DepartmentMV model)
-        //{
-        //    ResponseMV response = new();
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (model.Id > 0)
-        //        {
-        //            var result = _departmentService.Update(model);
-        //            response.Success = result > 0;
-        //            response.Message = result > 0 ? "Department updated successfully" : "Error occurred while updating department";
-        //        }
-        //        else
-        //        {
-        //            var result = _departmentService.Add(model);
-        //            response.Success = result > 0;
-        //            response.Message = result > 0 ? "Department added successfully" : "Error occurred while adding department";
-        //        }
-        //    }
-        //    else
-        //    {
-        //        response.Success = false;
-        //        response.Message = "Invalid data";
-        //    }
-
-        //    return Json(response);
-        //}
-
-
-
-        //[HttpPost]
-        //public IActionResult AddUpdate(DepartmentMV model)
-        //{
-        //    ResponseMV response = new();
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (model.Id > 0)
-        //        {
-        //            var result = _departmentService.Update(model);
-        //            if (result > 0)
-        //            {
-        //                response.Success = true;
-        //                response.Message = "Department updated successfully";
-        //            }
-        //            else if (result == -1) // ✅ Match StudentController validation feedback
-        //            {
-        //                response.Success = false;
-        //                response.Message = "Department name already exists";
-        //            }
-        //            else
-        //            {
-        //                response.Success = false;
-        //                response.Message = "Error occurred while updating department";
-        //            }
-        //        }
-        //        else
-        //        {
-        //            var result = _departmentService.Add(model);
-        //            if (result > 0)
-        //            {
-        //                response.Success = true;
-        //                response.Message = "Department added successfully";
-        //            }
-        //            else if (result == -1) // ✅ Match StudentController validation feedback
-        //            {
-        //                response.Success = false;
-        //                response.Message = "Department name already exists";
-        //            }
-        //            else
-        //            {
-        //                response.Success = false;
-        //                response.Message = "Error occurred while adding department";
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        response.Success = false;
-        //        response.Message = "Invalid data";
-        //    }
-
-        //    return Json(response);
-        //}
         [HttpGet]
         public IActionResult AddUpdate(int id)
         {
@@ -148,7 +63,6 @@ namespace Examination.PL.Areas.Admin.Controllers
                 if (department == null)
                     return NotFound();
 
-                // Preload selected branch IDs for editing
                 ViewBag.SelectedBranchIds = _unitOfWork.DepartmentBranchRepo
                     .GetAll(b => b.DepartmentId == id)
                     .Select(b => b.BranchId)
@@ -209,7 +123,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                 if (result > 0)
                 {
                     response.Success = true;
-                    response.Message = "Department status changed successfully"; // ✅ Unified format
+                    response.Message = "Department status changed successfully";
                 }
                 else
                 {
@@ -230,35 +144,6 @@ namespace Examination.PL.Areas.Admin.Controllers
 
 
 
-
-
-        //[HttpPost]
-        //public IActionResult ChangeStatus(int id, int status)
-        //{
-        //    ResponseMV response = new();
-
-        //    if (id > 0)
-        //    {
-        //        var result = _departmentService.ChangeStatus(id, status);
-        //        if (result > 0)
-        //        {
-        //            response.Success = true;
-        //            response.Message = "Department status changed successfully";
-        //        }
-        //        else
-        //        {
-        //            response.Success = false;
-        //            response.Message = "Error occurred while changing department status";
-        //        }
-        //    }
-        //    else
-        //    {
-        //        response.Success = false;
-        //        response.Message = "Invalid department id";
-        //    }
-
-        //    return Json(response);
-        //}
 
 
         [HttpGet]
