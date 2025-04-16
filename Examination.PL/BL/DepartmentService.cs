@@ -12,6 +12,8 @@ namespace Examination.PL.BL
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<DepartmentService> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<DepartmentService> logger)
         {
             _unitOfWork = unitOfWork;
@@ -81,80 +83,46 @@ namespace Examination.PL.BL
             }
         }
 
-        //public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV Departmentsearch, int pageSize, int page)
-        //{
-        //    try
-        //    {
-        //        List<DepartmentMV> departmentMVs = new List<DepartmentMV>();
-        //        List<Department> data = _unitOfWork.DepartmentRepo.GetAll(
-        //    d =>
-        //        (string.IsNullOrEmpty(Departmentsearch.Name) || d.Name.ToLower().Trim().Contains(Departmentsearch.Name.ToLower().Trim())) &&
-        //        (Departmentsearch.Status == null || d.Status == Departmentsearch.Status) &&
-        //        (Departmentsearch.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == Departmentsearch.BranchId)),
-        //           "DepartmentBranches"
-        //         )
-        //         .OrderByDescending(d => d.CreatedAt)
-        //         .ToList();
-
-        //        departmentMVs = _mapper.Map<List<DepartmentMV>>(data);
-        //        int totalCount = departmentMVs.Count;
-
-        //        if (totalCount > 0)
-        //        {
-        //            departmentMVs = departmentMVs
-        //            .Skip((page - 1) * pageSize)
-        //            .Take(pageSize).ToList();
-
-        //        }
-
-        //        return new PaginatedData<DepartmentMV>
-        //        {
-        //            Items = departmentMVs,
-        //            TotalCount = totalCount,
-        //            PageSize = pageSize,
-        //            CurrentPage = page
-        //        };
 
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error in GetAllPaginated DepartmentService");
-        //        return new PaginatedData<DepartmentMV>();
-        //    }
-        //}
-
-
-
-        public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV search, int pageSize = 10, int page = 1)
+        public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV departmentSearch, int PageSize = 10, int Page = 1)
         {
             try
             {
                 var data = _unitOfWork.DepartmentRepo.GetAll(
                     d =>
-                        (string.IsNullOrEmpty(search.Name) || d.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim())) &&
-                        (search.Status == null || d.Status == search.Status) &&
-                        (search.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == search.BranchId)),
-                     "DepartmentBranches.Branch" 
+                        (string.IsNullOrEmpty(departmentSearch.Name) || d.Name.ToLower().Trim().Contains(departmentSearch.Name.ToLower().Trim())) &&
+                        (departmentSearch.Status == null || d.Status == departmentSearch.Status) &&
+                        (departmentSearch.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == departmentSearch.BranchId)),
+                    "DepartmentBranches.Branch"
                 )
                 .OrderByDescending(d => d.CreatedAt)
                 .ToList();
 
-                var mapped = _mapper.Map<List<DepartmentMV>>(data);
+                var totalCount = data.Count;
 
-                int totalCount = mapped.Count;
-
-                var paged = mapped
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
+                var pagedDepartments = data
+                    .Skip((Page - 1) * PageSize)
+                    .Take(PageSize)
                     .ToList();
+
+                var result = pagedDepartments.Select(d => new DepartmentMV
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    Capacity = d.Capacity,
+                    Status = d.Status,
+                    Description = d.Description,
+                    //BranchIds = d.DepartmentBranches.Select(b => b.BranchId).ToList(),
+                    BranchNames = d.DepartmentBranches.Select(b => b.Branch?.Name ?? "Unknown").ToList()
+                }).ToList();
 
                 return new PaginatedData<DepartmentMV>
                 {
-                    Items = paged,
+                    Items = result,
                     TotalCount = totalCount,
-                    PageSize = pageSize,
-                    CurrentPage = page
+                    PageSize = PageSize,
+                    CurrentPage = Page
                 };
             }
             catch (Exception ex)
@@ -163,6 +131,44 @@ namespace Examination.PL.BL
                 return new PaginatedData<DepartmentMV>();
             }
         }
+
+        //public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV search, int pageSize = 10, int page = 1)
+        //{
+        //    try
+        //    {
+        //        var data = _unitOfWork.DepartmentRepo.GetAll(
+        //            d =>
+        //                (string.IsNullOrEmpty(search.Name) || d.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim())) &&
+        //                (search.Status == null || d.Status == search.Status) &&
+        //                (search.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == search.BranchId)),
+        //             "DepartmentBranches.Branch" 
+        //        )
+        //        .OrderByDescending(d => d.CreatedAt)
+        //        .ToList();
+
+        //        var mapped = _mapper.Map<List<DepartmentMV>>(data);
+
+        //        int totalCount = mapped.Count;
+
+        //        var paged = mapped
+        //            .Skip((page - 1) * pageSize)
+        //            .Take(pageSize)
+        //            .ToList();
+
+        //        return new PaginatedData<DepartmentMV>
+        //        {
+        //            Items = paged,
+        //            TotalCount = totalCount,
+        //            PageSize = pageSize,
+        //            CurrentPage = page
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error in GetAllPaginated DepartmentService");
+        //        return new PaginatedData<DepartmentMV>();
+        //    }
+        //}
 
         public int Add(DepartmentMV department)
         {
@@ -216,7 +222,27 @@ namespace Examination.PL.BL
         }
 
 
-
+        public int ChangeStatus(int id, int status)
+        {
+            try
+            {
+                var department = _unitOfWork.DepartmentRepo.FirstOrDefault(d => d.Id == id);
+                if (department != null)
+                {
+                    department.Status = status;
+                    department.UpdatedAt = DateTime.Now;
+                    department.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                    _unitOfWork.DepartmentRepo.Update(department);
+                    return _unitOfWork.Save();
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while changing department status");
+                return 0;
+            }
+        }
 
     }
 }

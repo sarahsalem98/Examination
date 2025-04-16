@@ -102,6 +102,66 @@ namespace Examination.PL.Areas.Admin.Controllers
 
             return Json(response);
         }
+        [HttpPost]
+        public IActionResult ChangeStatus(int id, int status)
+        {
+            ResponseMV response = new();
+
+            if (id > 0)
+            {
+                var result = _departmentService.ChangeStatus(id, status);
+                if (result > 0)
+                {
+                    response.Success = true;
+                    response.Message = "Department status changed successfully";
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Error occurred while changing department status";
+                }
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Invalid department id";
+            }
+
+            return Json(response);
+        }
+
+
+        [HttpGet]
+        public IActionResult GetDepartmentsByBranchId(int branchId)
+        {
+            ResponseMV response = new();
+            var departments = new List<DepartmentMV>();
+
+            if (branchId > 0)
+            {
+                departments = _departmentService.GetByBranch(branchId);
+                if (departments == null || !departments.Any())
+                {
+                    response.Success = false;
+                    response.Message = "No departments found for this branch";
+                    response.Data = null;
+                }
+                else
+                {
+                    response.Success = true;
+                    response.Message = "Departments found";
+                    response.Data = departments;
+                }
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Invalid branch id";
+                response.Data = null;
+            }
+
+            return Json(response);
+        }
 
     }
 }

@@ -13,6 +13,7 @@ namespace Examination.PL.IBL
 
         int Add(DepartmentMV department);
       int Update(DepartmentMV department);
-      //  int Delete(int id);
+        int ChangeStatus(int id, int status);
+
     }
 }

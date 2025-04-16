@@ -10,6 +10,7 @@ namespace Examination.DAL.Repos
 {
     public class ExamRepo : Repo<Exam>, IExamRepo
     {
+        public ExamRepo(AppDbContext db) : base(db)
         {
         }
     }

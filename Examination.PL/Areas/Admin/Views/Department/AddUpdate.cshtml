@@ -23,7 +23,7 @@
             <!-- Capacity -->
             <div class="col-md-6 mb-3">
                 <label for="Capacity" class="form-label">Capacity</label>
-                <input type="number" class="form-control rounded-0 mb-1" id="Capacity" asp-for="Capacity" placeholder="Enter capacity" required>
+                <input type="number" class="form-control rounded-0 mb-1" id="Capacity" asp-for="Capacity" min="1" placeholder="Enter capacity" required>
                 <span asp-validation-for="Capacity" class="text-danger"></span>
             </div>
         </div>
@@ -44,18 +44,26 @@
 
         <div class="row">
             <div class="col-md-12 mb-3">
-                <label for="branchSelection" class="form-label">Branches</label>
-                <select multiple class="form-select rounded-0 mb-1" id="BranchIds" name="BranchIds">
+                <label class="form-label">Branches</label>
+                <div class="border p-2">
                     @foreach (var branch in ViewBag.Branches)
                     {
-                        <option value="@branch.Id">@branch.Name</option>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   name="BranchIds"
+                                   value="@branch.Id"
+                                   id="branch_@branch.Id"
+                            @(ViewBag.SelectedBranchIds.Contains(branch.Id) ? "checked" : "")>
+                            <label class="form-check-label" for="branch_@branch.Id">
+                                @branch.Name
+                            </label>
+                        </div>
                     }
-                </select>
-                <small class="text-muted">Hold Ctrl (or Cmd) to select multiple branches.</small>
+                </div>
             </div>
         </div>
 
-        <!-- Status (Optional) -->
+        <!-- Status  -->
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="Status" class="form-label">Status</label>
