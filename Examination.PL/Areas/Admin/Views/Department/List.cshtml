@@ -1,9 +1,12 @@
 ﻿@using Examination.PL.General;
 @model PaginatedData<DepartmentMV>
+@{
+    Layout = null;
+}
 
 <input type="hidden" id="totalCount" value="@Model.TotalCount" />
 
-<table class="table table-hover table-bordered">
+<table class="table data-table table-bordered table-hover mt-2">
     <thead class="thead-light">
         <tr>
             <th>#</th>

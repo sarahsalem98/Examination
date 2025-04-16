@@ -70,9 +70,7 @@
             <button class="btn btn-add rounded-0" onclick="AdminDepartment.ShowAddUpdateModal();">+ Create</button>
         </div>
 
-        <div class="table-responsive list mt-4" id="departmentList">
-            @await Html.PartialAsync("List", Model)
-        </div>
+        <div class="table-responsive list mt-4" id="DepartmentList"></div>
     </div>
 
     <div class="d-flex justify-content-center">
