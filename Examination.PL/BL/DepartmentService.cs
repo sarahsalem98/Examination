@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Examination.DAL.Entities;
 using Examination.DAL.Repos.IRepos;
+using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
+using Microsoft.AspNetCore.Http;
 using System.Drawing.Printing;
 
 namespace Examination.PL.BL
@@ -14,11 +16,13 @@ namespace Examination.PL.BL
         private readonly ILogger<DepartmentService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<DepartmentService> logger)
+        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<DepartmentService> logger , IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
+
         }
         public List<DepartmentMV> GetByStatus(int status)
         {
@@ -59,15 +63,10 @@ namespace Examination.PL.BL
                 _logger.LogError(ex, "Error in GetByBranch DepartmentService");
                 return null;
 
-            }
-        
-
-
-        
+            }       
         }
 
-
-       
+ 
         public DepartmentMV GetById(int id)
         {
             try
@@ -113,7 +112,7 @@ namespace Examination.PL.BL
                     Capacity = d.Capacity,
                     Status = d.Status,
                     Description = d.Description,
-                    //BranchIds = d.DepartmentBranches.Select(b => b.BranchId).ToList(),
+                    BranchIds = d.DepartmentBranches.Select(b => b.BranchId).ToList(),
                     BranchNames = d.DepartmentBranches.Select(b => b.Branch?.Name ?? "Unknown").ToList()
                 }).ToList();
 
@@ -132,63 +131,160 @@ namespace Examination.PL.BL
             }
         }
 
-        //public PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV search, int pageSize = 10, int page = 1)
+
+        //public int Add(DepartmentMV department)
         //{
+        //    int result = 0;
         //    try
         //    {
-        //        var data = _unitOfWork.DepartmentRepo.GetAll(
-        //            d =>
-        //                (string.IsNullOrEmpty(search.Name) || d.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim())) &&
-        //                (search.Status == null || d.Status == search.Status) &&
-        //                (search.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == search.BranchId)),
-        //             "DepartmentBranches.Branch" 
-        //        )
-        //        .OrderByDescending(d => d.CreatedAt)
-        //        .ToList();
 
-        //        var mapped = _mapper.Map<List<DepartmentMV>>(data);
+        //        var existing = _unitOfWork.DepartmentRepo.FirstOrDefault(d => d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
 
-        //        int totalCount = mapped.Count;
-
-        //        var paged = mapped
-        //            .Skip((page - 1) * pageSize)
-        //            .Take(pageSize)
-        //            .ToList();
-
-        //        return new PaginatedData<DepartmentMV>
+        //        if (existing != null)
         //        {
-        //            Items = paged,
-        //            TotalCount = totalCount,
-        //            PageSize = pageSize,
-        //            CurrentPage = page
-        //        };
+        //            return -1;
+        //        }
+
+        //        var newDepartment = _mapper.Map<Department>(department);
+        //        newDepartment.CreatedAt = DateTime.Now;
+        //        newDepartment.CreatedBy = 1; 
+        //        _unitOfWork.DepartmentRepo.Insert(newDepartment);
+        //        return _unitOfWork.Save();
         //    }
         //    catch (Exception ex)
         //    {
-        //        _logger.LogError(ex, "Error in GetAllPaginated DepartmentService");
-        //        return new PaginatedData<DepartmentMV>();
+        //        _logger.LogError(ex, "Error occurred while adding new department");
+        //        return 0;
         //    }
         //}
 
+
+        //public int Add(DepartmentMV department)
+        //{
+        //    try
+        //    {
+        //        // Check if a department with the same name already exists (case-insensitive)
+        //        var existing = _unitOfWork.DepartmentRepo
+        //            .FirstOrDefault(d => d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
+
+        //        if (existing != null)
+        //        {
+        //            return -1; // duplicate
+        //        }
+
+        //        // Map DepartmentMV to Department entity
+        //        var newDepartment = _mapper.Map<Department>(department);
+
+        //        // Set metadata
+        //        newDepartment.CreatedAt = DateTime.Now;
+        //        newDepartment.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+        //        newDepartment.Status = (int)Status.Active;
+
+        //        // Validate that at least one BranchId is provided
+        //        if (department.BranchIds == null || !department.BranchIds.Any())
+        //        {
+        //            throw new Exception("At least one branch must be assigned to the department.");
+        //        }
+
+        //        // Assign selected branches to the department
+        //        newDepartment.DepartmentBranches = department.BranchIds
+        //            .Select(branchId => new DepartmentBranch
+        //            {
+        //                BranchId = branchId
+        //            }).ToList();
+
+        //        // Insert and save
+        //        _unitOfWork.DepartmentRepo.Insert(newDepartment);
+        //        return _unitOfWork.Save();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error occurred while adding new department");
+        //        return 0;
+        //    }
+        //}
+
+        //public int Add(DepartmentMV department)
+        //{
+        //    int result = 0;
+
+        //    try
+        //    {
+        //        // Check for duplicates
+        //        var existing = _unitOfWork.DepartmentRepo
+        //            .FirstOrDefault(d => d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
+
+        //        if (existing != null)
+        //            return -1;
+
+        //        // Map ViewModel to Entity
+        //        var newDepartment = _mapper.Map<Department>(department);
+        //        newDepartment.CreatedAt = DateTime.Now;
+        //        newDepartment.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+        //        newDepartment.Status = (int)Status.Active;
+
+        //        // Validate Branches are selected
+        //        if (department.BranchIds == null || !department.BranchIds.Any())
+        //            throw new Exception("At least one branch must be selected.");
+
+        //        // Set DepartmentBranches from selected IDs
+        //        newDepartment.DepartmentBranches = department.BranchIds.Select(branchId => new DepartmentBranch
+        //        {
+        //            BranchId = branchId
+        //        }).ToList();
+
+        //        _unitOfWork.DepartmentRepo.Insert(newDepartment);
+        //        return _unitOfWork.Save();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error while adding department");
+        //        return 0;
+        //    }
+        //}
+
+
+
+
+
         public int Add(DepartmentMV department)
         {
+            int result = 0;
             try
             {
-                //check
+                // Check if a department with the same name already exists
                 var existing = _unitOfWork.DepartmentRepo
                     .FirstOrDefault(d => d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
 
                 if (existing != null)
                 {
-                    return -1; //already exists
+                    result = -1; // Department already exists
+                }
+                else
+                {
+                    // Ensure branches are selected
+                    if (department.BranchIds == null || !department.BranchIds.Any())
+                    {
+                        throw new Exception("At least one branch must be selected.");
+                    }
+
+                    // Map view model to entity
+                    var newDepartment = _mapper.Map<Department>(department);
+                    newDepartment.CreatedAt = DateTime.Now;
+                    newDepartment.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                    newDepartment.Status = (int)Status.Active;
+
+                    // Link selected branches
+                    newDepartment.DepartmentBranches = department.BranchIds.Select(branchId => new DepartmentBranch
+                    {
+                        BranchId = branchId
+                    }).ToList();
+
+                    _unitOfWork.DepartmentRepo.Insert(newDepartment);
+                    result = _unitOfWork.Save();
                 }
 
-                var newDepartment = _mapper.Map<Department>(department);
-                newDepartment.CreatedAt = DateTime.Now;
-                newDepartment.CreatedBy = 1; // Replace with current user ID
-
-                _unitOfWork.DepartmentRepo.Insert(newDepartment);
-                return _unitOfWork.Save();
+                return result;
             }
             catch (Exception ex)
             {
@@ -198,21 +294,60 @@ namespace Examination.PL.BL
         }
 
 
+
         public int Update(DepartmentMV department)
         {
+            int result = 0;
             try
             {
-                var existing = _unitOfWork.DepartmentRepo
-                    .FirstOrDefault(d => d.Id != department.Id && d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
-                if (existing != null)
+                var departmentExist = _unitOfWork.DepartmentRepo
+                    .FirstOrDefault(d => d.Id == department.Id, "DepartmentBranches");
+
+                if (departmentExist != null)
                 {
-                    return -1; //already exists
+                    var nameExists = _unitOfWork.DepartmentRepo
+                        .FirstOrDefault(d => d.Id != department.Id && d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
+
+                    if (nameExists != null)
+                    {
+                        result = -1; // Duplicate name
+                    }
+                    else
+                    {
+                        // Check branch selection
+                        if (department.BranchIds == null || !department.BranchIds.Any())
+                        {
+                            throw new Exception("At least one branch must be selected.");
+                        }
+
+                        // Preserve created fields
+                        department.CreatedAt = departmentExist.CreatedAt;
+                        department.CreatedBy = departmentExist.CreatedBy;
+
+                        // Map updated values
+                        _mapper.Map(department, departmentExist);
+
+                        // Update timestamps
+                        departmentExist.UpdatedAt = DateTime.Now;
+                        departmentExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+
+                        // Clear and set new DepartmentBranches
+                        departmentExist.DepartmentBranches.Clear();
+                        foreach (var branchId in department.BranchIds)
+                        {
+                            departmentExist.DepartmentBranches.Add(new DepartmentBranch
+                            {
+                                BranchId = branchId,
+                                DepartmentId = department.Id
+                            });
+                        }
+
+                        _unitOfWork.DepartmentRepo.Update(departmentExist);
+                        result = _unitOfWork.Save();
+                    }
                 }
-                var updatedDepartment = _mapper.Map<Department>(department);
-                updatedDepartment.UpdatedAt = DateTime.Now;
-                updatedDepartment.UpdatedBy = 1; // Replace with current user ID
-                _unitOfWork.DepartmentRepo.Update(updatedDepartment);
-                return _unitOfWork.Save();
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -220,6 +355,37 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
+
+
+
+
+
+
+
+        //public int Update(DepartmentMV department)
+        //{
+        //    try
+        //    {
+        //        var existing = _unitOfWork.DepartmentRepo
+        //            .FirstOrDefault(d => d.Id != department.Id && d.Name.Trim().ToLower() == department.Name.Trim().ToLower());
+        //        if (existing != null)
+        //        {
+        //            return -1;
+        //        }
+        //        var updatedDepartment = _mapper.Map<Department>(department);
+        //        updatedDepartment.UpdatedAt = DateTime.Now;
+        //        updatedDepartment.UpdatedBy = 1;
+        //        _unitOfWork.DepartmentRepo.Update(updatedDepartment);
+        //        return _unitOfWork.Save();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error occurred while updating department");
+        //        return 0;
+        //    }
+        //}
+
+
 
 
         public int ChangeStatus(int id, int status)

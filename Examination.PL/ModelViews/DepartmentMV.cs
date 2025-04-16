@@ -1,4 +1,6 @@
-﻿namespace Examination.PL.ModelViews
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Examination.PL.ModelViews
 {
     public class DepartmentMV
     {
@@ -17,7 +19,8 @@
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public List<string> BranchNames { get; set; }
+       public List<string>? BranchNames { get; set; }
+        public List<int> BranchIds { get; set; } = new List<int>();
 
     }
 

@@ -1,12 +1,17 @@
 ﻿using Examination.DAL.Repos.IRepos;
+using Examination.PL.Attributes;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 using Microsoft.AspNetCore.Mvc;
+using Examination.PL.Attributes; 
+
 
 namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
+   // [UserTypeAuthorize(Constants.UserTypes.Admin)] // ✅ Enforce admin-only access like StudentController
+
     public class DepartmentController : Controller
     {
         private readonly IDepartmentService _departmentService;
@@ -44,6 +49,93 @@ namespace Examination.PL.Areas.Admin.Controllers
 
 
 
+
+
+        //[HttpPost]
+        //public IActionResult AddUpdate(DepartmentMV model)
+        //{
+        //    ResponseMV response = new();
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (model.Id > 0)
+        //        {
+        //            var result = _departmentService.Update(model);
+        //            response.Success = result > 0;
+        //            response.Message = result > 0 ? "Department updated successfully" : "Error occurred while updating department";
+        //        }
+        //        else
+        //        {
+        //            var result = _departmentService.Add(model);
+        //            response.Success = result > 0;
+        //            response.Message = result > 0 ? "Department added successfully" : "Error occurred while adding department";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        response.Success = false;
+        //        response.Message = "Invalid data";
+        //    }
+
+        //    return Json(response);
+        //}
+
+
+
+        //[HttpPost]
+        //public IActionResult AddUpdate(DepartmentMV model)
+        //{
+        //    ResponseMV response = new();
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (model.Id > 0)
+        //        {
+        //            var result = _departmentService.Update(model);
+        //            if (result > 0)
+        //            {
+        //                response.Success = true;
+        //                response.Message = "Department updated successfully";
+        //            }
+        //            else if (result == -1) // ✅ Match StudentController validation feedback
+        //            {
+        //                response.Success = false;
+        //                response.Message = "Department name already exists";
+        //            }
+        //            else
+        //            {
+        //                response.Success = false;
+        //                response.Message = "Error occurred while updating department";
+        //            }
+        //        }
+        //        else
+        //        {
+        //            var result = _departmentService.Add(model);
+        //            if (result > 0)
+        //            {
+        //                response.Success = true;
+        //                response.Message = "Department added successfully";
+        //            }
+        //            else if (result == -1) // ✅ Match StudentController validation feedback
+        //            {
+        //                response.Success = false;
+        //                response.Message = "Department name already exists";
+        //            }
+        //            else
+        //            {
+        //                response.Success = false;
+        //                response.Message = "Error occurred while adding department";
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        response.Success = false;
+        //        response.Message = "Invalid data";
+        //    }
+
+        //    return Json(response);
+        //}
         [HttpGet]
         public IActionResult AddUpdate(int id)
         {
@@ -78,6 +170,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         public IActionResult AddUpdate(DepartmentMV model)
         {
             ResponseMV response = new();
+            
 
             if (ModelState.IsValid)
             {
@@ -100,8 +193,11 @@ namespace Examination.PL.Areas.Admin.Controllers
                 response.Message = "Invalid data";
             }
 
+
             return Json(response);
         }
+
+
         [HttpPost]
         public IActionResult ChangeStatus(int id, int status)
         {
@@ -113,7 +209,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                 if (result > 0)
                 {
                     response.Success = true;
-                    response.Message = "Department status changed successfully";
+                    response.Message = "Department status changed successfully"; // ✅ Unified format
                 }
                 else
                 {
@@ -129,6 +225,40 @@ namespace Examination.PL.Areas.Admin.Controllers
 
             return Json(response);
         }
+
+
+
+
+
+
+
+        //[HttpPost]
+        //public IActionResult ChangeStatus(int id, int status)
+        //{
+        //    ResponseMV response = new();
+
+        //    if (id > 0)
+        //    {
+        //        var result = _departmentService.ChangeStatus(id, status);
+        //        if (result > 0)
+        //        {
+        //            response.Success = true;
+        //            response.Message = "Department status changed successfully";
+        //        }
+        //        else
+        //        {
+        //            response.Success = false;
+        //            response.Message = "Error occurred while changing department status";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        response.Success = false;
+        //        response.Message = "Invalid department id";
+        //    }
+
+        //    return Json(response);
+        //}
 
 
         [HttpGet]
@@ -163,5 +293,11 @@ namespace Examination.PL.Areas.Admin.Controllers
             return Json(response);
         }
 
+
+
+
+
+       
     }
 }
+ 

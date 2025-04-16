@@ -49,10 +49,7 @@
                     @foreach (var branch in ViewBag.Branches)
                     {
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                   name="BranchIds"
-                                   value="@branch.Id"
-                                   id="branch_@branch.Id"
+                            <input class="form-check-input" type="checkbox" name="BranchIds" value="@branch.Id" id="branch_@branch.Id"
                             @(ViewBag.SelectedBranchIds.Contains(branch.Id) ? "checked" : "")>
                             <label class="form-check-label" for="branch_@branch.Id">
                                 @branch.Name
@@ -89,7 +86,6 @@
 
 <script>
     $(document).ready(function () {
-        // preload selected branches if editing
         var selectedBranches = @Html.Raw(Json.Serialize(ViewBag.SelectedBranchIds ?? new List<int>()));
         $("#BranchIds").val(selectedBranches);
     });

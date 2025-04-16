@@ -52,35 +52,53 @@
                             <span class="badge  text-secondary">Unknown</span>
                         }
                     </td>
-                  
-
 
                     <td class="actions-cell">
-                        <a href="javascript:void(0);" onclick="AdminDepartment.ShowAddUpdateModal(@dept.Id);">
-                            <i class="bi bi-pencil"></i>
-                        </a>
+                        <a href="javascript:void(0);" onclick="AdminDepartment.ShowAddUpdateModal(@dept.Id);"><i class="bi bi-pencil"></i></a>
 
                         @if (dept.Status != (int)Status.Deleted)
                         {
-                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Deleted))" class="delete-icon">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Deleted))"><i class="bi bi-trash"></i></a>
                         }
 
                         @if (dept.Status != (int)Status.Inactive)
                         {
-                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Inactive))" class="inactive-icon">
-                                <i class="bi bi-x-circle"></i>
-                            </a>
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Inactive))"><i class="bi bi-x-circle"></i></a>
                         }
 
                         @if (dept.Status != (int)Status.Active)
                         {
-                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Active))" class="active-icon">
-                                <i class="bi bi-check-circle"></i>
-                            </a>
+                            <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Active))"><i class="bi bi-check-circle"></i></a>
                         }
                     </td>
+
+
+                    @* <td class="actions-cell"> *@
+                    @*     <a href="javascript:void(0);" onclick="AdminDepartment.ShowAddUpdateModal(@dept.Id);"> *@
+                    @*         <i class="bi bi-pencil"></i> *@
+                    @*     </a> *@
+
+                    @*     @if (dept.Status != (int)Status.Deleted) *@
+                    @*     { *@
+                    @*         <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Deleted))" class="delete-icon"> *@
+                    @*             <i class="bi bi-trash"></i> *@
+                    @*         </a> *@
+                    @*     } *@
+
+                    @*     @if (dept.Status != (int)Status.Inactive) *@
+                    @*     { *@
+                    @*         <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Inactive))" class="inactive-icon"> *@
+                    @*             <i class="bi bi-x-circle"></i> *@
+                    @*         </a> *@
+                    @*     } *@
+
+                    @*     @if (dept.Status != (int)Status.Active) *@
+                    @*     { *@
+                    @*         <a href="javascript:void(0);" onclick="AdminDepartment.ChangeStatus(@dept.Id, @((int)Status.Active))" class="active-icon"> *@
+                    @*             <i class="bi bi-check-circle"></i> *@
+                    @*         </a> *@
+                    @*     } *@
+                    @* </td> *@
                 </tr>
                 index++;
             }
