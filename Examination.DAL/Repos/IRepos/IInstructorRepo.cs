@@ -9,5 +9,7 @@ namespace Examination.DAL.Repos.IRepos
 {
     public interface IInstructorRepo:IRepo<Instructor>
     {
+        public int UpdateCourses(List<InstructorCourse> newInstructorCourses, int instructorId);
+        public List<InstructorCourse> GetInstructorCoursesWithDepartmentBranchId(List<InstructorCourse> newInstructorCourses);
     }
 }

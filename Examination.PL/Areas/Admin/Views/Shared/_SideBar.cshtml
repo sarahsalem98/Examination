@@ -27,6 +27,8 @@
             <a  asp-controller="Student" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","Student","Index")">
                 <i class="bi bi-person"></i> <span class="ms-2">Students</span>
             </a>
+        </li>
+        <li class="nav-item mt-2">
             <a asp-controller="Instructor" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","Instructor","Index")">
                 <i class="bi bi-person"></i> <span class="ms-2">Instructors</span>
             </a>
@@ -34,6 +36,17 @@
                 <i class="bi bi-person"></i> <span class="ms-2">Instructors</span>
             </a>
         </li>
+        <li class="nav-item mt-2">
+            <a asp-controller="Exam" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","Exam","Index")">
+                <i class="bi bi-journal-text"></i> <span class="ms-2">Exams</span>
+            </a>
+        </li>
+        <li class="nav-item mt-2">
+            <a asp-controller="ExamQuestion" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","ExamQuestion","Index")">
+                <i class="bi bi-journal-text"></i> <span class="ms-2">ExamQuestions</span>
+            </a>
+        </li>
+           
         <!-- Courses -->
      @*    <li class="nav-item">
             <a href="courses.html" class="nav-link text-white">

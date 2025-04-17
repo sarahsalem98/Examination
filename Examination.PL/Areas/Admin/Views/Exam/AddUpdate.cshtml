@@ -1,0 +1,83 @@
+﻿@model ExamMV 
+ 
+@{
+    Layout = null;
+}
+<form id="admin-exam-form">
+    <input type="hidden" asp-for="Id" id="Id" />
+    <div class="modal-body mx-3">
+
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label for="Name" class="form-label">Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="Name" asp-for="Name" placeholder="Enter Exam Name" required>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+                <div class="col-md-6 mb-3">
+                    <label for="Description" class="form-label">Description</label>
+                    <textarea class="form-control rounded-0" id="Description" asp-for="Description" placeholder="Enter Exam Description" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+               
+
+            <div class="row">
+            <div class="col-md-6 mb-4">
+                <label for="type" class="form-label">Exam Type:</label>
+                <select class="form-select" id="type" asp-for="Type">
+                    <option value="">Select Exam Type </option>
+                    <option value="Final">Final</option>
+                    <option value="Midterm">Midterm</option>
+                    <option value="Assignment">Assignment</option>
+                    <option value="Quiz">Quiz</option>
+                    <option value="SecondTry">SecondTry</option>
+                </select>
+
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <label for="Course" class="form-label">Course:</label>
+                <select class="form-select" id="CourseID" asp-for="CourseId">
+                    <option value="">Select Course</option>
+                    @foreach (var crs in ViewBag.Courses)
+                    {
+                        <option value="@crs.Id">@crs.Name</option>
+                    }
+                   
+                    
+                </select>
+
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div>
+          </div>
+            <div class="col-md-3 mb-3">
+                <label for="Duration" class="form-label">Duration (minutes)</label>
+                <input type="number" class="form-control rounded-0" id="Duration" asp-for="Duration" placeholder="e.g. 60" min="1" required>
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+       </div>
+       </div>
+
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn advanced-search-btn" onclick="AdminExam.AddUpdate(event)">Save Data</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function(){
+
+    
+
+    });
+</script>
+
+
+
