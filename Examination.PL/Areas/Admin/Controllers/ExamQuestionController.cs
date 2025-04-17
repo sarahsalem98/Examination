@@ -12,8 +12,13 @@ namespace Examination.PL.Areas.Admin.Controllers
            
             return View();
         }
+
+        public IActionResult List()
+        {
+            return View();
+        }
         [HttpPost]
-        public IActionResult AddUpdate()
+        public IActionResult Details()
         {
             return PartialView();
         }
