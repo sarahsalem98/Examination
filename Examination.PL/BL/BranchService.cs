@@ -169,6 +169,42 @@ namespace Examination.PL.BL
 
         }
 
+        public PaginatedData<BranchMV> GetAllPaginated(BranchSearchMV branchSearch, int pageSize = 10, int page = 1)
+        {
+            try
+            {
+                var query = _unitOfWork.BranchRepo.GetAll(
+                    b =>
+                        (string.IsNullOrWhiteSpace(branchSearch.Name) || b.Name.ToLower().Contains(branchSearch.Name.ToLower().Trim())) &&
+                        (string.IsNullOrWhiteSpace(branchSearch.Location) || b.Location.ToLower().Contains(branchSearch.Location.ToLower().Trim())) &&
+                        (branchSearch.Status == null || b.Status == branchSearch.Status)
+                ).OrderByDescending(b => b.CreatedAt);
+
+                int totalCount = query.Count();
+
+                var paginatedBranches = query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                var branchMVs = _mapper.Map<List<BranchMV>>(paginatedBranches);
+
+                return new PaginatedData<BranchMV>
+                {
+                    Items = branchMVs,
+                    TotalCount = totalCount,
+                    PageSize = pageSize,
+                    CurrentPage = page
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving branch data.");
+                return null;
+            }
+        }
+
+
 
     }
 }
