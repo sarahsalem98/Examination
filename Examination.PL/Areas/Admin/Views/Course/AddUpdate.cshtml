@@ -51,13 +51,15 @@
             <!-- Description -->
             <div class="col-md-6 mb-3">
                 <label for="Description" class="form-label">Description</label>
-                <textarea type="text" class="form form-control rounded-0 mb-1" id="Description" asp-for="Description" placeholder="Enter Course Description" required></textarea>
+                <textarea type="text" rows="10" style="width: 100%; resize:vertical;min-height:100px" class="form-control rounded-0 mb-1" id="Description" asp-for="Description" placeholder="Enter Course Description" required></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
+
+
             <div class="col-md-6 mb-3">
                 <label for="depts" class="form-label">Departments</label>
-                <select asp-for="DepartmentsIds" asp-items="@DeptsList" class="form form-control" required multiple>
+                <select asp-for="DepartmentsIds" asp-items="@DeptsList" class="form-select" style="min-height:100px" required multiple>
                     <option value="0">Select Department</option>
                 </select>
                 <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
