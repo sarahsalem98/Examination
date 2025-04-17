@@ -34,5 +34,6 @@ namespace Examination.PL.ModelViews
         public int? DepartmentId { get; set; }
         public int? BranchId { get; set; }
         public int? TrackType { get; set; }  
-    }
+        public int? courseId { get; set; }
+     }
 }

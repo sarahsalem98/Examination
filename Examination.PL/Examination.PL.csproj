@@ -16,11 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Instructor\Controllers\" />
-    <Folder Include="Areas\Instructor\Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Examination.DAL\Examination.DAL.csproj" />
   </ItemGroup>
 

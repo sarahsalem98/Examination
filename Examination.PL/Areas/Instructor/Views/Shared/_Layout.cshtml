@@ -1,0 +1,76 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+
+    <!--nav-->
+       <partial name="_Nav.cshtml">
+
+        <div class="d-flex" style="min-height: 100vh;">
+            <!-- Sidebar -->
+           
+                <partial name="_SideBar.cshtml" />
+           
+
+            <!-- Main Content Area -->
+           
+                <main role="main" class="flex-grow-1 p-4">
+                    @RenderBody()
+                </main>
+
+              @*   <div class="footer-container">
+                <partial name="_Footer.cshtml" />
+
+                </div> *@
+           
+        </div>
+
+
+        <div id="loader" class="custom-loader">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+        <script>
+            function toggleSidebar() {
+              const sidebar = document.getElementById("sidebar");
+              sidebar.classList.toggle("collapsed");
+            }
+
+            // Function to automatically collapse the sidebar on small screens when the page loads or resizes
+            function handleResize() {
+              const sidebar = document.getElementById("sidebar");
+
+              if (window.innerWidth <= 768) {
+                sidebar.classList.add("collapsed");
+              } else {
+                sidebar.classList.remove("collapsed");
+              }
+            }
+            handleResize();
+            window.addEventListener('resize', handleResize);
+        </script>
+</body>
+
+</html>
