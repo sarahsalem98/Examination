@@ -9,6 +9,7 @@ namespace Examination.DAL.Repos.IRepos
 {
      public interface IUserRepo:IRepo<User>
     {
+    
 
     }
 }

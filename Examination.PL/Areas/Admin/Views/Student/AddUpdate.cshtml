@@ -2,6 +2,7 @@
 
 @{
     Layout = null;
+    var isDisabled = Model.Id != null ? "disabled" : "";
 }
 <form id="admin-student-form">
     <input type="hidden" asp-for="Id" />
@@ -52,7 +53,7 @@
             <!-- Branch Name -->
             <div class="col-md-6 mb-3">
                 <label for="branchName" class="form-label">Branch </label>
-                <select class="form-select rounded-0 mb-1" id="branchId" asp-for="BranchId" onchange="AdminStudent.GetDepartmentsByBranchId()">
+                <select class="form-select rounded-0 mb-1" id="branchId" asp-for="BranchId" onchange="AdminStudent.GetDepartmentsByBranchId()" disabled="@(Model.Id!=0  )">
                     <option selected>select branch</option>
                     @foreach (var branch in ViewBag.Branches)
                     {

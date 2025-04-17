@@ -19,43 +19,42 @@ namespace Examination.PL.BL
             _logger = logger;
 
         }
-        //public PaginatedData<ExamQuestionMV> GetAllExamsQuestions(ExamQuestionSearchMV searchMV, int PageSize = 10, int Page = 1)
-        //{
-        //    try
-        //    {
-        //        List<ExamQuestionMV> list = new List<ExamQuestionMV>();
-        //        List<ExamQ> data = _unitOfWork.ExamQuestionRepo.GetAll(
-        //            item =>
-        //                (searchMV.CourseId == null || item.Exam.CourseId == searchMV.CourseId) &&
-        //                (searchMV.Status != (int)Status.Deleted ? item. != (int)Status.Deleted : item.Status == (int)Status.Deleted) &&
-        //                (searchMV.Status == null || item.Status == searchMV.Status) &&
-        //                (
-        //                    String.IsNullOrEmpty(searchMV.Question) ||
-        //                    (!String.IsNullOrEmpty(item.Question) && item.Question.ToLower().Trim().Contains(searchMV.Question.ToLower().Trim()))
-        //                )
-        //            , "Exam"
-        //        ).OrderByDescending(item => item.CreatedAt).ToList();
-        //        list = _mapper.Map<List<ExamQuestionMV>>(data);
-        //        int TotalCounts = list.Count();
-        //        if (TotalCounts > 0)
-        //        {
-        //            list = list.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
-        //        }
-        //        PaginatedData<ExamQuestionMV> paginatedData = new PaginatedData<ExamQuestionMV>
-        //        {
-        //            Items = list,
-        //            TotalCount = TotalCounts,
-        //            PageSize = PageSize,
-        //            CurrentPage = Page
-        //        };
-        //        return paginatedData;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "error occuired while getting all exams");
-        //        return null;
-        //    }
-        //}
+        public PaginatedData<ExamQuestionMV> GetAllExamsQuestions(ExamQuestionSearchMV searchMV, int PageSize = 7, int Page = 1)
+        {
+            try
+            {
+                List<ExamQuestionMV> list = new List<ExamQuestionMV>();
+                List<ExamQ> data = _unitOfWork.ExamQuestionRepo.GetAll(
+                    item =>
+                        (searchMV.CourseId == null || item.Exam.CourseId == searchMV.CourseId) &&
+                        (searchMV.Status != (int)Status.Deleted ? item.Status != (int)Status.Deleted : item.Status == (int)Status.Deleted) &&
+                        (searchMV.Status == null || item.Status == searchMV.Status) &&
+                        (searchMV.QuestionType == null || item.QuestionType == searchMV.QuestionType) &&
+                        (searchMV.Type == null || item.Exam.Type== searchMV.Type) 
+
+                    , "Exam.Course"
+                ).OrderByDescending(item => item.CreatedAt).ToList();
+                list = _mapper.Map<List<ExamQuestionMV>>(data);
+                int TotalCounts = list.Count();
+                if (TotalCounts > 0)
+                {
+                    list = list.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
+                }
+                PaginatedData<ExamQuestionMV> paginatedData = new PaginatedData<ExamQuestionMV>
+                {
+                    Items = list,
+                    TotalCount = TotalCounts,
+                    PageSize = PageSize,
+                    CurrentPage = Page
+                };
+                return paginatedData;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occuired while getting all exams");
+                return null;
+            }
+        }
 
 
     }

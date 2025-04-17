@@ -52,8 +52,14 @@ namespace Examination.PL.ModelViews
         public int Degree { get; set; }
 
         public string? QuestionType { get; set; }
+        public int? Status { get; set; }
 
-        public virtual ExamMV Exam { get; set; } = null!;
+        public int? CreatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
+        public  ExamMV Exam { get; set; } = null!;
 
 
     }

@@ -4,7 +4,7 @@ namespace Examination.PL.IBL
 {
     public interface IExamQuestionService
     {
-       // public PaginatedData<ExamQuestionMV> GetAllExamsQuestions(ExamQuestionSearchMV searchMV, int PageSize = 10, int Page = 1);
+       public PaginatedData<ExamQuestionMV> GetAllExamsQuestions(ExamQuestionSearchMV searchMV, int PageSize = 10, int Page = 1);
 
 
     }

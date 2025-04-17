@@ -9,6 +9,8 @@ namespace Examination.DAL.Repos.IRepos
 {
     public interface IStudentRepo : IRepo<Student>
     {
-       // public void Update(Student student);
+        public int AddStudentCoursesAccordingToDepartmentId(int StudentId, int DepartmentId);
+        public int UpdateStudentCoursesAccordingToDepartmentId(int StudentId, int DepartmentId);
+        public int DoesStudentFinishedAtLeastOneCourse(int StudentId);
     }
 }
