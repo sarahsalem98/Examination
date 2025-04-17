@@ -56,7 +56,22 @@
 
                     <td class="actions-cell">
                         <a href="javascript:void(0);" onclick="Courses.ShowAddUpdateModal(@item.Id);"><i class="bi bi-pencil"></i></a>
-                        <a href="#" class="delete-icon"><i class="bi bi-trash"></i></a>
+                        @if (item.Status != (int)Status.Deleted)
+                        {
+                            <a href="javascript:void(0);" onclick="Courses.ChangeStatus(@item.Id,@((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
+
+                        }
+
+                        @if (item.Status != (int)Status.Inactive)
+                        {
+                            <a href="javascript:void(0);" onclick="Courses.ChangeStatus(@item.Id,@((int)Status.Inactive))" class="inactive-icon"><i class="bi bi-x-circle"></i></a>
+
+                        }
+                        @if (item.Status != (int)Status.Active)
+                        {
+                            <a href="javascript:void(0);" onclick="Courses.ChangeStatus(@item.Id,@((int)Status.Active))" class="active-icon"><i class="bi bi-check-circle"></i></a>
+
+                        }
                     </td>
                 </tr>
 

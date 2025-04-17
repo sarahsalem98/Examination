@@ -201,5 +201,27 @@ namespace Examination.PL.BL
                 return null;
             }
         }
+
+        public int ChangeStatus(int id, int status)
+        {
+            try
+            {
+                var course = _unitOfWork.CourseRepo.FirstOrDefault(s => s.Id == id);
+                if (course != null)
+                {
+                    course.Status = status;
+                    course.UpdatedAt = DateTime.Now;
+                    course.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                    _unitOfWork.CourseRepo.Update(course);
+                    return _unitOfWork.Save();
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occuired while changing Course status ");
+                return 0;
+            }
+        }
     }
 }

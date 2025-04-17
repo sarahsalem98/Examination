@@ -122,6 +122,33 @@ namespace Examination.PL.Areas.Admin.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult ChangeStatus(int id, int status)
+        {
+            ResponseMV response = new ResponseMV();
+            if (id > 0)
+            {
+                var result = _courseService.ChangeStatus(id, status);
+                if (result > 0)
+                {
+                    response.Success = true;
+                    response.Message = "Course status changed successfully";
+                    response.RedirectUrl = null;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Error occurred while changing Course status";
+                }
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Invalid Course id";
+            }
+            return Json(response);
 
+
+        }
     }
 }

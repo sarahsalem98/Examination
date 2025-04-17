@@ -120,6 +120,24 @@
         Courses.currentSearchData = {};
         Courses.Fetch(1);
     },
+    ChangeStatus: function (id, status) {
+        $.ajax({
+            type: "POST",
+            url: "/Admin/Course/ChangeStatus",
+            data: { id: id, status: status },
+            success: function (response) {
+                if (response.success) {
+                    Courses.Fetch(Courses.currentPage);
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error changing student status:", error);
+            }
+        });
+    }
 
 
 }
