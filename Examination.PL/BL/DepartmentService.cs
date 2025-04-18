@@ -91,7 +91,7 @@ namespace Examination.PL.BL
                 var data = _unitOfWork.DepartmentRepo.GetAll(
                     d =>
                         (string.IsNullOrEmpty(departmentSearch.Name) || d.Name.ToLower().Trim().Contains(departmentSearch.Name.ToLower().Trim())) &&
-                        (departmentSearch.Status == null || d.Status == departmentSearch.Status) &&
+                        (departmentSearch.Status != (int)Status.Deleted ? d.Status != (int)Status.Deleted : d.Status == (int)Status.Deleted) &&
                         (departmentSearch.BranchId == null || d.DepartmentBranches.Any(b => b.BranchId == departmentSearch.BranchId)),
                     "DepartmentBranches.Branch"
                 )
@@ -201,29 +201,43 @@ namespace Examination.PL.BL
 
                     if (nameExists != null)
                     {
-                        result = -1; // Duplicate name
+                        result = -1; 
                     }
                     else
                     {
-                        // Check branch selection
-                        if (department.BranchIds == null || !department.BranchIds.Any())
+
+                        if (department.BranchIds == null)
                         {
                             throw new Exception("At least one branch must be selected.");
                         }
 
-                        // Preserve created fields
+                        
                         department.CreatedAt = departmentExist.CreatedAt;
                         department.CreatedBy = departmentExist.CreatedBy;
+                        department.Status = departmentExist.Status;
 
-                        // Map updated values
+                        
                         _mapper.Map(department, departmentExist);
 
-                        // Update timestamps
+                     
                         departmentExist.UpdatedAt = DateTime.Now;
                         departmentExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                        departmentExist.Name = department.Name;
+                        departmentExist.Description = department.Description;
+                        departmentExist.Capacity = department.Capacity;
+                    
+                        // Handle DepartmentBranches
+                        var existingBranchIds = departmentExist.DepartmentBranches.Select(db => db.BranchId).ToList();
 
-                        // Clear and set new DepartmentBranches
-                        departmentExist.DepartmentBranches.Clear();
+                        // Remove branches that are no longer associated
+                        var branchesToRemove = departmentExist.DepartmentBranches
+                            .Where(db => !department.BranchIds.Contains(db.BranchId))
+                            .ToList();
+                        foreach (var branch in branchesToRemove)
+                        {
+                            departmentExist.DepartmentBranches.Remove(branch);
+                        }
+
                         foreach (var branchId in department.BranchIds)
                         {
                             departmentExist.DepartmentBranches.Add(new DepartmentBranch

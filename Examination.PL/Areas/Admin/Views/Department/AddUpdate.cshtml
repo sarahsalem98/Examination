@@ -60,20 +60,7 @@
             </div>
         </div>
 
-        <!-- Status  -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="Status" class="form-label">Status</label>
-                <select class="form-select rounded-0 mb-1" asp-for="Status">
-                    <option value="" selected>Select status</option>
-                    @foreach (var item in ViewBag.Statuses)
-                    {
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-        </div>
+  
     </div>
 
     <partial name="_ValidationScriptsPartial" />
