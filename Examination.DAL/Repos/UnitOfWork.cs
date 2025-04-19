@@ -22,6 +22,7 @@ namespace Examination.DAL.Repos
         public IExamRepo ExamRepo { get { return new ExamRepo(_db); }  }
         public IDepartmentBranch DepartmentBranchRepo { get { return new DepartmentBranchRepo(_db); } } 
         public ICourseRepo CourseRepo { get { return new CourseRepo(_db); } }
+        public IExamQuestionRepo ExamQuestionRepo { get { return new ExamQuestionRepo(_db); } }
         public UnitOfWork(AppDbContext db)
         {
 

@@ -1,4 +1,5 @@
-﻿var AdminExam = {
+﻿
+var AdminExam = {
 
     currentSearchData: {},
     totalPages: 1,
@@ -9,7 +10,7 @@
         $.ajax({
             type: "POST",
             url: "/Admin/Exam/list",
-            data: { studentSearch: AdminExam.currentSearchData, PageSize: AdminExam.pageSize, Page: Page },
+            data: { examSearch: AdminExam.currentSearchData, PageSize: AdminExam.pageSize, Page: Page },
             success: function (response) {
                 $("#loader").removeClass("show");
                 $("#List").html(response);
@@ -51,8 +52,8 @@
         AdminExam.currentSearchData = {
             Name: $("#Name").val(),
             Status: $("#Status").val(),
-            DepartmentId: $("#Type").val(),
-            BranchId: $("#CourseId").val()
+            Type: $("#Type").val(),
+            CourseId: $("#CourseId").val()
 
         };
 
@@ -71,8 +72,67 @@
         AdminExam.Fetch(1);
     },
 
+    ShowAddUpdateModal: function (id) {
+        console.log(id);
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Admin/Exam/AddUpdate",
+            data: { id: id },
+            success: function (response) {
+
+                $("#loader").removeClass("show");
+                $("#addUpdateModalView").html(response);
+                $('#addUpdateModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching Exam:", error);
+            }
+        });
+    },
+
+    AddUpdate: function (e) {
+        e.preventDefault();
+        $.ajax({
+            type:"POST",
+            url: "/Admin/Exam/AddUpdate",
+            data: $("#admin-exam-form").serialize(),
+            success: function (response) {
+                
+                if (response.success) {
+                    AdminExam.Fetch(AdminExam.currentPage);
+               
+                    $('#addUpdateModal').modal('hide');
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error adding/updating Exam:", error);
+            }
 
 
+        })
+    },
+    ChangeStatus: function (id, status) {
+        $.ajax({
+            type: "PUT",
+            url: "/Admin/Exam/ChangeStatus",
+            data: { id: id, status: status },
+            success: function (response) {
 
+                if (response.success) {
+                    AdminExam.Fetch(AdminExam.currentPage);
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error Changing Exam Status:", error);
+            }
+        })
+    }
 
 }
