@@ -1,4 +1,5 @@
-﻿using Examination.PL.Attributes;
+﻿using AspNetCoreGeneratedDocument;
+using Examination.PL.Attributes;
 using Examination.PL.BL;
 using Examination.PL.General;
 using Examination.PL.IBL;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Examination.PL.Areas.Instructor.Controllers
 {
     [Area("Instructor")]
-    //[UserTypeAuthorize(Constants.UserTypes.Instructor)]
+    [UserTypeAuthorize(Constants.UserTypes.Instructor)]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
@@ -41,6 +42,19 @@ namespace Examination.PL.Areas.Instructor.Controllers
            
           
            return View(students);
+        }
+        public IActionResult StudentDetails(int id)
+        {
+           
+            var student=_studentService.GetStudentCoursesWithInstructor(id);
+            if (student == null)
+            {
+                return NotFound();
+            }else
+            {
+                return View(student);
+            }
+            
         }
     }
 }

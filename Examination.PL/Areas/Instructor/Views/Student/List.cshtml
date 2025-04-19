@@ -41,9 +41,10 @@
                     
                     <td class="@((item.User.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.User?.Status)</td>
                     <td>
-                        <a href="#">
+                        <a href="/Instructor/Student/StudentDetails/@item.Id">
                             <button class="btn btn-Results">Details</button>
-                            </a>
+                        </a>
+   
                     </td>
                 </tr>
                 

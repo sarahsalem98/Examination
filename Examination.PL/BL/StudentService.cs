@@ -5,6 +5,7 @@ using Examination.DAL.Repos.IRepos;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
+using System.Linq;
 
 namespace Examination.PL.BL
 {
@@ -22,6 +23,8 @@ namespace Examination.PL.BL
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
+     
+
         public PaginatedData<StudentMV> GetStudentsByInstructorPaginated(StudentSearchMV studentSearch, int PageSize = 10, int Page = 1)
         {
             try
@@ -39,7 +42,7 @@ namespace Examination.PL.BL
                 (!String.IsNullOrEmpty(s.User.LastName) && s.User.LastName.ToLower().Trim().Contains(studentSearch.Name)))
 
                 ),
-            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,StudentCourses").GroupBy(s => s.Id).Select(s => s.First()).Where(s=>s.User.Status==(int)Status.Active).ToList();
+            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).Where(s=>s.User.Status==(int)Status.Active).ToList();
                 studentsMV =_mapper.Map<List< StudentMV>>(data);
                 int TotalCounts = studentsMV.Count();
                 if (TotalCounts > 0)
@@ -162,6 +165,32 @@ namespace Examination.PL.BL
                     return studentMV;
                 }
                 studentMV = _mapper.Map<StudentMV>(student);
+                return studentMV;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occuired while retriving student data ");
+                return null;
+            }
+        }
+        public StudentMV GetStudentCoursesWithInstructor(int id)
+        {
+            try
+            {
+           int loggedinInstructor = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+              
+        StudentMV studentMV = new StudentMV();
+                var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == id &&
+                 s.DepartmentBranch.InstructorCourses.Any(ic=>ic.Instructor.UserId==loggedinInstructor),
+                "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course,DepartmentBranch.Department,DepartmentBranch.Branch");
+          
+                if (student == null)
+                {
+                    return studentMV;
+                }
+             student.DepartmentBranch.InstructorCourses=student.DepartmentBranch.InstructorCourses.Where(ic => ic.Instructor.UserId == loggedinInstructor).ToList();
+                studentMV = _mapper.Map<StudentMV>(student);
+                
                 return studentMV;
             }
             catch (Exception ex)

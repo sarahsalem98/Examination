@@ -72,23 +72,5 @@ Reset: function () {
     InstructorStudent.currentSearchData = {};
     InstructorStudent.Fetch(1);
 },
-ShowStudentDetailsModal: function (id) {
-    console.log(id);
-    $("#loader").addClass("show");
-    $.ajax({
-        type: "GET",
-        url: "/Instructor/Student/ShowStudentDetails",
-        data: { id: id },
-        success: function (response) {
-
-            $("#loader").removeClass("show");
-            $("#StudentDetailsModalView").html(response);
-            $('#StudentDetailsModal').modal('show');
-        },
-        error: function (xhr, status, error) {
-            console.error("Error fetching Instructor data:", error);
-        }
-    });
-}
-
+   
 }
