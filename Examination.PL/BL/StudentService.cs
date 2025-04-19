@@ -78,6 +78,7 @@ namespace Examination.PL.BL
             try
             {
                 var userExist = _unitOfWork.UserRepo.FirstOrDefault(u => u.Email == student.User.Email);
+                var newStudent = new Student();
                 if (userExist == null)
                 {
                     var departmentBranchId = _unitOfWork.DepartmentBranchRepo.GetAll(d => d.DepartmentId == student.DepartmentId && d.BranchId == student.BranchId).FirstOrDefault()?.Id;
@@ -88,7 +89,7 @@ namespace Examination.PL.BL
 
                     }
                     student.DepartmentBranchId = (int)departmentBranchId;
-                    var newStudent = _mapper.Map<Student>(student);
+                     newStudent = _mapper.Map<Student>(student);
                     newStudent.User.CreatedAt = DateTime.Now;
                     newStudent.User.Password = PasswordHelper.HashPassword("123456");
                     newStudent.User.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
@@ -102,6 +103,22 @@ namespace Examination.PL.BL
                 {
                     result = -1;
                 }
+                if (result > 0)
+                {
+
+                    var studentCourses = _unitOfWork.StudentRepo.AddStudentCoursesAccordingToDepartmentId((int)newStudent.Id, student.DepartmentId);
+                    if (studentCourses > 0)
+                    {
+                        result = 1;
+                    }
+                    else
+                    {
+                        result = -2;
+                    }
+
+
+                }
+
                 return result;
             }
             catch (Exception ex)
@@ -125,7 +142,7 @@ namespace Examination.PL.BL
                            (String.IsNullOrEmpty(studentSearch.Name) ||
                            (!String.IsNullOrEmpty(s.User.FirstName) && s.User.FirstName.ToLower().Trim().Contains(studentSearch.Name)) ||
                            (!String.IsNullOrEmpty(s.User.LastName) && s.User.LastName.ToLower().Trim().Contains(studentSearch.Name)))
-                           
+
 
                     , "User,DepartmentBranch.Department,DepartmentBranch.Branch").OrderByDescending(s => s.User.CreatedAt).ToList();
                 studentMVs = _mapper.Map<List<StudentMV>>(data);
@@ -216,24 +233,34 @@ namespace Examination.PL.BL
                     }
                     else
                     {
-                        var departmentBranch = _unitOfWork.DepartmentBranchRepo.FirstOrDefault(d => d.DepartmentId == student.DepartmentId && d.BranchId == student.BranchId);
-                        if (departmentBranch == null)
+                        if (studentExist.DepartmentBranch.DepartmentId != student.DepartmentId&& _unitOfWork.StudentRepo.DoesStudentFinishedAtLeastOneCourse(studentExist.Id)==1)
                         {
-                            throw new Exception("Department Branch not found");
+                            result = -2;
+
                         }
-                        student.DepartmentBranchId = (int)departmentBranch.Id;
-                        student.User.Password = studentExist.User.Password;
-                        student.User.CreatedAt = studentExist.User.CreatedAt;
-                        student.User.CreatedBy = studentExist.User.CreatedBy;
-                        student.User.Status = studentExist.User.Status;
-                        _mapper.Map(student, studentExist);
-                        studentExist.DepartmentBranch = departmentBranch;
-                        studentExist.User.UpdatedAt = DateTime.Now;
-                        studentExist.User.UpdatedBy =int.Parse( _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value) ;
-                        studentExist.User.Id = studentExist.UserId;
-                        studentExist.User.UserTypes.Add(_unitOfWork.UserTypeRepo.FirstOrDefault(u => u.TypeName == Constants.UserTypes.Student));
-                        _unitOfWork.StudentRepo.Update(studentExist);
-                        result = _unitOfWork.Save();
+                        else
+                        {
+                            var departmentBranch = _unitOfWork.DepartmentBranchRepo.FirstOrDefault(d => d.DepartmentId == student.DepartmentId && d.BranchId == student.BranchId);
+                            if (departmentBranch == null)
+                            {
+                                throw new Exception("Department Branch not found");
+                            }
+                            student.DepartmentBranchId = (int)departmentBranch.Id;
+                            student.User.Password = studentExist.User.Password;
+                            student.User.CreatedAt = studentExist.User.CreatedAt;
+                            student.User.CreatedBy = studentExist.User.CreatedBy;
+                            student.User.Status = studentExist.User.Status;
+                            _mapper.Map(student, studentExist);
+                            studentExist.DepartmentBranch = departmentBranch;
+                            studentExist.User.UpdatedAt = DateTime.Now;
+                            studentExist.User.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                            studentExist.User.Id = studentExist.UserId;
+                            studentExist.User.UserTypes.Add(_unitOfWork.UserTypeRepo.FirstOrDefault(u => u.TypeName == Constants.UserTypes.Student));
+                            _unitOfWork.StudentRepo.Update(studentExist);
+                            result = _unitOfWork.Save();
+
+                        }
+                     
                     }
 
 

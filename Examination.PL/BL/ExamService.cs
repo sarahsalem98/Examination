@@ -22,6 +22,8 @@ namespace Examination.PL.BL
             _httpContextAccessor = httpContextAccessor;
 
         }
+        #region AdminExam
+
         public int Add(ExamMV exam)
         {
             try
@@ -193,5 +195,8 @@ namespace Examination.PL.BL
                 return null;
             }
         }
+        #endregion
+
+     
     }
 }
