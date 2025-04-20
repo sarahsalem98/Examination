@@ -16,6 +16,7 @@ namespace Examination.PL.Areas.Instructor.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IBranchService _branchService;
         private readonly ICourseService _courseService;
+       
         public StudentController(IStudentService studentService, IDepartmentService departmentService, IBranchService branchService, ICourseService courseService)
         {
             _studentService = studentService;
@@ -25,28 +26,30 @@ namespace Examination.PL.Areas.Instructor.Controllers
         }
         public IActionResult Index()
         {
+            var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ViewData["Title"] = "Students";
             ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
             ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
             ViewBag.TrackTypes = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
-            ViewBag.courses = _courseService.GetCourseByInstructor();
+            ViewBag.courses = _courseService.GetCourseByInstructor(Loggedinuser);
 
 
             return View();
         }
         public IActionResult List(StudentSearchMV studentSearch, int Page = 1, int PageSize = 10)
         {
-
+            var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ViewData["Title"] = "Students List";
-            var students = _studentService.GetStudentsByInstructorPaginated(studentSearch, PageSize, Page);
+            var students = _studentService.GetStudentsByInstructorPaginated(Loggedinuser, studentSearch, PageSize, Page);
            
           
            return View(students);
         }
         public IActionResult StudentDetails(int id)
         {
-           
-            var student=_studentService.GetStudentCoursesWithInstructor(id);
+            var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
+
+            var student =_studentService.GetStudentCoursesWithInstructor(id, Loggedinuser);
             if (student == null)
             {
                 return NotFound();
@@ -56,5 +59,6 @@ namespace Examination.PL.Areas.Instructor.Controllers
             }
             
         }
+        
     }
 }

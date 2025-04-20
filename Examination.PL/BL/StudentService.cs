@@ -25,13 +25,13 @@ namespace Examination.PL.BL
         }
      
 
-        public PaginatedData<StudentMV> GetStudentsByInstructorPaginated(StudentSearchMV studentSearch, int PageSize = 10, int Page = 1)
+        public PaginatedData<StudentMV> GetStudentsByInstructorPaginated(int Instructor_Id, StudentSearchMV studentSearch, int PageSize = 10, int Page = 1)
         {
             try
             {
-                int loggedinInstructor = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+               
                 List<StudentMV> studentsMV = new List<StudentMV>();
-                List<Student> data = _unitOfWork.StudentRepo.GetAll((s => s.DepartmentBranch.InstructorCourses.Any(c => c.Instructor.UserId == loggedinInstructor) &&
+                List<Student> data = _unitOfWork.StudentRepo.GetAll((s => s.DepartmentBranch.InstructorCourses.Any(c => c.Instructor.UserId == Instructor_Id) &&
                 (studentSearch.DepartmentId == null || s.DepartmentBranch.DepartmentId == studentSearch.DepartmentId) &&
                (studentSearch.BranchId == null || s.DepartmentBranch.BranchId == studentSearch.BranchId) &&
                (studentSearch.TrackType == null || s.TrackType == studentSearch.TrackType) &&
@@ -190,22 +190,22 @@ namespace Examination.PL.BL
                 return null;
             }
         }
-        public StudentMV GetStudentCoursesWithInstructor(int id)
+        public StudentMV GetStudentCoursesWithInstructor(int Student_Id,int Instructor_ID)
         {
             try
             {
-           int loggedinInstructor = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+          
               
         StudentMV studentMV = new StudentMV();
-                var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == id &&
-                 s.DepartmentBranch.InstructorCourses.Any(ic=>ic.Instructor.UserId==loggedinInstructor),
+                var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == Student_Id &&
+                 s.DepartmentBranch.InstructorCourses.Any(ic=>ic.Instructor.UserId== Instructor_ID),
                 "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course,DepartmentBranch.Department,DepartmentBranch.Branch");
           
                 if (student == null)
                 {
                     return studentMV;
                 }
-             student.DepartmentBranch.InstructorCourses=student.DepartmentBranch.InstructorCourses.Where(ic => ic.Instructor.UserId == loggedinInstructor).ToList();
+             student.DepartmentBranch.InstructorCourses=student.DepartmentBranch.InstructorCourses.Where(ic => ic.Instructor.UserId == Instructor_ID).ToList();
                 studentMV = _mapper.Map<StudentMV>(student);
                 
                 return studentMV;
@@ -295,7 +295,7 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
-
+      
     }
 
 }
