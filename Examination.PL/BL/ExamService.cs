@@ -69,7 +69,7 @@ namespace Examination.PL.BL
                 {
                     return -2;
                 }
-                var examExsist = _unitOfWork.ExamRepo.FirstOrDefault(e => e.CourseId == exam.CourseId && e.Type == exam.Type);
+                var examExsist = _unitOfWork.ExamRepo.FirstOrDefault(e => e.CourseId == exam.CourseId && e.Type == exam.Type&&e.Id!=OldExam.Id);
                 if (examExsist != null)
                 {
                     return -1;
