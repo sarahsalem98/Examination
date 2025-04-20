@@ -1,0 +1,60 @@
+﻿@model PaginatedData<CourseMV>
+@using Examination.PL.General;
+
+@{
+    Layout = null;
+
+
+}
+<input type="hidden" id="totalCount" value="@Model.TotalCount" />
+<table class="table data-table table-bordered table-hover mt-2">
+    <thead>
+        <tr>
+
+            <th scope="col">Branch</th>
+            <th scope="col" class="sort-arrows"> Department </th>
+            <th scope="col" class="sort-arrows"> Course </th>
+            <th scope="col">Total Pass Students</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class=" alert-info text-center">No Courses found</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+
+                @foreach (var crs in item.InstructorCourses)
+                {
+                    <tr>
+                        <td>@crs.DepartmentBranch.Branch.Name</td>
+                        <td>@crs.DepartmentBranch.Department.Name</td>
+                        <td>@crs.Course.Name</td>
+                        <td>0</td>
+                        <td>
+                            <a href="#">
+                                <button class="btn btn-Results">Caluculate Result</button>
+                            </a>
+
+                        </td>
+                        
+                    </tr>
+                  
+                }
+
+            }
+        }
+
+
+
+    </tbody>
+</table>
+
+
+

@@ -12,7 +12,7 @@ namespace Examination.DAL.Repos
     {
         public CourseRepo(AppDbContext db):base(db) 
         {
-            
+             
         }
     }
 

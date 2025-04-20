@@ -6,6 +6,8 @@ namespace Examination.PL.IBL
     {
         public List<CourseMV> GetCoursesByDeaprtment(int id);
         public List<CourseMV> GetCourseByStatus(int status);
-        public List<CourseMV> GetCourseByInstructor();
+        public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
+        public PaginatedData<CourseMV> GetCourseByInstructorPaginated(int Instructor_Id, CourseSearchMV courseSearch, int Page = 1, int PageSize = 10);
+
     }
 }

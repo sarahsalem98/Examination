@@ -45,4 +45,12 @@ namespace Examination.PL.ModelViews
 
         public InstructorMV Instructor { get; set; } = null!;
     }
+    public class CourseSearchMV
+    {
+        public string ? Name { get; set; }  
+        public int? CourseId { get; set; }
+        public int? DepartmentId { get; set; }
+        public int? BranchId { get; set; }
+        public int ?Status { get; set; }
+    }
 }
