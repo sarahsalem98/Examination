@@ -12,7 +12,8 @@ namespace Examination.PL.IBL
         public int Update(ExamMV exam);
 
         #endregion
+        public List<ExamMV> GetByStatus(int? status=null);
 
-    
+
     }
 }

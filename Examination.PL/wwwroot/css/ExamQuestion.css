@@ -47,7 +47,7 @@ a.btn {
 
 label {
     display: block;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: bold;
     margin-top: 1rem;
 }
@@ -127,7 +127,7 @@ input[type="text"] {
     }
 
 .breadcrumb {
-    background-color: #e9ecef;
+    background-color: #f9f9f9;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -163,7 +163,7 @@ input[type="text"] {
     }
 
     label {
-        font-size: 12px;
+        font-size: 22px;
     }
 
     select,

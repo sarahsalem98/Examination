@@ -46,21 +46,21 @@
                     <td>@item.Exam.Type</td>
                     <td class="@((item.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.Status)</td>
                     <td class="actions-cell">
-                        <a href="javascript:void(0);" onclick="AdminStudent.ShowAddUpdateModal(@item.Id);"><i class="bi bi-pencil"></i></a>
+                        <a  asp-action="Details"  asp-controller="ExamQuestion" asp-area="Admin" asp-route-id="@item.Id"  ><i class="bi bi-pencil"></i></a>
                         @if (item.Status != (int)Status.Deleted)
                         {
-                            <a href="javascript:void(0);" onclick="AdminStudent.ChangeStatus(@item.Id,@((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
+                            <a href="javascript:void(0);" onclick="AdminExamQs.ChangeStatus(@item.Id,@((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
 
                         }
 
                         @if (item.Status != (int)Status.Inactive)
                         {
-                            <a href="javascript:void(0);" onclick="AdminStudent.ChangeStatus(@item.Id,@((int)Status.Inactive))" class="inactive-icon"><i class="bi bi-x-circle"></i></a>
+                            <a href="javascript:void(0);" onclick="AdminExamQs.ChangeStatus(@item.Id,@((int)Status.Inactive))" class="inactive-icon"><i class="bi bi-x-circle"></i></a>
 
                         }
                         @if (item.Status != (int)Status.Active)
                         {
-                            <a href="javascript:void(0);" onclick="AdminStudent.ChangeStatus(@item.Id,@((int)Status.Active))" class="active-icon"><i class="bi bi-check-circle"></i></a>
+                            <a href="javascript:void(0);" onclick="AdminExamQs.ChangeStatus(@item.Id,@((int)Status.Active))" class="active-icon"><i class="bi bi-check-circle"></i></a>
 
                         }
                     </td>
