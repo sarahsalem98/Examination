@@ -39,48 +39,7 @@ namespace Examination.PL.BL
 
             }
         }
-        public PaginatedData<CourseMV> GetCourseByInstructorPaginated(int Instructor_Id, CourseSearchMV courseSearch, int Page = 1, int PageSize = 10)
-        {
-            try
-            {
-                List<CourseMV> courseMV = new List<CourseMV>();
-
-
-                List<Course> data = unitOfWork.CourseRepo.GetAll(
-    c => c.Status == (int)Status.Active &&
-         c.InstructorCourses.Any(ic =>
-             ic.Instructor.UserId == Instructor_Id && 
-             (courseSearch.CourseId == null || ic.CourseId == courseSearch.CourseId) &&
-             (courseSearch.DepartmentId == null || ic.DepartmentBranch.DepartmentId == courseSearch.DepartmentId) &&
-             (courseSearch.BranchId == null || ic.DepartmentBranch.BranchId == courseSearch.BranchId)
-         ) &&
-         (string.IsNullOrEmpty(courseSearch.Name) ||
-         c.Name.ToLower().Trim().Contains(courseSearch.Name.ToLower().Trim()))
-    , "InstructorCourses,InstructorCourses.Instructor,InstructorCourses.DepartmentBranch.Department,InstructorCourses.DepartmentBranch.Branch"
-).ToList();
-                courseMV = mapper.Map<List<CourseMV>>(data);
-                int TotalCounts = courseMV.Count();
-                if (TotalCounts > 0)
-                {
-                    courseMV = courseMV.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
-
-                }
-                PaginatedData<CourseMV> paginatedData = new PaginatedData<CourseMV>
-                {
-                    Items = courseMV,
-                    TotalCount = TotalCounts,
-                    PageSize = PageSize,
-                    CurrentPage = Page
-                };
-                return paginatedData;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error in fetch Courses ");
-                return null;
-
-            }
-        }
+      
         public List<CourseMV> GetCoursesByDeaprtment(int id)
         {
             try

@@ -14,12 +14,14 @@ namespace Examination.PL.Areas.Instructor.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IBranchService _branchService;
         private readonly ICourseService _courseService;
-        public CourseController(IStudentService studentService, IDepartmentService departmentService, IBranchService branchService, ICourseService courseService)
+        private readonly IInstructorCourseService _instructorCourseService;  
+        public CourseController(IStudentService studentService, IDepartmentService departmentService, IBranchService branchService, ICourseService courseService, IInstructorCourseService instructorCourseService)
         {
             _studentService = studentService;
             _departmentService = departmentService;
             _branchService = branchService;
             _courseService = courseService;
+            _instructorCourseService = instructorCourseService;
         }
         public IActionResult Index()
         {
@@ -33,7 +35,7 @@ namespace Examination.PL.Areas.Instructor.Controllers
         public IActionResult List(CourseSearchMV courseSearch, int Page = 1, int PageSize = 10)
         {
             var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
-            var courses=_courseService.GetCourseByInstructorPaginated(Loggedinuser, courseSearch,Page,PageSize);
+            var courses=_instructorCourseService.GetCourseByInstructorPaginated(Loggedinuser, courseSearch,Page,PageSize);
 
             return View(courses);
         }

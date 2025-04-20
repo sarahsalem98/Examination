@@ -1,4 +1,4 @@
-﻿@model PaginatedData<CourseMV>
+﻿@model PaginatedData<InstructorCourseMV>
 @using Examination.PL.General;
 
 @{
@@ -29,13 +29,13 @@
         {
             @foreach (var item in Model.Items)
             {
+                
 
-                @foreach (var crs in item.InstructorCourses)
-                {
+                
                     <tr>
-                        <td>@crs.DepartmentBranch.Branch.Name</td>
-                        <td>@crs.DepartmentBranch.Department.Name</td>
-                        <td>@crs.Course.Name</td>
+                        <td>@item.DepartmentBranch.Branch.Name</td>
+                        <td>@item.DepartmentBranch.Department.Name</td>
+                        <td>@item.Course.Name</td>
                         <td>0</td>
                         <td>
                             <a href="#">
@@ -46,8 +46,8 @@
                         
                     </tr>
                   
-                }
-
+                
+                
             }
         }
 

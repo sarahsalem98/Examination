@@ -39,9 +39,11 @@ namespace Examination.PL.ModelViews
     {
         public int Id { get; set; }
 
+        [Required]
         public int ExamId { get; set; }
 
-        public string Question { get; set; } = null!;
+        [Required]
+        public string Question { get; set; } 
 
         public string Answers { get; set; } = null!;
 
@@ -49,7 +51,10 @@ namespace Examination.PL.ModelViews
 
         public int? Level { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Degree must be greater than 0.")]
+        [Required(ErrorMessage = "Degree is required.")]
         public int Degree { get; set; }
+       
 
         public string? QuestionType { get; set; }
         public int? Status { get; set; }

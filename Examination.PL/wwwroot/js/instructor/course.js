@@ -53,7 +53,7 @@
             BranchId: $("#BranchId").val(),
             DepartmentId: $("#DepartmentId").val(),
             Status: $("#Status").val(),
-            courseId: $("#CourseId").val()
+            CourseId: $("#CourseId").val()
         }
     },
     Search: function () {
