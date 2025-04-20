@@ -29,9 +29,51 @@ namespace Examination.PL.ModelViews
     public class ExamSearchMV
     {
         public int? CourseId { get; set; }
-        public int? Status {  get; set; }
+        public int? Status { get; set; }
         public string? Type { get; set; }
         public string? Name { get; set; }
 
+    }
+
+    public class ExamQuestionMV
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public int ExamId { get; set; }
+
+        [Required]
+        public string Question { get; set; } 
+
+        public string Answers { get; set; } = null!;
+
+        public string RightAnswer { get; set; } = null!;
+
+        public int? Level { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Degree must be greater than 0.")]
+        [Required(ErrorMessage = "Degree is required.")]
+        public int Degree { get; set; }
+       
+
+        public string? QuestionType { get; set; }
+        public int? Status { get; set; }
+
+        public int? CreatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
+        public  ExamMV Exam { get; set; } = null!;
+
+
+    }
+
+    public class ExamQuestionSearchMV
+    {
+        public int? CourseId { get; set; }
+        public string? Type { get; set; }
+        public string? QuestionType { get; set; }
+        public int? Status { get; set; }
     }
 }

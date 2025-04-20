@@ -79,6 +79,10 @@ namespace Examination.PL.Areas.Admin.Controllers
                     {
                         response.Success = false;
                         response.Message = "Email is already exist";
+                    }else if (result == -2)
+                    {
+                        response.Success = false;
+                        response.Message = "can not change department while already courses has been taken";
                     }
                     else
                     {
@@ -99,6 +103,10 @@ namespace Examination.PL.Areas.Admin.Controllers
                     {
                         response.Success = false;
                         response.Message = "Email is alraedy exist";
+                    }else if(result == -2)
+                    {
+                        response.Success = false;
+                        response.Message = "something went wrong while adding studentcourses related to department";
                     }
                     else
                     {

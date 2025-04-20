@@ -20,6 +20,12 @@ public partial class ExamQ
     public int Degree { get; set; }
 
     public string? QuestionType { get; set; }
+    public int? Status { get; set; }
+
+    public int? CreatedBy { get; set; }
+    public int? UpdatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public virtual Exam Exam { get; set; } = null!;
 

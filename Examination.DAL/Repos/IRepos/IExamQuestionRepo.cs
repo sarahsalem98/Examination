@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Examination.DAL.Repos.IRepos
 {
-     public interface IUserRepo:IRepo<User>
+    public interface IExamQuestionRepo:IRepo<ExamQ>
     {
-    
 
     }
 }

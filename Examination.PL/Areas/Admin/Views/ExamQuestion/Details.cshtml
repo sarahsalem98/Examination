@@ -1,0 +1,108 @@
+﻿@model ExamQuestionMV
+@{
+    bool isUpdate = Model?.Id > 0;
+}
+
+
+@using Examination.PL.Constants;
+@section Styles {
+    <link rel="stylesheet" href="~/css/ExamQuestion.css" asp-append-version="true" />
+}
+
+<nav class="breadcrumb">
+    <a href="َQuestions.html">Questions Bank</a>/<span>@(isUpdate?"Edit Question":"Add Question")</span>
+</nav>
+
+<div class="card">
+    <form class="form-card" id="questionForm">
+
+        <input type="hidden" asp-for="Id" id="Id" />
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="ExamId" class="form-label">Exam</label>
+                <select class="form-select rounded-0" id="ExamId" name="ExamId" asp-for="ExamId" required>
+                    <option value="">Select Exam to assign question to...</option>
+                    @foreach (var exam in ViewBag.Exams)
+                    {
+                        <option value="@exam.Id">@exam.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="ExamId" class="text-danger"></span>
+            </div>
+
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="QuestionType" class="form-label">Question Type</label>
+                <select class="form-select rounded-0" id="QuestionType" asp-for="QuestionType" required onchange="AdminExamQs.toggleOptionInputs()">
+                    <option value="">Select Question Type ...</option>
+                    <option value="@ExamQuestionType.MCQ">@ExamQuestionType.MCQ</option>
+                    <option value="@ExamQuestionType.TrueFalse">@ExamQuestionType.TrueFalse</option>
+                </select>
+                <span asp-validation-for="QuestionType" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="ExamId" class="form-label">Degree</label>
+                <input class="form-control rounded-0" asp-for="Degree" placeholder="Degree" id="Degree" type="number" />
+                <span asp-validation-for="Degree" class="text-danger"></span>
+            </div>
+
+        </div>
+
+
+        <!-- question -->
+        <label for="Question">Question</label>
+        <textarea id="Question" name="Question" asp-for="Question" rows="3" required></textarea>
+        <span asp-validation-for="Question" class="text-danger"></span>
+
+
+        <div id="option-container"></div>
+
+
+        <button type="button" class="add-option" onclick="AdminExamQs.addOption()">Add Option</button>
+        <button type="submit" class="save-button" onclick="AdminExamQs.Save(event)">@(isUpdate ? "UPDATE DETAILS" : "SAVE DETAILS")</button>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/admin/ExamQuestion.js"></script>
+    <script>
+          $(document).ready(function () {
+            AdminExamQs.toggleOptionInputs();
+
+            const isUpdate = $('#Id').length > 0;
+
+            if (isUpdate) {
+                const questionType = $("#QuestionType").val();
+                const answers = `@Model.Answers`.trim();
+                const rightAnswer = `@Model.RightAnswer`;
+
+                if (questionType === "MCQ") {
+                    const options = answers.split(";").map(o => o.trim());
+
+                    $("#option-container").empty();
+                    AdminExamQs.optionCount = 0;
+
+                    options.forEach(option => {
+                        const [letter, value] = option.split(") ");
+                        AdminExamQs.addOption(value, letter === rightAnswer);
+                    });
+
+                } else if (questionType === "TF") {
+                    const tfValue = rightAnswer === "A" ? "True" : "False";
+                    setTimeout(() => {
+                        $(`input[name="correctAnswer"][value="${tfValue}"]`).prop("checked", true);
+                    }, 100);
+                }
+            }
+        });
+
+
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+
+}

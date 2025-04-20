@@ -22,6 +22,8 @@ namespace Examination.PL.BL
             _httpContextAccessor = httpContextAccessor;
 
         }
+        #region AdminExam
+
         public int Add(ExamMV exam)
         {
             try
@@ -193,5 +195,36 @@ namespace Examination.PL.BL
                 return null;
             }
         }
+        #endregion
+
+
+        public List<ExamMV> GetByStatus(int? status = null)
+        {
+            try
+            {
+                List<ExamMV> list = new List<ExamMV>();
+
+                List<Exam> data = _unitOfWork.ExamRepo.GetAll(
+                    item =>
+                        status == null
+                            ? item.Status != (int)Status.Deleted 
+                            : item.Status == status,             
+                    "Course"
+                )
+                .OrderByDescending(item => item.CreatedAt)
+                .ToList();
+
+                list = _mapper.Map<List<ExamMV>>(data);
+                return list;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occurred while getting exams");
+                return null;
+            }
+        }
+
+
+
     }
 }
