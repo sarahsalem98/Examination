@@ -7,6 +7,9 @@
 
     SelectList DeptsList = new SelectList(ViewBag.Departments, "Id", "Name");
 }
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
 <form id="admin-Course-form">
     <input type="hidden" asp-for="Id" />
     <div class="modal-body mx-3">
@@ -14,7 +17,7 @@
         <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
         <div class="row">
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label for="Name" class="form-label">Name</label>
                 <input type="text" class="form-control rounded-0 mb-1" id="Name" asp-for="Name" placeholder="Enter Course Name" required>
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -30,7 +33,7 @@
             </div> *@
 
 
-            <div class="col-md-4 mb-3">
+            @*             <div class="col-md-4 mb-3">
                 <label for="Status" class="form-label">Status</label>
                 <select asp-for="Status" class="form-control" required>
                     <option value="0">Select Status</option>
@@ -39,9 +42,9 @@
                     <option value="@((int)Status.Deleted)">@Status.Deleted.ToString()</option>
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
+            </div> *@
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label for="Hours" class="form-label">Hours</label>
                 <input type="number" min="1" class="form-control rounded-0 mb-1" value="1" id="Hours" asp-for="Hours" placeholder="Enter Course Hours" required>
                 <span asp-validation-for="Hours" class="text-danger"></span>
@@ -66,6 +69,32 @@
             </div>
 
 
+
+
+
+            @*   <div class="col-md-12 mb-3">
+                <label for="id_label_multiple" class="form-label">Departments</label>
+
+
+                <select asp-for="DepartmentsIds"
+                        asp-items="@DeptsList"
+                        id="id_label_multiple"
+                        class="form-control select2-multiple"
+                        style="min-height:100px"
+                        multiple
+                        required>
+                    <!-- No default option needed for multi-select -->
+                    <option value="0">Select Department0</option>
+                    <option value="1">Select Department1</option>
+                    <option value="2">Select Department2</option>
+                </select>
+
+
+                <small class="form-text text-muted">select multiple departments</small>
+                <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
+            </div> *@
+
+
         </div>
 
     </div>
@@ -78,8 +107,17 @@
     </div>
 </form>
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+
     $(document).ready(function(){
+
+         $('.select2-multiple').select2({
+        placeholder: "Select departments",
+        width: '100%',
+        allowClear: true
+    });
+
 
     });
 </script>

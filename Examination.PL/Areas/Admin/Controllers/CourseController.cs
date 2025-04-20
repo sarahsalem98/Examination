@@ -1,4 +1,5 @@
 ﻿using Examination.DAL.Repos.IRepos;
+using Examination.PL.Attributes;
 using Examination.PL.BL;
 using Examination.PL.General;
 using Examination.PL.IBL;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [UserTypeAuthorize(Constants.UserTypes.Admin)]
 
     public class CourseController : Controller
     {
@@ -55,6 +57,8 @@ namespace Examination.PL.Areas.Admin.Controllers
             if (id > 0)
             {
                 course = _courseService.GetCourseByID(id);
+                course.DepartmentsIds = course.CourseDepartments.Select(s => s.DepartmentId).ToList();
+
                 if (course == null)
                 {
                     return NotFound();

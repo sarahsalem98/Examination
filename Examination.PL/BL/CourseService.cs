@@ -28,6 +28,8 @@ namespace Examination.PL.BL
             int result = 0;
             try
             {
+                course.Status = (int)Status.Active;
+                course.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
                 var crs = _mapper.Map<Course>(course);
                 crs.CreatedAt = DateTime.Now;
                 // Should be the id of the Logged User  
@@ -167,13 +169,36 @@ namespace Examination.PL.BL
             try
             {
                 int result = 0;
-                var courseExist = _unitOfWork.CourseRepo.FirstOrDefault(c => c.Id == course.Id);
+                var courseExist = _unitOfWork.CourseRepo.FirstOrDefault(c => c.Id == course.Id, "CourseDepartments");
                 if (courseExist == null)
                     return result = -1;
-                _mapper.Map(course, courseExist);
+                // Updating
+                courseExist.Name = course.Name;
+                courseExist.Description = course.Description;
+                courseExist.Hours = course.Hours;
+
+                var courseDepts = courseExist.CourseDepartments.ToList();
+                var CourseDeptIds = courseDepts.Select(S => S.DepartmentId).ToList();
+
+                if (CourseDeptIds != course.DepartmentsIds)
+                {
+                    CourseDeptIds = course.DepartmentsIds;
+                    _unitOfWork.CourseDepartmentRepo.RemoveRange(courseDepts);
+                    foreach (var dep in CourseDeptIds)
+                    {
+                        var courseDept = new CourseDepartment() { CourseId = courseExist.Id, DepartmentId = dep };
+                        _unitOfWork.CourseDepartmentRepo.Insert(courseDept);
+                    }
+                    ;
+                }
+
                 courseExist.UpdatedAt = DateTime.Now;
-                //courseExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
-                courseExist.UpdatedBy = 0;
+                courseExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+
+
+
+                courseExist.UpdatedAt = DateTime.Now;
+
                 _unitOfWork.CourseRepo.Update(courseExist);
                 result = _unitOfWork.Save();
                 return result;
@@ -189,7 +214,7 @@ namespace Examination.PL.BL
         {
             try
             {
-                var course = _unitOfWork.CourseRepo.FirstOrDefault(i => i.Id == id);
+                var course = _unitOfWork.CourseRepo.FirstOrDefault(i => i.Id == id, "CourseDepartments");
                 if (course == null)
                     return null;
                 var courseMv = _mapper.Map<CourseMV>(course);
