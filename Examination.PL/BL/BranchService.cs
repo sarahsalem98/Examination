@@ -169,7 +169,7 @@ namespace Examination.PL.BL
 
         }
 
-        public PaginatedData<BranchMV> GetAllPaginated(BranchSearchMV branchSearch, int pageSize = 10, int page = 1)
+        public PaginatedData<BranchMV> GetAllPaginated(BranchSearchMV branchSearch, int PageSize = 10, int Page = 1)
         {
             try
             {
@@ -183,8 +183,8 @@ namespace Examination.PL.BL
                 int totalCount = query.Count();
 
                 var paginatedBranches = query
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
+                    .Skip((Page - 1) * PageSize)
+                    .Take(PageSize)
                     .ToList();
 
                 var branchMVs = _mapper.Map<List<BranchMV>>(paginatedBranches);
@@ -193,8 +193,8 @@ namespace Examination.PL.BL
                 {
                     Items = branchMVs,
                     TotalCount = totalCount,
-                    PageSize = pageSize,
-                    CurrentPage = page
+                    PageSize = PageSize,
+                    CurrentPage = Page
                 };
             }
             catch (Exception ex)
@@ -204,7 +204,23 @@ namespace Examination.PL.BL
             }
         }
 
-
+        public List<String> GetDistinctBranchLocations()
+        {
+            try
+            {
+                var locations = _unitOfWork.BranchRepo.GetAll()
+                    .Where(b => b.Status == (int)Status.Active)
+                    .Select(b => b.Location)
+                    .Distinct()
+                    .ToList();
+                return locations;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving distinct branch locations.");
+                return null;
+            }
+        }
 
     }
 }
