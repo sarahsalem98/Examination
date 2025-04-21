@@ -5,7 +5,7 @@ namespace Examination.PL.IBL
     public interface IBranchService
     {
         public List<BranchMV> GetByStatus(int status);
-        public int Add(BranchMV branch, List<int> DepIds);
+        public int Add(BranchMV branch);
 
         public BranchMV GetById(int id);
 

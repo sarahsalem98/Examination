@@ -33,31 +33,28 @@
                     <td>@item?.Location</td>
                     <td class="@((item?.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.Status)</td>
                     <td class="actions-cell">
-                        @* <a href="#" onclick="AdminInstructor.ShowAddUpdateModal(@item.Id)"><i class="bi bi-pencil"></i></a> *@
-                        @* @if (item.User.Status == (int)Status.Active) *@
-                        @* { *@
-                        @*     <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Inactive))"><i class="bi bi-x-circle"></i></a> *@
-                        @*     <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a> *@
-                        @* } *@
-                        @* else if (item.User.Status == (int)Status.Inactive) *@
-                        @* { *@
-                        @*     <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Active))"> *@
-                        @*         <i class="bi bi-check-circle"></i> *@
+                        <a href="#" onclick="AdminBranch.ShowAddUpdateModel(@item.Id)"><i class="bi bi-pencil"></i></a>
+                        @if (item.Status == (int)Status.Active)
+                        {
+                            <a href="#" onclick="AdminBranch.ChangeStatus(@item.Id, @((int)Status.Inactive))"><i class="bi bi-x-circle"></i></a>
+                            <a href="#" onclick="AdminBranch.ChangeStatus(@item.Id, @((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
+                        }
+                        else if (item.Status == (int)Status.Inactive)
+                        {
+                            <a href="#" onclick="AdminBranch.ChangeStatus(@item.Id, @((int)Status.Active))"><i class="bi bi-check-circle"></i> </a>
+                            <a href="#" onclick="AdminBranch.ChangeStatus(@item.Id, @((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a>
+                        }
+                        else if (item.Status == (int)Status.Deleted)
+                        {
+                            <a href="#" onclick="AdminBranch.ChangeStatus(@item.Id, @((int)Status.Inactive))">
+                                <i class="bi bi-x-circle"></i>
 
-                        @*     </a> *@
-                        @*     <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Deleted))" class="delete-icon"><i class="bi bi-trash"></i></a> *@
-                        @* } *@
-                        @* else if (item.User.Status == (int)Status.Deleted) *@
-                        @* { *@
-                        @*     <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Inactive))"> *@
-                        @*         <i class="bi bi-x-circle"></i> *@
+                            </a>
+                            <a href="#" onclick="AdminBranch.ChangeStatus(@item.Id, @((int)Status.Active))">
+                                <i class="bi bi-check-circle"></i>
 
-                        @*     </a> *@
-                        @*     <a href="#" onclick="AdminInstructor.ChangeStatus(@item.Id, @((int)Status.Active))"> *@
-                        @*         <i class="bi bi-check-circle"></i> *@
-
-                        @*     </a> *@
-                        @* } *@
+                            </a>
+                        }
                     </td>
                 </tr>
 

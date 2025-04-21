@@ -22,7 +22,7 @@ namespace Examination.PL.BL
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int Add(BranchMV branch, List<int> DepIds)
+        public int Add(BranchMV branch)
         {
             int result = 0;
             try
@@ -30,28 +30,12 @@ namespace Examination.PL.BL
                 var branchExist = _unitOfWork.BranchRepo.FirstOrDefault(u => u.Id == branch.Id);
                 if (branchExist == null)
                 {
-                    //check department exist
-                    var departments = _unitOfWork.DepartmentRepo.GetAll(d => DepIds.Contains(d.Id)).ToList();
-                    if (departments.Count != DepIds.Count)
-                    {
-                        _logger.LogWarning("Some departments could not be found.");
-                    }
-                    //add
                     //1-add branch
                     var newbranch = _mapper.Map<Branch>(branch);
+                    newbranch.CreatedAt = DateTime.Now;
+                    newbranch.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
+                    newbranch.Status = (int)Status.Active;
                     _unitOfWork.BranchRepo.Insert(newbranch);
-                    _unitOfWork.Save();
-                    //2-add deprtments
-                    foreach (Department dep in departments)
-                    {
-                        var depbranch = new DepartmentBranch()
-                        {
-                            BranchId = newbranch.Id,
-                            DepartmentId = dep.Id
-                        };
-                        _unitOfWork.DepartmentBranchRepo.Insert(depbranch);
-                    }
-
                     result = _unitOfWork.Save();
                 }
                 else
@@ -74,7 +58,7 @@ namespace Examination.PL.BL
             try
             {
                 BranchMV branchMV = new BranchMV();
-                var branch = _unitOfWork.BranchRepo.FirstOrDefault(b => b.Id == id, "DepartmentBranch.Department");
+                var branch = _unitOfWork.BranchRepo.FirstOrDefault(b => b.Id == id);
                 if (branch == null)
                 {
                     return branchMV;
@@ -95,17 +79,19 @@ namespace Examination.PL.BL
             int result = 0;
             try
             {
-                var branchExist = _unitOfWork.BranchRepo.FirstOrDefault(b => b.Id == branch.Id, "DepartmentBranches");
+                var branchExist = _unitOfWork.BranchRepo.FirstOrDefault(b => b.Id == branch.Id);
                 if (branchExist != null)
                 {
-                    branch.CreatedAt = branchExist.CreatedAt;
-                    branch.CreatedBy = branchExist.CreatedBy;
+                   
 
                     var userId = _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value;
-                    branch.UpdatedAt = DateTime.Now;
-                    branch.UpdatedBy = userId != null ? int.Parse(userId) : (int?)null;
+                    branchExist.UpdatedAt = DateTime.Now;
+                    branchExist.UpdatedBy = userId != null ? int.Parse(userId) : (int?)null;
+                    branchExist.Name = branch.Name;
+                    branchExist.Location = branch.Location;
+                  
 
-                    _mapper.Map(branch, branchExist);
+
                     _unitOfWork.BranchRepo.Update(branchExist);
                     result = _unitOfWork.Save();
                 }
