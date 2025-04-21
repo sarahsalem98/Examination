@@ -29,7 +29,7 @@ namespace Examination.PL.Areas.Instructor.Controllers
             var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
             ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
-            ViewBag.Status = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
+            ViewBag.Status = Enum.GetValues(typeof(CourseStatus)).Cast<CourseStatus>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
             ViewBag.courses = _courseService.GetCourseByInstructor(Loggedinuser);
             return View();
         }
@@ -41,7 +41,7 @@ namespace Examination.PL.Areas.Instructor.Controllers
             return View(courses);
         }
         [HttpPost]
-        public IActionResult CompleteCourse(int DepartmentBranchId, int course_id)
+        public IActionResult CompleteCourse(int DepartmentBranchId,int instructor_id ,int course_id)
         {
             var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ResponseMV response = new ResponseMV();
@@ -54,7 +54,7 @@ namespace Examination.PL.Areas.Instructor.Controllers
             else if (res == 0)
             {
                 response.Success = false;
-                response.Message = "Something Went Wrong";
+                response.Message = "Something Went Wronggg";
             }
             else if (res == -1)
             {

@@ -58,7 +58,7 @@ namespace Examination.PL.BL
                     //means failed students doeasn't have corrective exam (tested)
                     return -5;
                 }
-                else if (DepartmentBranchCourse.DepartmentBranch.Students.Any(s=>s.StudentCourses.Any(sc=>sc.CourseId==course_id)&&s.DepartmentBranchId==DepartmentBranchId))
+                else if (DepartmentBranchCourse.IsCompleted==1||DepartmentBranchCourse.DepartmentBranch.Students.Any(s=>s.StudentCourses.Any(sc=>sc.CourseId==course_id)&&s.DepartmentBranchId==DepartmentBranchId))
                
                 {
                     //means he already put the grades
@@ -76,6 +76,9 @@ namespace Examination.PL.BL
 
                     });
                     DepartmentBranchCourse.Course.StudentCourses.AddRange(studentCourses);
+                    DepartmentBranchCourse.IsCompleted = 1;
+                    unitOfWork.InstructorCourseRepo.Update(DepartmentBranchCourse);
+                 
                     var res = unitOfWork.Save();
                     if(res>0)
                     {
@@ -108,6 +111,7 @@ namespace Examination.PL.BL
                 &&(courseSearch.CourseId==null||ic.CourseId==courseSearch.CourseId)
                 &&(courseSearch.DepartmentId==null||ic.DepartmentBranch.DepartmentId==courseSearch.DepartmentId)
                && (courseSearch.BranchId == null || ic.DepartmentBranch.BranchId == courseSearch.BranchId)
+               &&(courseSearch.Status==null||(ic.IsCompleted??0)==(int)courseSearch.Status)
                && (string.IsNullOrEmpty(courseSearch.Name) ||
                    ic.Course.Name.ToLower().Trim().Contains(courseSearch.Name.ToLower().Trim()))
 

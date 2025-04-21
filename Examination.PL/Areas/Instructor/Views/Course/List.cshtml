@@ -3,20 +3,23 @@
 
 @{
     Layout = null;
-   
+
 
 }
+
+
 <input type="hidden" id="totalCount" value="@Model.TotalCount" />
 <table class="table data-table table-bordered table-hover mt-2">
     <thead>
         <tr>
 
             <th scope="col">Branch</th>
-            <th scope="col" class="sort-arrows"> Department </th>
-            <th scope="col" class="sort-arrows"> Course </th>
-            <th scope="col">Total Students</th>
-            <th scope="col">Total Passed</th>
-            <th scope="col">Total Failed</th>
+            <th scope="col" class="sort-arrows">Department</th>
+            <th scope="col" class="sort-arrows">Course</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Passed</th>
+            <th scope="col">Failed</th>
+            <th scope="col">Status</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -36,24 +39,22 @@
                 var totalPassed = finalPassed + correctivePassed;
                 var totalStudents = item.TotalStudents ?? 0;
                 var failed = totalStudents - totalPassed;
-                    <tr>
+
+               
+                <tr>
                         <td>@item.DepartmentBranch.Branch.Name</td>
                         <td>@item.DepartmentBranch.Department.Name</td>
                         <td>@item.Course.Name</td>
                         <td>@totalStudents</td>
                     <td>@totalPassed</td>
                     <td>@failed</td>
+                    <td>@Enum.GetName(typeof(CourseStatus), item.IsCompleted??0)</td>
                         <td>
-                            <a href="#">
-                            <button onclick="InstructorCourse.CompleteCourse(@item.DepartmentBranchId,@item.InstructorId,@item.CourseId)" class="btn btn-Results">Complete Course</button>
-                            </a>
-
+                        <button onclick="InstructorCourse.CompleteCourse(@item.DepartmentBranchId,@item.InstructorId, @item.CourseId)" class="btn btn-Results rounded-0" >Complete Course</button>
                         </td>
                         
                     </tr>
-                  
-                
-                
+
             }
         }
 

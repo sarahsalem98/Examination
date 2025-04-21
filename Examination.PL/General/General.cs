@@ -13,6 +13,12 @@
         Internal =1
 
     }
+    public enum CourseStatus
+    {
+        Completed = 1,
+        Incomplete = 0
+
+    }
 
     public enum TrackType
     {

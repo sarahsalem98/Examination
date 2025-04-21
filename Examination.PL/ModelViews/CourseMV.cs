@@ -39,7 +39,7 @@ namespace Examination.PL.ModelViews
 
         public int? DepartmentBranchId { get; set; }
         public int? TotalStudents { get; set; }
-
+        public int? IsCompleted { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string? LastGeneratedExamType { get; set; }
