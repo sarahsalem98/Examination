@@ -14,6 +14,6 @@ namespace Examination.PL.IBL
         int Add(DepartmentMV department);
       int Update(DepartmentMV department);
         int ChangeStatus(int id, int status);
-
+        DepartmentMV GetByIdWithBranches(int id);
     }
 }
