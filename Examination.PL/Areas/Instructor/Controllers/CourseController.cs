@@ -1,4 +1,5 @@
-﻿using Examination.PL.Attributes;
+﻿using Azure;
+using Examination.PL.Attributes;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
@@ -38,6 +39,55 @@ namespace Examination.PL.Areas.Instructor.Controllers
             var courses=_instructorCourseService.GetCourseByInstructorPaginated(Loggedinuser, courseSearch,Page,PageSize);
 
             return View(courses);
+        }
+        [HttpPost]
+        public IActionResult CompleteCourse(int DepartmentBranchId, int course_id)
+        {
+            var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
+            ResponseMV response = new ResponseMV();
+            int res=_instructorCourseService.CompleteCourse(DepartmentBranchId, Loggedinuser, course_id);
+            if (res == 1)
+            {
+                response.Success = true;
+                response.Message = "Course Completed Succesfully";
+            }
+            else if (res == 0)
+            {
+                response.Success = false;
+                response.Message = "Something Went Wrong";
+            }
+            else if (res == -1)
+            {
+                response.Success = false;
+                response.Message = "Can't Complete The Course Try Again";
+            }
+            else if (res == -2)
+            {
+                response.Success = false;
+                response.Message = "Course Doesn't End Yet";
+            }
+            else if (res == -3)
+            {
+                response.Success = false;
+                response.Message = "You Should Generate Exam ";
+            }
+            else if (res == -4)
+            {
+                response.Success = false;
+                response.Message = "Student Waiting The Exam";
+            }
+            else if (res == -5)
+            {
+                response.Success = false;
+                response.Message = "Students That Doesn't Pass Exam doesn't have Corrective Exam Yet";
+            }
+            else if (res == -6)
+            {
+                response.Success = false;
+                response.Message = "The course Is Completed Already";
+            }
+            
+            return Json(response);
         }
     }
 }

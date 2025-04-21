@@ -3,7 +3,7 @@
 
 @{
     Layout = null;
-
+   
 
 }
 <input type="hidden" id="totalCount" value="@Model.TotalCount" />
@@ -14,7 +14,9 @@
             <th scope="col">Branch</th>
             <th scope="col" class="sort-arrows"> Department </th>
             <th scope="col" class="sort-arrows"> Course </th>
-            <th scope="col">Total Pass Students</th>
+            <th scope="col">Total Students</th>
+            <th scope="col">Total Passed</th>
+            <th scope="col">Total Failed</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -29,17 +31,21 @@
         {
             @foreach (var item in Model.Items)
             {
-                
-
-                
+                var finalPassed = item.FinalPassedStudentCount ?? 0;
+                var correctivePassed = item.CorrectivePassedStudentCount ?? 0;
+                var totalPassed = finalPassed + correctivePassed;
+                var totalStudents = item.TotalStudents ?? 0;
+                var failed = totalStudents - totalPassed;
                     <tr>
                         <td>@item.DepartmentBranch.Branch.Name</td>
                         <td>@item.DepartmentBranch.Department.Name</td>
                         <td>@item.Course.Name</td>
-                        <td>0</td>
+                        <td>@totalStudents</td>
+                    <td>@totalPassed</td>
+                    <td>@failed</td>
                         <td>
                             <a href="#">
-                                <button class="btn btn-Results">Caluculate Result</button>
+                            <button onclick="InstructorCourse.CompleteCourse(@item.DepartmentBranchId,@item.InstructorId,@item.CourseId)" class="btn btn-Results">Complete Course</button>
                             </a>
 
                         </td>

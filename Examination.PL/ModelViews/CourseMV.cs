@@ -38,6 +38,14 @@ namespace Examination.PL.ModelViews
         public int CourseId { get; set; }
 
         public int? DepartmentBranchId { get; set; }
+        public int? TotalStudents { get; set; }
+
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string? LastGeneratedExamType { get; set; }
+
+        public int? FinalPassedStudentCount { get; set; }
+        public int? CorrectivePassedStudentCount { get; set; }
 
         public CourseMV Course { get; set; } = null!;
 

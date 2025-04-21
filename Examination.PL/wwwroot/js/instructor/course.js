@@ -72,5 +72,30 @@
         InstructorCourse.currentSearchData = {};
         InstructorCourse.Fetch(1);
     },
+    CompleteCourse: function (DepartmentBranchId, instructor_id, course_id)
+    {
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "Post",
+            url: "/Instructor/Course/CompleteCourse",
+            data: { DepartmentBranchId: DepartmentBranchId, course_id: course_id },
+            success: function (response) {
+
+                $("#loader").removeClass("show");
+                if (response.success) {
+
+                    InstructorCourse.Fetch(InstructorCourse.currentPage);
+                    toastr.success(response.message);
+
+                } else {
+                   
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching Complete Course:", error);
+            }
+        })
+    }
 
 }
