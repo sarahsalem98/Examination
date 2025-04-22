@@ -8,6 +8,7 @@ namespace Examination.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [UserTypeAuthorize(Constants.UserTypes.Admin)]
+
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
@@ -59,7 +60,7 @@ namespace Examination.PL.Areas.Admin.Controllers
 
         [HttpPost]
         public IActionResult AddUpdate(StudentMV model)
-            {
+        {
 
             ResponseMV response = new ResponseMV();
             if (ModelState.IsValid)
@@ -68,7 +69,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                 if (model.Id > 0)
                 {
                     var result = _studentService.Update(model);
-                    if(result > 0)
+                    if (result > 0)
                     {
                         response.Success = true;
                         response.Message = "Student updated successfully";
@@ -97,7 +98,8 @@ namespace Examination.PL.Areas.Admin.Controllers
                         response.Success = true;
                         response.Message = "Student added successfully";
                         response.RedirectUrl = null;
-                    }else if (result == -1)
+                    }
+                    else if (result == -1)
                     {
                         response.Success = false;
                         response.Message = "Email is alraedy exist";
@@ -112,7 +114,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                         response.Message = "Error occurred while adding student";
 
                     }
-                  
+
                 }
             }
             else
@@ -127,7 +129,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangeStatus(int id , int status)
+        public IActionResult ChangeStatus(int id, int status)
         {
             ResponseMV response = new ResponseMV();
             if (id > 0)
@@ -158,7 +160,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetDepartmentsByBranchId(int BranchId)
         {
-            ResponseMV response = new ResponseMV(); 
+            ResponseMV response = new ResponseMV();
             var departments = new List<DepartmentMV>();
             if (BranchId > 0)
             {

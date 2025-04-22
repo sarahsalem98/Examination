@@ -15,14 +15,16 @@ namespace Examination.DAL.Repos.IRepos
         public IBranchRepo BranchRepo { get; }
         public IDepartmentRepo DepartmentRepo { get; }
         public IInstructorRepo InstructorRepo { get; }
+       // public IInstructorCourseRepo InstructorCourseRepo { get; }
         public IUserTypeRepo UserTypeRepo { get; }
         public IDepartmentBranch DepartmentBranchRepo { get; }
         public ICourseRepo CourseRepo { get; }
         public IExamRepo ExamRepo { get; }
         public IExamQuestionRepo ExamQuestionRepo { get; }
+        public ICourseDepartmentRepo CourseDepartmentRepo { get; }
         public int Save();
         public IDbContextTransaction BeginTransaction();
-        
+
 
     }
 }

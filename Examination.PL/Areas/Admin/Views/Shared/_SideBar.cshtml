@@ -25,7 +25,13 @@
         <!-- Calender -->
         <li class="nav-item mt-2">
             <a  asp-controller="Student" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","Student","Index")">
+
                 <i class="bi bi-person"></i> <span class="ms-2">Students</span>
+            </a>
+        </li>
+        <li class="nav-item mt-2">
+            <a asp-controller="Department" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","Department","Index")">
+                <i class="bi-buildings"></i> <span class="ms-2">Departments</span>
             </a>
         </li>
         <li class="nav-item mt-2">
@@ -45,10 +51,16 @@
         </li>
         <li class="nav-item mt-2">
             <a asp-controller="ExamQuestion" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","ExamQuestion","Index")">
-                <i class="bi bi-journal-text"></i> <span class="ms-2">ExamQuestions</span>
+                <i class="bi bi-question-square"></i> <span class="ms-2">ExamQuestions</span>
             </a>
         </li>
-           
+
+        <li class="nav-item mt-2">
+            <a asp-controller="Course" asp-action="Index" asp-area="Admin" class="sidebar-link nav-link text-white rounded-0 @IsActive("Admin","Course","Index")">
+                <i class="bi bi-journals"></i> <span class="ms-2">Courses</span>
+            </a>
+        </li>
+
         <!-- Courses -->
      @*    <li class="nav-item">
             <a href="courses.html" class="nav-link text-white">

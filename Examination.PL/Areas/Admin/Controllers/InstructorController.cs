@@ -68,7 +68,8 @@ namespace Examination.PL.Areas.Admin.Controllers
                     response.Success = true;
                     response.Message = "Instructor Updated successfully";
                     response.Data = instructor;
-                }else if (res == -2)
+                }
+                else if (res == -2)
                 {
                     response.Success = false;
                     response.Message = "this courses in this department already assigned to another instructor";
@@ -96,7 +97,8 @@ namespace Examination.PL.Areas.Admin.Controllers
                     response.Success = false;
                     response.Message = "Instructor Already Exsists";
                     response.Data = instructor;
-                }else if (res == -2)
+                }
+                else if (res == -2)
                 {
                     response.Success = false;
                     response.Message = "this courses in this department already assigned to another instructor";
@@ -110,31 +112,31 @@ namespace Examination.PL.Areas.Admin.Controllers
                     response.Data = instructor;
                 }
             }
-        
+
 
             return Json(response);
         }
         [HttpPut]
-        public IActionResult ChangeStatus(int id,int status)
+        public IActionResult ChangeStatus(int id, int status)
         {
             ResponseMV response = new ResponseMV();
-        
-           var res=InstructorService.ChangeStatus(id, status);
-            if(res==0)
+
+            var res = InstructorService.ChangeStatus(id, status);
+            if (res == 0)
             {
                 response.Success = false;
                 response.Message = "Something Went Wrong";
             }
-            else  if (res == -1)
-                {
-                    response.Success = false;
-                    response.Message = "instructor Not found";
-                }
+            else if (res == -1)
+            {
+                response.Success = false;
+                response.Message = "instructor Not found";
+            }
             else
             {
                 response.Success = true;
                 response.Message = $"instructor Status Changed Successfully";
-              
+
             }
 
             return Json(response);
@@ -142,16 +144,17 @@ namespace Examination.PL.Areas.Admin.Controllers
         public IActionResult GetCoursesByDepartmenID(int DepartmentId)
         {
             ResponseMV response = new ResponseMV();
-            var courses=new List<CourseMV>();
+            var courses = new List<CourseMV>();
             if (DepartmentId > 0)
             {
-                courses=courseService.GetCoursesByDeaprtment(DepartmentId);
-                if(courses==null)
+                courses = courseService.GetCoursesByDeaprtment(DepartmentId);
+                if (courses == null)
                 {
                     response.Success = false;
                     response.Message = "no courses found";
                     response.Data = null;
-                }else
+                }
+                else
                 {
                     response.Success = true;
                     response.Message = "AllCourses";

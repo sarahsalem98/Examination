@@ -6,5 +6,14 @@ namespace Examination.PL.IBL
     {
         public List<DepartmentMV> GetByStatus(int status);
         public List<DepartmentMV> GetByBranch(int branchId);
+
+        //List<DepartmentMV> GetAll();
+        DepartmentMV GetById(int id);
+        PaginatedData<DepartmentMV> GetAllPaginated(DepartmentSearchMV search, int pageSize, int page);
+
+        int Add(DepartmentMV department);
+      int Update(DepartmentMV department);
+        int ChangeStatus(int id, int status);
+        DepartmentMV GetByIdWithBranches(int id);
     }
 }
