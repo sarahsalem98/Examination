@@ -24,15 +24,7 @@ public class CourseMV
 
 }
 
-public class CourseSearchMV
-{
 
-    public string? Name { get; set; }
-    public int? Status { get; set; }
-    public int? DepartmentId { get; set; }
-    public int? BranchId { get; set; }
-    public int? TrackType { get; set; }
-}
 public class CourseDepartmentMV
 {
     public int Id { get; set; }
@@ -70,5 +62,6 @@ public class InstructorCourseMV
         public int? DepartmentId { get; set; }
         public int? BranchId { get; set; }
         public int ?Status { get; set; }
-    }
+    public int? TrackType { get; set; }
+
 }

@@ -117,14 +117,14 @@ namespace Examination.PL.BL
             try
             {
                 List< CourseMV> courseMV = new List<CourseMV>();
-                List<Course> data=unitOfWork.CourseRepo.GetAll(c=>c.InstructorCourses.Select(c=>c.Instructor.UserId).Contains(Instructor_Id),
+                List<Course> data=_unitOfWork.CourseRepo.GetAll(c=>c.InstructorCourses.Select(c=>c.Instructor.UserId).Contains(Instructor_Id),
                     "InstructorCourses").Where(c=>c.Status==(int)Status.Active).ToList();
-                courseMV=mapper.Map<List< CourseMV>>(data);
+                courseMV=_mapper.Map<List< CourseMV>>(data);
                 return courseMV;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error in fetch Courses ");
+                _logger.LogError(ex, "Error in fetch Courses ");
                 return null;
 
             }
