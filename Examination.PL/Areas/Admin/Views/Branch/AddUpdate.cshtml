@@ -1,0 +1,40 @@
+﻿@model BranchMV
+
+@{
+    Layout = null;
+}
+<form id="admin-branch-form">
+    <input type="hidden" asp-for="Id" id="BranchId" />
+    <div class="modal-body mx-3">
+
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label for="Name" class="form-label">Name</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="BranchName" asp-for="Name" placeholder="Enter Branch Name" required>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="Location" class="form-label">Location</label>
+                <input type="text" class="form-control rounded-0 mb-1" id="BranchLocation" asp-for="Location" placeholder="Enter Location" required>
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button class="btn advanced-search-btn" onclick="AdminBranch.AddUpdate(event)">Save Data</button>
+    </div>
+</form>
+
+
+
+
