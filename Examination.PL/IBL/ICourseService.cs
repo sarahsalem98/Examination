@@ -1,4 +1,5 @@
 ﻿using Examination.DAL.Entities;
+using Examination.DAL.Repos;
 using Examination.DAL.Repos.IRepos;
 using Examination.PL.ModelViews;
 
@@ -17,4 +18,6 @@ public interface ICourseService
 
     public int ChangeStatus(int id, int status);
     public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
+    public List<CourseMV> GetCoursesByStudent();
+
 }

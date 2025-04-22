@@ -1,0 +1,33 @@
+﻿@model List<CourseMV>
+@{
+    ViewData["Title"] = "Courses";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Description</th>
+                <th>Hours</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@course.Name</td>
+                    <td>@course.Description</td>
+                    <td>@course.Hours</td>
+                    <td>@(course.Status == 1 ? "Active" : "Inactive")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No courses available for the student.</p>
+}

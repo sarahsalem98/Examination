@@ -1,4 +1,18 @@
-﻿<nav class="sidebar p-2" id="sidebar">
+﻿@functions {
+    public string IsActive(string area, string controller, string action = null)
+    {
+        var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+        bool isActive = (currentArea == area) && (currentController == controller) &&
+                        (action == null || currentAction == action);
+
+        return isActive ? "active" : "";
+    }
+}
+
+<nav class="sidebar p-2" id="sidebar">
     <div class="d-flex justify-content-between align-items-center sidebar-header mb-4">
         <h2 class="fs-4 mb-0">QwikTest</h2>
         <button class="toggle-btn" onclick="toggleSidebar()">
@@ -15,8 +29,8 @@
         </li>
         <!-- Courses -->
         <li class="nav-item">
-            <a href="courses.html" class="nav-link text-white">
-                <i class="bi bi-book"></i> <span class="ms-2">Courses</span>
+            <a asp-controller="Courses" asp-action="Index" asp-area="Student" class="sidebar-link nav-link text-white rounded-0 @IsActive("Studend","Courses","Index")">
+                <i class="bi bi-person-workspace"></i> <span class="ms-2">Instructors</span>
             </a>
         </li>
         <!-- Exams -->

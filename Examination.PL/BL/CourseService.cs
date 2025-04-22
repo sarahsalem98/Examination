@@ -116,10 +116,10 @@ namespace Examination.PL.BL
         {
             try
             {
-                List< CourseMV> courseMV = new List<CourseMV>();
-                List<Course> data=_unitOfWork.CourseRepo.GetAll(c=>c.InstructorCourses.Select(c=>c.Instructor.UserId).Contains(Instructor_Id),
-                    "InstructorCourses").Where(c=>c.Status==(int)Status.Active).ToList();
-                courseMV=_mapper.Map<List< CourseMV>>(data);
+                List<CourseMV> courseMV = new List<CourseMV>();
+                List<Course> data = _unitOfWork.CourseRepo.GetAll(c => c.InstructorCourses.Select(c => c.Instructor.UserId).Contains(Instructor_Id),
+                    "InstructorCourses").Where(c => c.Status == (int)Status.Active).ToList();
+                courseMV = _mapper.Map<List<CourseMV>>(data);
                 return courseMV;
             }
             catch (Exception ex)
@@ -129,7 +129,7 @@ namespace Examination.PL.BL
 
             }
         }
-      
+
         public List<CourseMV> GetCoursesByDeaprtment(int id)
         {
             try
@@ -264,6 +264,41 @@ namespace Examination.PL.BL
             {
                 _logger.LogError(ex, "error occuired while changing Course status ");
                 return 0;
+            }
+        }
+
+        public List<CourseMV> GetCoursesByStudent()
+        {
+            try
+            {
+                var userIdString = _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value;
+
+                // Ensure the UserId exists 
+                if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+                {
+                    _logger.LogWarning("UserId is not found or invalid in the HttpContext.");
+                    return new List<CourseMV>();
+                }
+
+                var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId, "StudentCourses.Course");
+
+                // Ensure the student exists
+                if (student == null)
+                {
+                    _logger.LogWarning("Student not found for UserId {userId}", userId);
+                    return new List<CourseMV>();
+                }
+
+                var studentCourses = student.StudentCourses.Select(sc => sc.Course).ToList();
+
+                var courseMVs = _mapper.Map<List<CourseMV>>(studentCourses);
+                return courseMVs;
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "An error occurred while retrieving courses");
+                return new List<CourseMV>();
             }
         }
     }
