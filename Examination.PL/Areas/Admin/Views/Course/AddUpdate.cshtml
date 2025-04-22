@@ -64,9 +64,9 @@
             <div class="col-md-6 mb-3">
                 <label for="depts" class="form-label">Departments</label>
                 <select asp-for="DepartmentsIds" asp-items="@DeptsList" class="form-select" style="min-height:100px" required multiple>
-                    <option value="0">Select Topics</option>
+                    <option value="0">Select Departments</option>
                 </select>
-                <span asp-validation-for="TopicsIds" class="text-danger"></span>
+                <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
             </div>
 
 
@@ -98,14 +98,18 @@
 
         </div>
 
+
+
+
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="depts" class="form-label">Topics</label>
+                <label for="Topics" class="form-label">Topics</label>
                 <select asp-for="TopicsIds" asp-items="@TopicList" class="form-select" style="min-height:100px" required multiple>
-                    <option value="0">Select Department</option>
+                    <option value="0">Select Topics</option>
                 </select>
                 <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
             </div>
+
         </div>
 
     </div>
