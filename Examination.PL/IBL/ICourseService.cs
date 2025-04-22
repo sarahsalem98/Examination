@@ -16,4 +16,5 @@ public interface ICourseService
     public int Update(CourseMV course);
 
     public int ChangeStatus(int id, int status);
+    public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
 }

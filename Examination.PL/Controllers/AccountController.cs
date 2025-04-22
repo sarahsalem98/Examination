@@ -59,6 +59,7 @@ namespace Examination.PL.Controllers
                             {
                                 Constants.UserTypes.Student => "/Student/Exam/Previous",
                                 Constants.UserTypes.Admin => "/Admin/Student/Index",
+                                Constants.UserTypes.Instructor => "/Instructor/Student/Index",
 
                             };
 

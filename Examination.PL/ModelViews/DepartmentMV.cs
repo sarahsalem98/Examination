@@ -34,6 +34,7 @@ namespace Examination.PL.ModelViews
 
         public DepartmentMV Department { get; set; } = null!;
         public BranchMV Branch { get; set; } = null!;
+        public List<InstructorCourseMV> InstructorCourses { get; set; }=new List<InstructorCourseMV>();
     }
 
     public class DepartmentSearchMV

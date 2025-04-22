@@ -42,7 +42,7 @@ builder.Services.AddScoped<IExamService, ExamService>();
 builder.Services.AddScoped<IInstructorService, InstructorService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IExamQuestionService, ExamQuestionService>();
-
+builder.Services.AddScoped<IInstructorCourseService, InstructorCourseService>();
 #endregion
 
 
