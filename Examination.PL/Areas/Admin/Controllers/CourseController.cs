@@ -62,6 +62,7 @@ namespace Examination.PL.Areas.Admin.Controllers
             {
                 course = _courseService.GetCourseByID(id);
                 course.DepartmentsIds = course.CourseDepartments.Select(s => s.DepartmentId).ToList();
+                course.TopicsIds = course.CourseTopics.Select(t => t.TopicId).ToList();
 
                 if (course == null)
                 {
