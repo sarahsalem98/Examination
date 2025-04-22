@@ -1,0 +1,70 @@
+﻿@model StudentMV
+@using Examination.PL.General;
+@{
+    ViewData["Title"] = "Students";
+    Layout = "~/Areas/Instructor/Views/Shared/_Layout.cshtml";
+
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
+}
+
+<input type="hidden" asp-for="Id" id="Id" />
+<input type="hidden" asp-for="UserId" id="UserId" />
+<form id="Instructor-GenerateExam-Form">
+<div class="modal-body mx-3">
+
+    <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control rounded-0 mb-1" id="firstName" asp-for="User.FirstName">
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control rounded-0 mb-1" id="lastName" asp-for="User.LastName">
+
+        </div>
+
+
+    </div>
+    <div class="row">
+
+        <div class="col-md-6 mb-3">
+            <label for="Branch" class="form-label">Branch</label>
+            <input type="text" class="form-control rounded-0 mb-1" id="Branch" asp-for="DepartmentBranch.Branch.Name">
+
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="Department" class="form-label">Department</label>
+            <input type="text" class="form-control rounded-0 mb-1" id="Department" asp-for="DepartmentBranch.Department.Name">
+
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="TrackType" class="form-label">TrackType</label>
+        <input type="text" class="form-control rounded-0 mb-1" id="TrackType" value="@Enum.GetName(typeof(TrackType), Model.TrackType)">
+
+    </div>
+
+
+
+</div>
+</form>
+
+
+
+<script>
+    $(document).ready(function(){
+
+
+
+    });
+</script>
+
+
+
