@@ -24,12 +24,7 @@ namespace Examination.DAL.Repos.IRepos
         public ICourseDepartmentRepo CourseDepartmentRepo { get; }
         public IInstructorCourseRepo InstructorCourseRepo { get; }
         public IGeneratedExamRepo GeneratedExamRepo { get; }
-        public ICourseDepartmentRepo CourseDepartmentRepo { get; }
->>>>>>>>> Temporary merge branch 2
-        public ICourseDepartmentRepo CourseDepartmentRepo { get; }
->>>>>>>>> Temporary merge branch 2
-        public ICourseDepartmentRepo CourseDepartmentRepo { get; }
->>>>>>>>> Temporary merge branch 2
+
         public int Save();
         public IDbContextTransaction BeginTransaction();
 
