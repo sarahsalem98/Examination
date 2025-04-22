@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Courses";
+    ViewData["Title"] = "Topics";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
 }
@@ -17,14 +17,14 @@
             <div class="search d-flex align-items-center ">
 
                 <div class="search-dropdown">
-                    <button class="advanced-search-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    @*                     <button class="advanced-search-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                         Advanced Search
-                    </button>
+                    </button> *@
                     <div class="dropdown-menu p-4 flex-start">
                         <!-- Dropdown content -->
-
-                        <div class="row g-2 mb-2">
+                        @*
+                           <div class="row g-2 mb-2">
                             <div class="col-md-6">
                                 <label for="DepartmentId" class="form-label">Department</label>
                                 <select class="form-select rounded-0" id="DepartmentId">
@@ -48,8 +48,17 @@
                             </div>
                         </div>
                         <div class="row g-2 mb-2">
-
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <label for="TrackType" class="form-label">Track Type:</label>
+                                <select class="form-select" id="TrackType">
+                                    <option selected value="">Choose...</option>
+                                    @foreach (var item in ViewBag.TrackTypes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
                                 <label for="Status" class="form-label">Status:</label>
                                 <select class="form-select" id="Status">
                                     <option value="" selected>Choose...</option>
@@ -71,17 +80,17 @@
                                     <i class="bi bi-search"></i> Search
                                 </button>
                             </div>
-                        </div>
+                        </div> *@
                     </div>
                 </div>
 
                 <div class="d-flex ms-2">
                     <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.."
                            aria-label="Search" />
-                    <button class="btn searchbtn" type="submit" onclick="Courses.Search();">
+                    <button class="btn searchbtn" type="submit" onclick="Topics.Search();">
                         <i class="bi bi-search"></i>
                     </button>
-                    <button class="btn searchbtn mx-2" type="submit" onclick="Courses.Reset();">
+                    <button class="btn searchbtn mx-2" type="submit" onclick="Topics.Reset();">
                         <i class="bi bi-x"></i>
                     </button>
                 </div>
@@ -89,7 +98,7 @@
 
             <div>
                 <div>
-                    <button class="btn btn-add rounded-0" onclick="Courses.ShowAddUpdateModal();"> + Create </button>
+                    <button class="btn btn-add rounded-0" onclick="Topics.ShowAddUpdateModal();"> + Create </button>
                 </div>
             </div>
         </div>
@@ -120,22 +129,10 @@
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
-    <script src="/js/admin/Course.js"></script>
+    <script src="/js/admin/Topic.js"></script>
     <script>
         $(document).ready(function () {
-          Courses.Fetch(1);
-           $('#addUpdateModal').on('shown.bs.modal', function () {
-            $('#DepartmentsIds').select2({
-                dropdownParent: $('#addUpdateModal'),
-                width: '100%',
-                placeholder: "Select Department"
-            });
-            $('#TopicsIds').select2({
-                dropdownParent: $('#addUpdateModal'),
-                width: '100%',
-                placeholder: "Select Topics"
-            });
-        });
+          Topics.Fetch(1)
         });
     </script>
-}
+    }
