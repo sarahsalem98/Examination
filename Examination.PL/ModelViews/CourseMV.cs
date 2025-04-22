@@ -1,4 +1,9 @@
-﻿namespace Examination.PL.ModelViews;
+﻿using Examination.DAL.Entities;
+using System.ComponentModel.DataAnnotations;
+
+using static Examination.PL.ModelViews.CourseDepartmentMV;
+
+namespace Examination.PL.ModelViews;
 
 public class CourseMV
 {
@@ -8,6 +13,7 @@ public class CourseMV
 
     public string? Description { get; set; }
 
+    [Range(minimum: 1, maximum: 100, ErrorMessage = "Hours must be between 1 & 100")]
     public int Hours { get; set; }
 
     public int? Status { get; set; }
@@ -18,8 +24,10 @@ public class CourseMV
     public DateTime? UpdatedAt { get; set; }
 
     public List<int> DepartmentsIds { get; set; }
+    public List<int> TopicsIds { get; set; }
     public List<InstructorCourseMV>? InstructorCourses { get; set; } = null!;
     public List<CourseDepartmentMV>? CourseDepartments { get; set; } = null!;
+    public virtual ICollection<CourseTopic>? CourseTopics { get; set; } = null!;
 
 
 }
@@ -30,6 +38,8 @@ public class CourseDepartmentMV
     public int Id { get; set; }
     public int CourseId { get; set; }
     public int DepartmentId { get; set; }
+
+
 }
 public class InstructorCourseMV
 {
@@ -65,3 +75,6 @@ public class InstructorCourseMV
     public int? TrackType { get; set; }
 
 }
+   
+
+
