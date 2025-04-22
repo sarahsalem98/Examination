@@ -22,6 +22,8 @@ public partial class InstructorCourse
     public int? FinalPassedStudentCount { get; set; }
     public int? CorrectivePassedStudentCount { get; set; }
 
+    public int? IsCompleted { get; set; }
+
     public virtual Course Course { get; set; } = null!;
 
     public virtual DepartmentBranch? DepartmentBranch { get; set; }
