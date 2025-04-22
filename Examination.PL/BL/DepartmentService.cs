@@ -226,10 +226,10 @@ namespace Examination.PL.BL
                         departmentExist.Description = department.Description;
                         departmentExist.Capacity = department.Capacity;
                     
-                        // Handle DepartmentBranches
+                     
                         var existingBranchIds = departmentExist.DepartmentBranches.Select(db => db.BranchId).ToList();
 
-                        // Remove branches that are no longer associated
+                        
                         var branchesToRemove = departmentExist.DepartmentBranches
                             .Where(db => !department.BranchIds.Contains(db.BranchId))
                             .ToList();
@@ -289,6 +289,31 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
+
+
+        public DepartmentMV GetByIdWithBranches(int id)
+        {
+            try
+            {
+                var department = _unitOfWork.DepartmentRepo
+                    .FirstOrDefault(d => d.Id == id, "DepartmentBranches.Branch");
+
+                if (department == null)
+                    return null;
+
+                var model = _mapper.Map<DepartmentMV>(department);
+                model.BranchIds = department.DepartmentBranches.Select(b => b.BranchId).ToList();
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetByIdWithBranches - DepartmentService");
+                return null;
+            }
+        }
+
+
 
     }
 }

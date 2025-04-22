@@ -16,14 +16,14 @@ namespace Examination.PL.Areas.Admin.Controllers
     {
         private readonly IDepartmentService _departmentService;
         private readonly IBranchService _branchService;
-        private readonly IUnitOfWork _unitOfWork;
+       
 
 
-        public DepartmentController(IDepartmentService departmentService, IBranchService branchService, IUnitOfWork unitOfWork)
+        public DepartmentController(IDepartmentService departmentService, IBranchService branchService)
         {
             _departmentService = departmentService;
             _branchService = branchService;
-            _unitOfWork = unitOfWork;
+            
 
         }
 
@@ -59,14 +59,11 @@ namespace Examination.PL.Areas.Admin.Controllers
 
             if (id > 0)
             {
-                department = _departmentService.GetById(id);
+                department = _departmentService.GetByIdWithBranches(id);
                 if (department == null)
                     return NotFound();
 
-                ViewBag.SelectedBranchIds = _unitOfWork.DepartmentBranchRepo
-                    .GetAll(b => b.DepartmentId == id)
-                    .Select(b => b.BranchId)
-                    .ToList();
+                ViewBag.SelectedBranchIds = department.BranchIds ?? new List<int>();
             }
             else
             {
