@@ -17,13 +17,15 @@ namespace Examination.PL.Areas.Admin.Controllers
         private readonly ICourseService _courseService;
         private readonly IDepartmentService _departmentService;
         private readonly IBranchService _branchService;
+        private readonly ITopicService _topicService;
 
 
-        public CourseController(ICourseService courseService, IUnitOfWork unitOfWork, IDepartmentService departmentService, IBranchService branchService)
+        public CourseController(ICourseService courseService, IUnitOfWork unitOfWork, IDepartmentService departmentService, IBranchService branchService, ITopicService topicService)
         {
             _courseService = courseService;
             _departmentService = departmentService;
             _branchService = branchService;
+            _topicService = topicService;
         }
 
         public IActionResult Index()
@@ -33,6 +35,7 @@ namespace Examination.PL.Areas.Admin.Controllers
             ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
             ViewBag.TrackTypes = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
             ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
+            ViewBag.Topics = _topicService.GetAll();
 
             return View();
         }
@@ -52,12 +55,14 @@ namespace Examination.PL.Areas.Admin.Controllers
         {
             ViewData["Title"] = "Add Update Course";
             ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
+            ViewBag.Topics = _topicService.GetAll();
             var course = new CourseMV();
 
             if (id > 0)
             {
                 course = _courseService.GetCourseByID(id);
                 course.DepartmentsIds = course.CourseDepartments.Select(s => s.DepartmentId).ToList();
+                course.TopicsIds = course.CourseTopics.Select(t => t.TopicId).ToList();
 
                 if (course == null)
                 {

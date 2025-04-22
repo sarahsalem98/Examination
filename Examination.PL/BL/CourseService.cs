@@ -34,18 +34,22 @@ namespace Examination.PL.BL
                 var crs = _mapper.Map<Course>(course);
                 crs.CreatedAt = DateTime.Now;
                 // Should be the id of the Logged User  
-                if (crs.CreatedBy == 0)
-                    crs.CreatedBy = 1;
                 _unitOfWork.CourseRepo.Insert(crs);
                 _unitOfWork.Save();
                 foreach (var dep in course.DepartmentsIds)
                 {
-                    //var courseDept = new CourseDepartment() { CourseId = crs.Id, DepartmentId = dep };
-                    //_unitOfWork.CourseDepartmentRepo.Insert(courseDept);
                     _unitOfWork.CourseDepartmentRepo.Insert(new CourseDepartment
                     {
                         CourseId = crs.Id,
                         DepartmentId = dep
+                    });
+                }
+                foreach (var topic in course.TopicsIds)
+                {
+                    _unitOfWork.CourseTopicRepo.Insert(new CourseTopic
+                    {
+                        CourseId = crs.Id,
+                        TopicId = topic
                     });
                 }
                 result = _unitOfWork.Save();
@@ -86,7 +90,7 @@ namespace Examination.PL.BL
                     //5
                     (String.IsNullOrEmpty(courseSearch.Name) ||
                     (!String.IsNullOrEmpty(s.Name) && s.Name.ToLower().Trim().Contains(courseSearch.Name)))
-                    , "CourseDepartments,InstructorCourses.DepartmentBranch").OrderByDescending(s => s.CreatedAt).ToList();
+                    , "CourseDepartments,InstructorCourses.DepartmentBranch,CourseTopics").OrderByDescending(s => s.CreatedAt).ToList();
                 CourseMVs = _mapper.Map<List<CourseMV>>(data);
                 int TotalCounts = CourseMVs.Count();
                 if (TotalCounts > 0)
@@ -189,7 +193,7 @@ namespace Examination.PL.BL
             try
             {
                 int result = 0;
-                var courseExist = _unitOfWork.CourseRepo.FirstOrDefault(c => c.Id == course.Id, "CourseDepartments");
+                var courseExist = _unitOfWork.CourseRepo.FirstOrDefault(c => c.Id == course.Id, "CourseDepartments,CourseTopics");
                 if (courseExist == null)
                     return result = -1;
                 // Updating
@@ -211,6 +215,26 @@ namespace Examination.PL.BL
                     }
                     ;
                 }
+
+
+
+                var courseTopic = courseExist.CourseTopics.ToList();
+                var courseTopicIds = courseTopic.Select(S => S.TopicId).ToList();
+                if (courseTopicIds != course.TopicsIds)
+                {
+                    courseTopicIds = course.TopicsIds;
+                    _unitOfWork.CourseTopicRepo.RemoveRange(courseTopic);
+                    foreach (var topic in courseTopicIds)
+                    {
+                        var newCourseTopic = new CourseTopic() { CourseId = courseExist.Id, TopicId = topic };
+                        _unitOfWork.CourseTopicRepo.Insert(newCourseTopic);
+                    }
+                    ;
+                }
+
+
+
+
 
                 courseExist.UpdatedAt = DateTime.Now;
                 courseExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
@@ -234,7 +258,7 @@ namespace Examination.PL.BL
         {
             try
             {
-                var course = _unitOfWork.CourseRepo.FirstOrDefault(i => i.Id == id, "CourseDepartments");
+                var course = _unitOfWork.CourseRepo.FirstOrDefault(i => i.Id == id, "CourseDepartments,CourseTopics");
                 if (course == null)
                     return null;
                 var courseMv = _mapper.Map<CourseMV>(course);
