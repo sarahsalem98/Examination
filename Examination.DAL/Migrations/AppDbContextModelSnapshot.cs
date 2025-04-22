@@ -512,6 +512,9 @@ namespace Examination.DAL.Migrations
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("IsCompleted")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastGeneratedExamType")
                         .HasColumnType("nvarchar(max)");
 

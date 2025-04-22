@@ -5,6 +5,7 @@ using Examination.DAL.Repos.IRepos;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
+using System.Drawing.Printing;
 
 namespace Examination.PL.BL
 {
@@ -115,7 +116,26 @@ namespace Examination.PL.BL
 
             }
         }
+      
 
+        public List<CourseMV> GetCourseByInstructor(int Instructor_Id)
+        {
+            try
+            {
+                List< CourseMV> courseMV = new List<CourseMV>();
+                List<Course> data=_unitOfWork.CourseRepo.GetAll(c=>c.InstructorCourses.Select(c=>c.Instructor.UserId).Contains(Instructor_Id),
+                    "InstructorCourses").Where(c=>c.Status==(int)Status.Active).ToList();
+                courseMV=_mapper.Map<List< CourseMV>>(data);
+                return courseMV;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in fetch Courses ");
+                return null;
+
+            }
+        }
+      
         public List<CourseMV> GetCoursesByDeaprtment(int id)
         {
             try

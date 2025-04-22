@@ -1,0 +1,61 @@
+﻿@model PaginatedData<StudentMV>
+@using Examination.PL.General;
+
+@{
+    Layout = null;
+   
+
+}
+<input type="hidden" id="totalCount" value="@Model.TotalCount" />
+<table class="table data-table table-bordered table-hover mt-2">
+    <thead>
+        <tr>
+           
+            <th scope="col">Name</th>
+            <th scope="col" class="sort-arrows"> tracktype </th>
+             <th scope="col">Branch</th>
+            <th scope="col" class="sort-arrows"> Department </th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class=" alert-info text-center">No Students found</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+
+
+                <tr>
+                   
+                    <td>@(item.User.FirstName + " " + item.User.LastName)</td>
+                    <td> @Enum.GetName(typeof(TrackType), item.TrackType)</td>
+                    <td>@item.DepartmentBranch.Branch.Name</td>
+                    <td>@item.DepartmentBranch.Department.Name</td>
+                    
+                    <td class="@((item.User.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.User?.Status)</td>
+                    <td>
+                        <a href="/Instructor/Student/StudentDetails/@item.Id">
+                            <button class="btn btn-Results">Details</button>
+                        </a>
+   
+                    </td>
+                </tr>
+                
+
+            }
+        }
+
+
+
+    </tbody>
+</table>
+
+
+

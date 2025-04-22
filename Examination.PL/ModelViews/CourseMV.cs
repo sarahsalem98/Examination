@@ -1,6 +1,8 @@
 ﻿using Examination.DAL.Entities;
 using System.ComponentModel.DataAnnotations;
 
+using static Examination.PL.ModelViews.CourseDepartmentMV;
+
 namespace Examination.PL.ModelViews;
 
 public class CourseMV
@@ -30,20 +32,14 @@ public class CourseMV
 
 }
 
-public class CourseSearchMV
-{
 
-    public string? Name { get; set; }
-    public int? Status { get; set; }
-    public int? DepartmentId { get; set; }
-    public int? BranchId { get; set; }
-    public int? TrackType { get; set; }
-}
 public class CourseDepartmentMV
 {
     public int Id { get; set; }
     public int CourseId { get; set; }
     public int DepartmentId { get; set; }
+
+
 }
 public class InstructorCourseMV
 {
@@ -53,12 +49,32 @@ public class InstructorCourseMV
 
     public int CourseId { get; set; }
 
-    public int? DepartmentBranchId { get; set; }
+        public int? DepartmentBranchId { get; set; }
+        public int? TotalStudents { get; set; }
+        public int? IsCompleted { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string? LastGeneratedExamType { get; set; }
 
-    public CourseMV Course { get; set; } = null!;
+        public int? FinalPassedStudentCount { get; set; }
+        public int? CorrectivePassedStudentCount { get; set; }
+
+        public CourseMV Course { get; set; } = null!;
 
     public DepartmentBranchMV DepartmentBranch { get; set; } = null!;
 
-    public InstructorMV Instructor { get; set; } = null!;
+        public InstructorMV Instructor { get; set; } = null!;
+    }
+    public class CourseSearchMV
+    {
+        public string ? Name { get; set; }  
+        public int? CourseId { get; set; }
+        public int? DepartmentId { get; set; }
+        public int? BranchId { get; set; }
+        public int ?Status { get; set; }
+    public int? TrackType { get; set; }
+
 }
+   
+
 

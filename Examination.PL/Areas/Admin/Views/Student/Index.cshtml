@@ -20,7 +20,7 @@
                             aria-expanded="false">
                         Advanced Search
                     </button>
-                    <div class="dropdown-menu p-4 flex-start">
+                    <div class="dropdown-menu p-4 flex-start" id="ttt">
                         <!-- Dropdown content -->
 
                         <div class="row g-2 mb-2">
@@ -132,6 +132,14 @@
     <script>
         $(document).ready(function () {
           AdminStudent.Fetch(1);
+               $('#DepartmentId, #BranchId, #TrackType, #Status').select2({
+            dropdownParent: $('#ttt'), 
+            theme: 'bootstrap-5',
+            width: '100%'
+        });
+             $('.search-dropdown .dropdown-menu').on('click', function (e) {
+            e.stopPropagation();
+        });
 
         });
     </script>

@@ -81,5 +81,9 @@ namespace Examination.DAL.Repos
         {
             dbSet.Update(entity);
         }
+        public void AddRange(IEnumerable<T> entites)
+        {
+            dbSet.AddRange(entites);
+        }
     }
 }
