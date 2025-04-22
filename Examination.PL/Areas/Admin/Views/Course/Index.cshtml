@@ -48,17 +48,8 @@
                             </div>
                         </div>
                         <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <label for="TrackType" class="form-label">Track Type:</label>
-                                <select class="form-select" id="TrackType">
-                                    <option selected value="">Choose...</option>
-                                    @foreach (var item in ViewBag.TrackTypes)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-md-6">
+                        
+                            <div class="col-md-12">
                                 <label for="Status" class="form-label">Status:</label>
                                 <select class="form-select" id="Status">
                                     <option value="" selected>Choose...</option>
@@ -132,7 +123,14 @@
     <script src="/js/admin/Course.js"></script>
     <script>
         $(document).ready(function () {
-          Courses.Fetch(1)
+          Courses.Fetch(1);
+           $('#addUpdateModal').on('shown.bs.modal', function () {
+            $('#DepartmentsIds').select2({
+                dropdownParent: $('#addUpdateModal'),
+                width: '100%',
+                placeholder: "Select Department"
+            });
+        });
         });
     </script>
 }

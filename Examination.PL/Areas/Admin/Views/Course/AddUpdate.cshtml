@@ -62,9 +62,10 @@
 
             <div class="col-md-6 mb-3">
                 <label for="depts" class="form-label">Departments</label>
-                <select asp-for="DepartmentsIds" asp-items="@DeptsList" class="form-select" style="min-height:100px" required multiple>
+                <select id="DepartmentsIds" asp-for="DepartmentsIds" asp-items="@DeptsList" class="form-select" multiple required style="min-height:100px">
                     <option value="0">Select Department</option>
                 </select>
+
                 <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
             </div>
 
@@ -108,19 +109,6 @@
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-
-    $(document).ready(function(){
-
-         $('.select2-multiple').select2({
-        placeholder: "Select departments",
-        width: '100%',
-        allowClear: true
-    });
-
-
-    });
-</script>
 
 
 

@@ -3,18 +3,19 @@
 
 @{
     Layout = null;
+    Layout = null;
+    var i = (Model.CurrentPage - 1) * Model.PageSize + 1;
 
 }
 <input type="hidden" id="totalCount" value="@Model.TotalCount" />
 <table class="table data-table table-bordered table-hover mt-2">
     <thead>
         <tr>
-            <th scope="col">Id</th>
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Hours</th>
             <th scope="col">Description</th>
             <th scope="col">CreatedAt</th>
-            <th scope="col">CreatedBy</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
         </tr>
@@ -31,29 +32,12 @@
             @foreach (var item in Model.Items)
             {
                 <tr>
-                    <th scope="row">@item.Id</th>
+                    <th scope="row">@i</th>
                     <td>@item.Name</td>
                     <td>@item.Hours</td>
                     <td>@item.Description</td>
                     <td>@item.CreatedAt</td>
-                    <td>@item.CreatedBy</td>
-
-                    @if ((int)Status.Active == item.Status)
-                    {
-                        <td>@(Status.Active.ToString())</td>
-                    }
-                    else if ((int)Status.Inactive == item.Status)
-                    {
-                        <td>@(Status.Inactive.ToString())</td>
-                    }
-                    else
-                    {
-                        <td>@(Status.Deleted.ToString())</td>
-                    }
-
-
-
-
+                    <td class="@((item.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.Status)</td>
                     <td class="actions-cell">
                         <a href="javascript:void(0);" onclick="Courses.ShowAddUpdateModal(@item.Id);"><i class="bi bi-pencil"></i></a>
                         @if (item.Status != (int)Status.Deleted)
@@ -74,6 +58,7 @@
                         }
                     </td>
                 </tr>
+                i++;
 
             }
         }
