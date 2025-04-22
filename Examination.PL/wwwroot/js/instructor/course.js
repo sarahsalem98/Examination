@@ -72,13 +72,13 @@
         InstructorCourse.currentSearchData = {};
         InstructorCourse.Fetch(1);
     },
-    CompleteCourse: function (DepartmentBranchId, instructor_id,course_id)
+    CompleteCourse: function (DepartmentBranchId,course_id)
     {
         $("#loader").addClass("show");
         $.ajax({
             type: "Post",
             url: "/Instructor/Course/CompleteCourse",
-            data: { DepartmentBranchId: DepartmentBranchId, instructor_id: instructor_id,course_id: course_id },
+            data: { DepartmentBranchId: DepartmentBranchId,course_id: course_id },
             success: function (response) {
 
                 $("#loader").removeClass("show");
