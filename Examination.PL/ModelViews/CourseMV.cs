@@ -18,6 +18,7 @@ public class CourseMV
     public DateTime? UpdatedAt { get; set; }
 
     public List<int> DepartmentsIds { get; set; }
+    public List<int> TopicsIds { get; set; }
     public List<InstructorCourseMV>? InstructorCourses { get; set; } = null!;
     public List<CourseDepartmentMV>? CourseDepartments { get; set; } = null!;
 

@@ -21,6 +21,8 @@ namespace Examination.DAL.Repos.IRepos
         public IExamRepo ExamRepo { get; }
         public IExamQuestionRepo ExamQuestionRepo { get; }
         public ICourseDepartmentRepo CourseDepartmentRepo { get; }
+        public ITopicRepo TopicRepo { get; }
+        public ICourseTopicRepo CourseTopicRepo { get; }
         public int Save();
         public IDbContextTransaction BeginTransaction();
 

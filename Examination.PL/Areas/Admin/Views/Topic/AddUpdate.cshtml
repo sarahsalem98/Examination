@@ -1,15 +1,13 @@
-﻿@model CourseMV
+﻿@model TopicMV
 @using Examination.PL.General
 
 @{
 
     Layout = null;
 
-    SelectList DeptsList = new SelectList(ViewBag.Departments, "Id", "Name");
-    SelectList TopicList = new SelectList(ViewBag.Topics, "Id", "Name");
+    // SelectList DeptsList = new SelectList(ViewBag.Departments, "Id", "Name");
 }
 @section Styles {
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 }
 <form id="admin-Course-form">
     <input type="hidden" asp-for="Id" />
@@ -45,7 +43,7 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div> *@
 
-            <div class="col-md-6 mb-3">
+            @*    <div class="col-md-6 mb-3">
                 <label for="Hours" class="form-label">Hours</label>
                 <input type="number" min="1" class="form-control rounded-0 mb-1" value="1" id="Hours" asp-for="Hours" placeholder="Enter Course Hours" required>
                 <span asp-validation-for="Hours" class="text-danger"></span>
@@ -62,12 +60,12 @@
 
 
             <div class="col-md-6 mb-3">
-                <label for="depts" class="form-label">Topics</label>
-                <select asp-for="TopicsIds" asp-items="@DeptsList" class="form-select" style="min-height:100px" required multiple>
-                    <option value="0">Select Topics</option>
+                <label for="depts" class="form-label">Departments</label>
+                <select asp-for="DepartmentsIds" asp-items="@DeptsList" class="form-select" style="min-height:100px" required multiple>
+                    <option value="0">Select Department</option>
                 </select>
-                <span asp-validation-for="TopicsIds" class="text-danger"></span>
-            </div>
+                <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
+            </div> *@
 
 
 
@@ -98,37 +96,17 @@
 
         </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="depts" class="form-label">Departments</label>
-                <select asp-for="DepartmentsIds" asp-items="@TopicList" class="form-select" style="min-height:100px" required multiple>
-                    <option value="0">Select Department</option>
-                </select>
-                <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
-            </div>
-        </div>
-
     </div>
 
     <partial name="_ValidationScriptsPartial" />
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn advanced-search-btn" onclick="Courses.AddUpdata(event)">Save Data</button>
+        <button type="submit" class="btn advanced-search-btn" onclick="Topics.AddUpdata(event)">Save Data</button>
     </div>
 </form>
-
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-
     $(document).ready(function(){
-
-         $('.select2-multiple').select2({
-        placeholder: "Select departments",
-        width: '100%',
-        allowClear: true
-    });
-
 
     });
 </script>

@@ -24,6 +24,8 @@ namespace Examination.DAL.Repos
         public ICourseRepo CourseRepo { get { return new CourseRepo(_db); } }
         public IExamQuestionRepo ExamQuestionRepo { get { return new ExamQuestionRepo(_db); } }
         public ICourseDepartmentRepo CourseDepartmentRepo { get { return new CourseDepartmentRepo(_db); } }
+        public ITopicRepo TopicRepo { get { return new TopicRepo(_db); } }
+        public ICourseTopicRepo CourseTopicRepo { get { return new CourseTopicRepo(_db); } }
         public UnitOfWork(AppDbContext db)
         {
 
