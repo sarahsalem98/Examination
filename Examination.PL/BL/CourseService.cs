@@ -112,6 +112,8 @@ namespace Examination.PL.BL
 
             }
         }
+      
+
         public List<CourseMV> GetCourseByInstructor(int Instructor_Id)
         {
             try

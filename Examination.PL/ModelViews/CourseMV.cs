@@ -1,4 +1,6 @@
-﻿namespace Examination.PL.ModelViews;
+﻿using static Examination.PL.ModelViews.CourseDepartmentMV;
+
+namespace Examination.PL.ModelViews;
 
 public class CourseMV
 {
@@ -30,6 +32,8 @@ public class CourseDepartmentMV
     public int Id { get; set; }
     public int CourseId { get; set; }
     public int DepartmentId { get; set; }
+
+
 }
 public class InstructorCourseMV
 {
@@ -65,3 +69,6 @@ public class InstructorCourseMV
     public int? TrackType { get; set; }
 
 }
+   
+
+
