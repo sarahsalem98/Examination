@@ -14,15 +14,7 @@ public interface ICourseService
     public PaginatedData<CourseMV> GetAllPaginated(CourseSearchMV courseSerach, int PageSize = 10, int Page = 1);
 
     public int Update(CourseMV course);
-
+    public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
     public int ChangeStatus(int id, int status);
-namespace Examination.PL.IBL
-{
-    public interface ICourseService
-    {
-        public List<CourseMV> GetCoursesByDeaprtment(int id);
-        public List<CourseMV> GetCourseByStatus(int status);
-        public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
 
-    }
 }
