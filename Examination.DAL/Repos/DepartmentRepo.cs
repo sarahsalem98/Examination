@@ -15,6 +15,6 @@ namespace Examination.DAL.Repos
         {
             _db = db;
         }
-      
+
     }
 }
