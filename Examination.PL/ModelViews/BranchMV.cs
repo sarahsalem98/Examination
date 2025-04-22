@@ -15,4 +15,10 @@
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
+    public class BranchSearchMV
+    {
+        public string? Name { get; set; }
+        public string Location { get; set; }
+        public int? Status { get; set; }
+    }
 }
