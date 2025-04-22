@@ -41,7 +41,7 @@ namespace Examination.PL.Areas.Instructor.Controllers
             return View(courses);
         }
         [HttpPost]
-        public IActionResult CompleteCourse(int DepartmentBranchId,int instructor_id ,int course_id)
+        public IActionResult CompleteCourse(int DepartmentBranchId,int course_id)
         {
             var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ResponseMV response = new ResponseMV();
