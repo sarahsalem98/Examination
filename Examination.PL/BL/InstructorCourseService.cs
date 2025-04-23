@@ -58,24 +58,25 @@ namespace Examination.PL.BL
                     //means failed students doeasn't have corrective exam (tested)
                     return -5;
                 }
-                else if (DepartmentBranchCourse.IsCompleted==1||DepartmentBranchCourse.DepartmentBranch.Students.Any(s=>s.StudentCourses.Any(sc=>sc.CourseId==course_id)&&s.DepartmentBranchId==DepartmentBranchId))
-               
+                else if (DepartmentBranchCourse.IsCompleted == 1 )
+
                 {
                     //means he already put the grades
                     return -6;
                 }
                 else
                 {
-                    var studentCourses = DepartmentBranchCourse.DepartmentBranch.Students.Select(s => new StudentCourse
-                    {
-                        StudentId = s.Id,
-                        CourseId = course_id,
-                        FinalGradePercent = (int)(s.ExamStudentGrades
-                                        .FirstOrDefault(es => es.GeneratedExam?.Exam?.CourseId == course_id)
-                                        ?.GradePercent ?? 0)
+                    foreach (var student in DepartmentBranchCourse.DepartmentBranch.Students)
 
-                    });
-                    DepartmentBranchCourse.Course.StudentCourses.AddRange(studentCourses);
+                    {
+                        var studentCourse = student.StudentCourses.FirstOrDefault(sc => sc.CourseId == course_id);
+                        if (studentCourse != null)
+                        {
+                            var finalgradepercent = student.ExamStudentGrades.FirstOrDefault(es => es.GeneratedExam?.Exam?.CourseId == course_id)?.GradePercent ?? 0;
+                            studentCourse.FinalGradePercent = (int)finalgradepercent;
+                            unitOfWork.StudentCourseRepo.Update(studentCourse);
+                        }
+                    }
                     DepartmentBranchCourse.IsCompleted = 1;
                     unitOfWork.InstructorCourseRepo.Update(DepartmentBranchCourse);
                  
