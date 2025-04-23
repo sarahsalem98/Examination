@@ -314,7 +314,7 @@ namespace Examination.PL.BL
                 studentMV.BranchId = student.DepartmentBranch.BranchId;
                 studentMV.StudentCourses = student.StudentCourses.Select(sc => new StudentCourseMV
                 {
-                    CourseName = sc.Course?.Name ?? "N/A",
+                    Course = _mapper.Map<CourseMV>(sc.Course),
                     FinalGradePercent = sc.FinalGradePercent
                 }).ToList();
 
@@ -327,7 +327,35 @@ namespace Examination.PL.BL
             }
         }
 
-      
+        public int UpdateProfile(StudentUpdateProfileMV student)
+        {
+            try
+            {
+                var studentExist = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == student.Id, "User");
+
+                if (studentExist == null) return 0;
+
+                studentExist.User.FirstName = student.User.FirstName;
+                studentExist.User.LastName = student.User.LastName;
+                studentExist.User.Email = student.User.Email;
+                studentExist.User.Phone = student.User.Phone;
+
+                studentExist.User.UpdatedAt = DateTime.Now;
+                studentExist.User.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId").Value);
+
+                _unitOfWork.StudentRepo.Update(studentExist);
+                return _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while updating student profile.");
+                return 0;
+            }
+        }
+
+
+
+
     }
 
 

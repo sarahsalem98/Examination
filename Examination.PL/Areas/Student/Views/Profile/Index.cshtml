@@ -9,28 +9,34 @@
 }
 
 <button class="open-popup" onclick="openPopup()"> <i class="bi bi-gear"></i> Update Profile</button>
+@await Html.PartialAsync("UpdateProfile", Model)
 
 <!-- Popup Background (Overlay) -->
-<div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
+@* <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div> *@
 
 <!-- Popup Form -->
-<div class="popup-form" id="popupForm">
-    <span class="close-btn" onclick="closePopup()">&times;</span>
-    <form onsubmit="submitForm(event)">
-        <h3>Popup Form</h3>
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Enter name" required>
+@* <div class="popup-form" id="popupForm"> *@
+@*     <span class="close-btn" onclick="closePopup()">&times;</span> *@
+@*     <form id="update-profile-form"> *@
+@*         <input type="hidden" id="studentId" value="@Model.Id" /> *@
+@*         <input type="hidden" id="userId" value="@Model.UserId" /> *@
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="Enter email" required>
+@*         <label for="firstName">First Name:</label> *@
+@*         <input type="text" id="firstName" value="@Model.User?.FirstName" required /> *@
 
-        <label for="tel">Phone:</label>
-        <input type="tel" id="Phone" placeholder="Enter Phone" required>
+@*         <label for="lastName">Last Name:</label> *@
+@*         <input type="text" id="lastName" value="@Model.User?.LastName" required /> *@
 
-        <button type="submit">Submit</button>
+@*         <label for="email">Email:</label> *@
+@*         <input type="email" id="email" value="@Model.User?.Email" required /> *@
 
-    </form>
-</div>
+@*         <label for="phone">Phone:</label> *@
+@*         <input type="tel" id="phone" value="@Model.User?.Phone" required /> *@
+
+@*         <button type="submit">Submit</button> *@
+@*     </form> *@
+ 
+@* </div> *@
 
 
 <div class="container">
@@ -68,20 +74,17 @@
             </tr>
             <tr>
                 <th>Date of Birth</th>
-                <td>@(Model.DateOfBirth?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                <td>@(Model.DateOfBirth?.ToString("dd/MM/yyyy") ?? "Unknown")</td>
             </tr>
             <tr>
                 <th>Enrollment Date</th>
-                <td>@(Model.EnrollmentDate?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                <td>@(Model.EnrollmentDate?.ToString("dd/MM/yyyy") ?? "Unknown")</td>
             </tr>
             <tr>
                 <th>Branch</th>
                 <td>@Model.DepartmentBranch?.Branch?.Name</td>
             </tr>
-            @* <tr> *@
-            @*     <th>Track</th> *@
-            @*     <td>@(Enum.GetName(typeof(TrackType), Model.TrackType) ?? "N/A")</td> *@
-            @* </tr> *@
+           
         </table>
     </div>
 
@@ -100,11 +103,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                       
                         @foreach (var course in Model.StudentCourses)
                         {
                             <tr>
-                                <td>@course.CourseName</td>
-                                <td>@(course.FinalGradePercent.HasValue ? $"{course.FinalGradePercent}%" : "N/A")</td>
+                                <td>@course.Course.Name</td>
+                                <td>@(course.FinalGradePercent.HasValue ? $"{course.FinalGradePercent}%" : "Not Assigned Yet")</td>
                             </tr>
                         }
                     </tbody>
@@ -117,3 +121,7 @@
         </div>
     </div>
 
+    @section Scripts {
+
+        <script src="~/js/student/StudentProfile.js"></script>
+    }
