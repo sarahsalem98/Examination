@@ -28,7 +28,7 @@ namespace Examination.PL.BL
             try
             {
                 var DepartmentBranchCourse = unitOfWork.InstructorCourseRepo.FirstOrDefault(ic => ic.DepartmentBranchId == DepartmentBranchId && ic.CourseId == course_id && ic.Instructor.UserId == instructor_id,
-                    "DepartmentBranch.Students.StudentCourses,Course,Course.Exams,Course.Exams.GeneratedExams,Instructor,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.Students,DepartmentBranch.Students.ExamStudentGrades,DepartmentBranch.Students.ExamStudentGrades.GeneratedExam.Exam");
+                    "DepartmentBranch.Students.StudentCourses,Course.Exams.GeneratedExams,Instructor,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.Students.ExamStudentGrades.GeneratedExam.Exam");
                 if (DepartmentBranchCourse == null)
                 {
                     return 0;
@@ -36,8 +36,13 @@ namespace Examination.PL.BL
                 var TakenDateExamForCourse = DepartmentBranchCourse.Course.Exams.Where(e=>e.CourseId==course_id)
                     .SelectMany(e=>e.GeneratedExams.Select(ge=>ge.TakenDate)).FirstOrDefault();
 
+                  if (DepartmentBranchCourse.IsCompleted == 1)
 
-                if (DepartmentBranchCourse.EndDate > DateTime.Now)
+                {
+                    //means he already put the grades
+                    return -6;
+                }
+               else if (DepartmentBranchCourse.EndDate > DateTime.Now)
                 {
                     //means course doasn't end (tested)
                     return -2;
@@ -58,12 +63,7 @@ namespace Examination.PL.BL
                     //means failed students doeasn't have corrective exam (tested)
                     return -5;
                 }
-                else if (DepartmentBranchCourse.IsCompleted == 1 )
-
-                {
-                    //means he already put the grades
-                    return -6;
-                }
+               
                 else
                 {
                     foreach (var student in DepartmentBranchCourse.DepartmentBranch.Students)
