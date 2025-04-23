@@ -12,12 +12,15 @@ namespace Examination.PL.Areas.Student.Controllers
     public class CoursesController : Controller
     {
         private readonly ICourseService courseService;
-        readonly ITopicService topicService;
+        private readonly ITopicService topicService;
+        private readonly IStudentService studentService;
 
-        public CoursesController(ICourseService _courseService, ITopicService _topicService)
+
+        public CoursesController(ICourseService _courseService, ITopicService _topicService,IStudentService _studentService)
         {
             courseService = _courseService;
             topicService = _topicService;
+            studentService = _studentService;
         }
         public IActionResult Index()
         {
@@ -33,6 +36,7 @@ namespace Examination.PL.Areas.Student.Controllers
         {
             var topics = topicService.GetTopicsByCourseId(Courseid);
             ViewBag.Course = courseService.GetCourseByID(Courseid);
+            ViewBag.Grade=studentService.GetStudentGrade(Courseid);
             return View(topics);
         }
     }
