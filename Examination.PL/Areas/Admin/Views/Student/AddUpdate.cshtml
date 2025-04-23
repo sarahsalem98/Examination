@@ -93,7 +93,7 @@
             <!-- Enrollment Date -->
             <div class="col-md-6 mb-3">
                 <label for="enrollmentDate" class="form-label">Enrollment Date</label>
-                <input type="date" class="form-control rounded-0 mb-1" asp-for="EnrollmentDate" required>
+                <input type="date" class="form-control rounded-0 mb-1" asp-for="EnrollmentDate" required min="@DateTime.Now.ToString("yyyy-MM-dd")">
                 <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
             </div>
         </div>

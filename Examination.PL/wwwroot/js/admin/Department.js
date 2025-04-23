@@ -92,13 +92,44 @@ var AdminDepartment = {
 
     AddUpdate: function (e) {
         e.preventDefault();
-        $("#loader").addClass("show");
+        debugger;
+        // Manually collect department data
+        var departmentData = {
+            Id: $("#Id").val(),
+            Name: $("#NameDp").val(),
+            Capacity: $("#Capacity").val(),
+            Description: $("#Description").val(),
+            // Add other department properties here as needed
+        };
+
+        // Collect selected branches and create SelectedBranches objects
+        var selectedBranches = [];
+        $('input[type="checkbox"]:checked').each(function () {
+            var branchId = $(this).val();
+            var branchName = $('#name_' + branchId).val();
+            var canBeRemoved = $('#canBeRemoved_' + branchId).val() === "true";
+            var status = $('#status_' + branchId).val();
+
+            // Create the SelectedBranches object for each selected branch
+            var selectedBranch = {
+                Id: branchId,
+                Name: branchName,
+                CanBeRemoved: canBeRemoved,
+                status: status
+            };
+
+            selectedBranches.push(selectedBranch);
+        });
+
+        // Add the selectedBranches to the department data
+        departmentData.selectedBranches = selectedBranches;
+       // $("#loader").addClass("show");
         $.ajax({
             type: "POST",
             url: "/Admin/Department/AddUpdate",
-            data: $("#admin-department-form").serialize(),
-            success: function (response) {
-                $("#loader").removeClass("show");
+            data: departmentData,
+            success: function (response) {  
+             //   $("#loader").removeClass("show");
                 if (response.success) {
                     AdminDepartment.Fetch(AdminDepartment.currentPage);
                     $('#addUpdateModal').modal('hide');

@@ -12,6 +12,11 @@ namespace Examination.PL.IBL
         public StudentMV GetById(int id);
         public int Update(StudentMV student);
         public int ChangeStatus(int id, int status);
+        public PaginatedData<StudentMV> GetStudentsByInstructorPaginated(int Instructor_Id,StudentSearchMV studentSearch, int PageSize = 10, int Page = 1);
+        public StudentMV GetStudentCoursesWithInstructor(int Student_Id,int Instructor_Id);
+       
+
+        public int ChangeStatus(int id, int status);
         StudentMV GetProfile(int userId);
     }
 }

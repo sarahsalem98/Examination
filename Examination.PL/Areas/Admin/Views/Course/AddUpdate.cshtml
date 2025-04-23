@@ -6,6 +6,7 @@
     Layout = null;
 
     SelectList DeptsList = new SelectList(ViewBag.Departments, "Id", "Name");
+    SelectList TopicList = new SelectList(ViewBag.Topics, "Id", "Name");
 }
 @section Styles {
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -46,7 +47,7 @@
 
             <div class="col-md-6 mb-3">
                 <label for="Hours" class="form-label">Hours</label>
-                <input type="number" min="1" class="form-control rounded-0 mb-1" value="1" id="Hours" asp-for="Hours" placeholder="Enter Course Hours" required>
+                <input type="number" min="1" class="form-control rounded-0 mb-1" value="@(Model.Hours)" id="Hours" asp-for="Hours" placeholder="Enter Course Hours" required>
                 <span asp-validation-for="Hours" class="text-danger"></span>
             </div>
         </div>
@@ -62,10 +63,9 @@
 
             <div class="col-md-6 mb-3">
                 <label for="depts" class="form-label">Departments</label>
-                <select id="DepartmentsIds" asp-for="DepartmentsIds" asp-items="@DeptsList" class="form-select" multiple required style="min-height:100px">
-                    <option value="0">Select Department</option>
+                <select asp-for="DepartmentsIds" asp-items="@DeptsList" class="form-select" style="min-height:100px" required multiple>
+                    <option value="0">Select Departments</option>
                 </select>
-
                 <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
             </div>
 
@@ -95,6 +95,20 @@
                 <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
             </div> *@
 
+
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="Topics" class="form-label">Topics</label>
+                <select asp-for="TopicsIds" asp-items="@TopicList" class="form-select" style="min-height:100px" required multiple>
+                    <option value="0">Select Topics</option>
+                </select>
+                <span asp-validation-for="DepartmentsIds" class="text-danger"></span>
+            </div>
 
         </div>
 

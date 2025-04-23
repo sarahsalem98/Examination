@@ -5,6 +5,7 @@ using Examination.DAL.Repos.IRepos;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
+using System.Drawing.Printing;
 
 namespace Examination.PL.BL
 {
@@ -33,20 +34,25 @@ namespace Examination.PL.BL
                 var crs = _mapper.Map<Course>(course);
                 crs.CreatedAt = DateTime.Now;
                 // Should be the id of the Logged User  
-                if (crs.CreatedBy == 0)
-                    crs.CreatedBy = 1;
                 _unitOfWork.CourseRepo.Insert(crs);
                 _unitOfWork.Save();
                 foreach (var dep in course.DepartmentsIds)
                 {
-                    //var courseDept = new CourseDepartment() { CourseId = crs.Id, DepartmentId = dep };
-                    //_unitOfWork.CourseDepartmentRepo.Insert(courseDept);
                     _unitOfWork.CourseDepartmentRepo.Insert(new CourseDepartment
                     {
                         CourseId = crs.Id,
                         DepartmentId = dep
                     });
                 }
+                foreach (var topic in course.TopicsIds)
+                {
+                    _unitOfWork.CourseTopicRepo.Insert(new CourseTopic
+                    {
+                        CourseId = crs.Id,
+                        TopicId = topic
+                    });
+                }
+                this.AddCourseToStudentsByDepartments(crs.Id, course.DepartmentsIds);
                 result = _unitOfWork.Save();
                 return result;
             }
@@ -85,7 +91,7 @@ namespace Examination.PL.BL
                     //5
                     (String.IsNullOrEmpty(courseSearch.Name) ||
                     (!String.IsNullOrEmpty(s.Name) && s.Name.ToLower().Trim().Contains(courseSearch.Name)))
-                    , "CourseDepartments,InstructorCourses.DepartmentBranch").OrderByDescending(s => s.CreatedAt).ToList();
+                    , "CourseDepartments,InstructorCourses.DepartmentBranch,CourseTopics").OrderByDescending(s => s.CreatedAt).ToList();
                 CourseMVs = _mapper.Map<List<CourseMV>>(data);
                 int TotalCounts = CourseMVs.Count();
                 if (TotalCounts > 0)
@@ -107,6 +113,25 @@ namespace Examination.PL.BL
             catch (Exception ex)
             {
                 _logger.LogError(ex, "error occuired while retriving student data in admin area");
+                return null;
+
+            }
+        }
+
+
+        public List<CourseMV> GetCourseByInstructor(int Instructor_Id)
+        {
+            try
+            {
+                List<CourseMV> courseMV = new List<CourseMV>();
+                List<Course> data = _unitOfWork.CourseRepo.GetAll(c => c.InstructorCourses.Select(c => c.Instructor.UserId).Contains(Instructor_Id),
+                    "InstructorCourses").Where(c => c.Status == (int)Status.Active).ToList();
+                courseMV = _mapper.Map<List<CourseMV>>(data);
+                return courseMV;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in fetch Courses ");
                 return null;
 
             }
@@ -169,7 +194,7 @@ namespace Examination.PL.BL
             try
             {
                 int result = 0;
-                var courseExist = _unitOfWork.CourseRepo.FirstOrDefault(c => c.Id == course.Id, "CourseDepartments");
+                var courseExist = _unitOfWork.CourseRepo.FirstOrDefault(c => c.Id == course.Id, "CourseDepartments,CourseTopics");
                 if (courseExist == null)
                     return result = -1;
                 // Updating
@@ -177,28 +202,49 @@ namespace Examination.PL.BL
                 courseExist.Description = course.Description;
                 courseExist.Hours = course.Hours;
 
-                var courseDepts = courseExist.CourseDepartments.ToList();
-                var CourseDeptIds = courseDepts.Select(S => S.DepartmentId).ToList();
+                var courseDeptsExists = courseExist.CourseDepartments.ToList();
+                var CourseDeptIdsExist = courseDeptsExists.Select(S => S.DepartmentId).ToList();
+                var NewDeptIds = course.DepartmentsIds;
 
-                if (CourseDeptIds != course.DepartmentsIds)
+                var DeptIdsCoursesNeededToAdd = NewDeptIds
+                                 .Where(id => !CourseDeptIdsExist.Contains(id))
+                                 .ToList();
+
+                var DeptIdsCoursesNeededToRemove = CourseDeptIdsExist
+                    .Where(id => !NewDeptIds.Contains(id))
+                    .ToList();
+
+                if (CourseDeptIdsExist != NewDeptIds)
                 {
-                    CourseDeptIds = course.DepartmentsIds;
-                    _unitOfWork.CourseDepartmentRepo.RemoveRange(courseDepts);
-                    foreach (var dep in CourseDeptIds)
+                    _unitOfWork.CourseDepartmentRepo.RemoveRange(courseDeptsExists);
+                    foreach (var dep in NewDeptIds)
                     {
                         var courseDept = new CourseDepartment() { CourseId = courseExist.Id, DepartmentId = dep };
                         _unitOfWork.CourseDepartmentRepo.Insert(courseDept);
                     }
+
+                }
+
+                var courseTopic = courseExist.CourseTopics.ToList();
+                var courseTopicIds = courseTopic.Select(S => S.TopicId).ToList();
+                if (courseTopicIds != course.TopicsIds)
+                {
+                    courseTopicIds = course.TopicsIds;
+                    _unitOfWork.CourseTopicRepo.RemoveRange(courseTopic);
+                    foreach (var topic in courseTopicIds)
+                    {
+                        var newCourseTopic = new CourseTopic() { CourseId = courseExist.Id, TopicId = topic };
+                        _unitOfWork.CourseTopicRepo.Insert(newCourseTopic);
+                    }
                     ;
                 }
 
+
+                this.AddCourseToStudentsByDepartments(courseExist.Id, DeptIdsCoursesNeededToAdd);
+                this.RemoveCourseFromStudentByDepartments(courseExist.Id, DeptIdsCoursesNeededToRemove);
+
                 courseExist.UpdatedAt = DateTime.Now;
                 courseExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
-
-
-
-                courseExist.UpdatedAt = DateTime.Now;
-
                 _unitOfWork.CourseRepo.Update(courseExist);
                 result = _unitOfWork.Save();
                 return result;
@@ -214,7 +260,7 @@ namespace Examination.PL.BL
         {
             try
             {
-                var course = _unitOfWork.CourseRepo.FirstOrDefault(i => i.Id == id, "CourseDepartments");
+                var course = _unitOfWork.CourseRepo.FirstOrDefault(i => i.Id == id, "CourseDepartments,CourseTopics");
                 if (course == null)
                     return null;
                 var courseMv = _mapper.Map<CourseMV>(course);
@@ -245,6 +291,79 @@ namespace Examination.PL.BL
             catch (Exception ex)
             {
                 _logger.LogError(ex, "error occuired while changing Course status ");
+                return 0;
+            }
+        }
+
+        public int AddCourseToStudentsByDepartments(int courseId, List<int> departmentIds)
+        {
+            try
+            {
+
+                if (departmentIds.Count() != 0)
+                {
+                    foreach (var id in departmentIds)
+                    {
+                        var studentsNeededToAddCourseTo = _unitOfWork.StudentRepo.GetAll(s => s.DepartmentBranch.Department.Id == id && s.EnrollmentDate.Value.Year == DateTime.Now.Year);
+                        foreach (var student in studentsNeededToAddCourseTo)
+                        {
+                            var studentCourse = new StudentCourse()
+                            {
+                                StudentId = student.Id,
+                                CourseId = courseId,
+
+                            };
+
+                            _unitOfWork.StudentCourseRepo.Insert(studentCourse);
+                        }
+
+                    }
+                }
+
+                return _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occurred while adding Course to Students ");
+                return 0;
+            }
+        }
+
+        public int RemoveCourseFromStudentByDepartments(int courseId, List<int> departmentIds)
+        {
+            try
+            {
+                if (departmentIds.Count() != 0)
+                {
+                    foreach (var id in departmentIds)
+                    {
+                        var students = _unitOfWork.StudentRepo.GetAll(s => s.DepartmentBranch.Department.Id == id && s.EnrollmentDate.Value.Year == DateTime.Now.Year, "StudentCourses");
+                        var studentsNeededToRemoveFromCourse = students.Where(s => s.StudentCourses.Any(sc => sc.CourseId == courseId &&sc.FinalGradePercent==null)).ToList();
+                        if (studentsNeededToRemoveFromCourse.Count() != 0)
+                        {
+                            foreach (var student in studentsNeededToRemoveFromCourse)
+                            {
+
+                                var coursesToRemove = student.StudentCourses
+                                                    .Where(sc => sc.CourseId == courseId && sc.FinalGradePercent == null)
+                                                    .ToList();
+
+                                if (coursesToRemove.Count > 0)
+                                {
+                                    _unitOfWork.StudentCourseRepo.RemoveRange(coursesToRemove);
+                                }
+
+                            }
+                        }
+                    }
+                }
+                return _unitOfWork.Save();
+               
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occurred while removing Course from Students ");
                 return 0;
             }
         }

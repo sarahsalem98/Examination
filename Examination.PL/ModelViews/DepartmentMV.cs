@@ -19,8 +19,7 @@ namespace Examination.PL.ModelViews
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-       public List<string>? BranchNames { get; set; }
-        public List<int> BranchIds { get; set; } = new List<int>();
+        public List<SelectedBranches>? selectedBranches { get; set; } = new List<SelectedBranches>();
 
     }
 
@@ -34,6 +33,7 @@ namespace Examination.PL.ModelViews
 
         public DepartmentMV Department { get; set; } = null!;
         public BranchMV Branch { get; set; } = null!;
+        public List<InstructorCourseMV> InstructorCourses { get; set; }=new List<InstructorCourseMV>();
     }
 
     public class DepartmentSearchMV
@@ -42,6 +42,14 @@ namespace Examination.PL.ModelViews
         public int? Status { get; set; }
 
         public int? BranchId { get; set; }
+
+    }
+    public class SelectedBranches
+    {
+        public string? Name { get; set; }
+        public int ? Id { get; set; }
+        public bool? CanBeRemoved { get; set; }
+        public int ?Status { get; set; }
 
     }
 }

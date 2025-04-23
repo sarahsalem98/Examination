@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="row g-2 mb-2">
-                        
+
                             <div class="col-md-12">
                                 <label for="Status" class="form-label">Status:</label>
                                 <select class="form-select" id="Status">
@@ -129,6 +129,11 @@
                 dropdownParent: $('#addUpdateModal'),
                 width: '100%',
                 placeholder: "Select Department"
+            });
+            $('#TopicsIds').select2({
+                dropdownParent: $('#addUpdateModal'),
+                width: '100%',
+                placeholder: "Select Topics"
             });
         });
         });

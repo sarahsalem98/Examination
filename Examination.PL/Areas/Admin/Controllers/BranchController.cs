@@ -105,6 +105,16 @@ namespace Examination.PL.Areas.Admin.Controllers
         public IActionResult ChangeStatus(int id,int status)
         {
             ResponseMV response = new ResponseMV();
+            if (status == (int)Status.Deleted || status == (int)Status.Inactive)
+            {
+                if (branchService.CanDeactivateDelete(id) == -1)
+                {
+                    response.Success = false;
+                    response.Message = "Branch is in use cannot be deactivated or deleted";
+                    return Json(response);
+
+                }
+            }
             var res = branchService.ChangeStatus(id, status);
             if (res == 0)
             {

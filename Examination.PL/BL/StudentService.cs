@@ -5,6 +5,7 @@ using Examination.DAL.Repos.IRepos;
 using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
+using System.Linq;
 
 namespace Examination.PL.BL
 {
@@ -22,6 +23,55 @@ namespace Examination.PL.BL
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
+     
+
+        public PaginatedData<StudentMV> GetStudentsByInstructorPaginated(int Instructor_Id, StudentSearchMV studentSearch, int PageSize = 10, int Page = 1)
+        {
+            try
+            {
+               
+                List<StudentMV> studentsMV = new List<StudentMV>();
+                List<Student> data = _unitOfWork.StudentRepo.GetAll((s => s.DepartmentBranch.InstructorCourses.Any(c => c.Instructor.UserId == Instructor_Id) &&
+                (studentSearch.DepartmentId == null || s.DepartmentBranch.DepartmentId == studentSearch.DepartmentId) &&
+               (studentSearch.BranchId == null || s.DepartmentBranch.BranchId == studentSearch.BranchId) &&
+               (studentSearch.TrackType == null || s.TrackType == studentSearch.TrackType) &&
+               (studentSearch.courseId == null || s.StudentCourses.Any(sc => sc.CourseId == studentSearch.courseId))&&
+
+               (String.IsNullOrEmpty(studentSearch.Name) ||
+                (!String.IsNullOrEmpty(s.User.FirstName) && s.User.FirstName.ToLower().Trim().Contains(studentSearch.Name)) ||
+                (!String.IsNullOrEmpty(s.User.LastName) && s.User.LastName.ToLower().Trim().Contains(studentSearch.Name)))
+
+                ),
+            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).Where(s=>s.User.Status==(int)Status.Active).ToList();
+                studentsMV =_mapper.Map<List< StudentMV>>(data);
+                int TotalCounts = studentsMV.Count();
+                if (TotalCounts > 0)
+                {
+                    studentsMV = studentsMV.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
+
+                }
+                PaginatedData<StudentMV> paginatedData = new PaginatedData<StudentMV>
+                {
+                    Items = studentsMV,
+                    TotalCount = TotalCounts,
+                    PageSize = PageSize,
+                    CurrentPage = Page
+                };
+                return paginatedData;
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "error occuired while Fetching Students by instructor ID ");
+                return null;
+                
+            }
+
+        }
+
+
+
         public int Add(StudentMV student)
         {
             int result = 0;
@@ -132,6 +182,32 @@ namespace Examination.PL.BL
                     return studentMV;
                 }
                 studentMV = _mapper.Map<StudentMV>(student);
+                return studentMV;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occuired while retriving student data ");
+                return null;
+            }
+        }
+        public StudentMV GetStudentCoursesWithInstructor(int Student_Id,int Instructor_ID)
+        {
+            try
+            {
+          
+              
+        StudentMV studentMV = new StudentMV();
+                var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == Student_Id &&
+                 s.DepartmentBranch.InstructorCourses.Any(ic=>ic.Instructor.UserId== Instructor_ID),
+                "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course,DepartmentBranch.Department,DepartmentBranch.Branch");
+          
+                if (student == null)
+                {
+                    return studentMV;
+                }
+             student.DepartmentBranch.InstructorCourses=student.DepartmentBranch.InstructorCourses.Where(ic => ic.Instructor.UserId == Instructor_ID).ToList();
+                studentMV = _mapper.Map<StudentMV>(student);
+                
                 return studentMV;
             }
             catch (Exception ex)
@@ -251,6 +327,7 @@ namespace Examination.PL.BL
             }
         }
 
+      
     }
 
 
