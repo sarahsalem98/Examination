@@ -116,7 +116,7 @@ namespace Examination.PL.BL
 
             }
         }
-      
+
 
         public List<CourseMV> GetCourseByInstructor(int Instructor_Id)
         {
@@ -293,39 +293,53 @@ namespace Examination.PL.BL
             }
         }
 
-        public List<CourseMV> GetCoursesByStudent()
+        public PaginatedData<CourseMV> GetCoursesByStudent( string name, int PageSize = 8,int Page = 1)
         {
             try
             {
                 var userIdString = _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value;
 
-                // Ensure the UserId exists 
                 if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
                 {
                     _logger.LogWarning("UserId is not found or invalid in the HttpContext.");
-                    return new List<CourseMV>();
+                    return new PaginatedData<CourseMV> { Items = new List<CourseMV>(), TotalCount = 0 };
                 }
 
                 var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId, "StudentCourses.Course");
 
-                // Ensure the student exists
                 if (student == null)
                 {
                     _logger.LogWarning("Student not found for UserId {userId}", userId);
-                    return new List<CourseMV>();
+                    return new PaginatedData<CourseMV> { Items = new List<CourseMV>(), TotalCount = 0 };
                 }
 
                 var studentCourses = student.StudentCourses.Select(sc => sc.Course).ToList();
 
                 var courseMVs = _mapper.Map<List<CourseMV>>(studentCourses);
-                return courseMVs;
+
+                // Filter by name if provided
+                if (!string.IsNullOrEmpty(name))
+                {
+                    courseMVs = courseMVs.Where(c => c.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                int totalCount = courseMVs.Count();
+                var paginatedCourses = courseMVs.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
+
+                return new PaginatedData<CourseMV>
+                {
+                    Items = paginatedCourses,
+                    TotalCount = totalCount,
+                    PageSize = PageSize,
+                    CurrentPage = Page
+                };
             }
             catch (Exception ex)
             {
-
-                _logger.LogError(ex, "An error occurred while retrieving courses");
-                return new List<CourseMV>();
+                _logger.LogError(ex, "Error occurred while retrieving courses.");
+                return new PaginatedData<CourseMV> { Items = new List<CourseMV>(), TotalCount = 0 };
             }
         }
+
     }
 }

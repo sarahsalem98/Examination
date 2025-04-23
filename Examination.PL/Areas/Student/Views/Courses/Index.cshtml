@@ -1,33 +1,49 @@
-﻿@model List<CourseMV>
-@{
+﻿@{
     ViewData["Title"] = "Courses";
     Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
 }
-@if (Model != null && Model.Count > 0)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Course Name</th>
-                <th>Description</th>
-                <th>Hours</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var course in Model)
-            {
-                <tr>
-                    <td>@course.Name</td>
-                    <td>@course.Description</td>
-                    <td>@course.Hours</td>
-                    <td>@(course.Status == 1 ? "Active" : "Inactive")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+@section Styles {
+    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/StudentCourses.css" asp-append-version="true" />
 }
-else
-{
-    <p>No courses available for the student.</p>
+
+<div class="d-flex flex-column">
+    <div class="container flex-grow-1">
+        <div class="d-flex align-items-center justify-content-between gap-lg-3 mb-3 mt-3">
+
+                <div class="d-flex ms-2">
+                    <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.."
+                           aria-label="Search" />
+                <button class="btn searchbtn" type="button" onclick="StudentCourses.Search();">
+                        <i class="bi bi-search"></i>
+                    </button>
+                <button class="btn searchbtn mx-2" type="submit" onclick="StudentCourses.Reset();">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="CoursesCards"></div>
+
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <ul id="pagination" class="pagination rounded-0"></ul>
+    </div>
+
+</div>
+
+@section Scripts {
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script src="~/js/student/Courses.js"></script>
+    <script>
+         $(document).ready(function () {
+
+           StudentCourses.Fetch(1)
+        });
+    </script>
 }
+

@@ -1,0 +1,30 @@
+﻿@model List<TopicMV>
+@{
+    ViewData["Title"] = "Course Details";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/StudentCourses.css" asp-append-version="true" />
+}
+<!-- breadcrumb -->
+<nav class="breadcrumb">
+    <a href="/Student/Courses">Courses</a>/<span>Course Details</span>
+</nav>
+
+<div class="container mt-5">
+    <div class="grade-card" id="gradeCard">
+        <h2>Overall Course Grade: <span class="grade-percentage" style="color: #f3722e;">_</span></h2>
+        <p>Description:@ViewBag.Course.Description </p>
+        <p>Course Duration:@ViewBag.Course.Hours </p>
+    </div>
+        <div>
+            <h3 class="topic-header">Course Agenda</h3>
+            <ol>
+                @foreach (var item in Model)
+                {
+                    <li class="topic-item">@item.Name</li>
+                }
+
+            </ol>
+       
+</div>

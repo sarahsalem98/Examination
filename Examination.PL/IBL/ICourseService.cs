@@ -15,9 +15,9 @@ public interface ICourseService
     public PaginatedData<CourseMV> GetAllPaginated(CourseSearchMV courseSerach, int PageSize = 10, int Page = 1);
 
     public int Update(CourseMV course);
-  
+
     public int ChangeStatus(int id, int status);
     public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
-    public List<CourseMV> GetCoursesByStudent();
+    public PaginatedData<CourseMV> GetCoursesByStudent(string name, int PageSize = 8, int Page = 1);
 
 }

@@ -1,0 +1,34 @@
+﻿@model PaginatedData<CourseMV>
+@using Examination.PL.General;
+
+@{
+    Layout = null;
+}
+<input type="hidden" id="TotalCount" value="@Model.TotalCount" />
+<h2 class="mb-4 text-center" style="color: #40277b;">Choose Course</h2>
+<div class="container mt-5">
+	 @if (Model.Items.Count() == 0)
+        {
+            
+                <h3 colspan="6" class=" alert-info text-center">No data found</h3>
+           
+        }
+        else
+        {
+        <div class="grid-container">
+            @foreach (var item in Model.Items)
+            {
+                   <a href="/Student/Courses/Details?Courseid=@item.Id" class="card-link">
+                    <div class="course-card">
+                        <img src="" alt="Web Development" class="background-img">
+                        <div class="course-title">@item.Name</div>
+                    </div>
+                </a>
+            }
+        </div>
+        }
+
+</div>
+
+
+
