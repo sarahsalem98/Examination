@@ -16,7 +16,9 @@ public interface ICourseService
     public int Update(CourseMV course);
     public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
     public int ChangeStatus(int id, int status);
+    public int AddCourseToStudentsByDepartments(int courseId, List<int> departmentIds);
+    public int RemoveCourseFromStudentByDepartments(int courseId, List<int> departmentIds);
 
-  
+
 }
 

@@ -4,7 +4,7 @@ using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 using Microsoft.AspNetCore.Mvc;
-using Examination.PL.Attributes; 
+using Examination.PL.Attributes;
 
 
 namespace Examination.PL.Areas.Admin.Controllers
@@ -16,14 +16,14 @@ namespace Examination.PL.Areas.Admin.Controllers
     {
         private readonly IDepartmentService _departmentService;
         private readonly IBranchService _branchService;
-       
+
 
 
         public DepartmentController(IDepartmentService departmentService, IBranchService branchService)
         {
             _departmentService = departmentService;
             _branchService = branchService;
-            
+
 
         }
 
@@ -53,7 +53,7 @@ namespace Examination.PL.Areas.Admin.Controllers
 
         [HttpGet]
         public IActionResult AddUpdate(int id)
-        {
+            {
             ViewData["Title"] = "Add / Update Department";
             var department = new DepartmentMV();
 
@@ -62,8 +62,6 @@ namespace Examination.PL.Areas.Admin.Controllers
                 department = _departmentService.GetByIdWithBranches(id);
                 if (department == null)
                     return NotFound();
-
-                ViewBag.SelectedBranchIds = department.BranchIds ?? new List<int>();
             }
             else
             {
@@ -71,9 +69,6 @@ namespace Examination.PL.Areas.Admin.Controllers
             }
 
             ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
-            ViewBag.Statuses = Enum.GetValues(typeof(Status)).Cast<Status>()
-                .Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
-
             return View(department);
         }
 
@@ -81,7 +76,7 @@ namespace Examination.PL.Areas.Admin.Controllers
         public IActionResult AddUpdate(DepartmentMV model)
         {
             ResponseMV response = new();
-            
+
 
             if (ModelState.IsValid)
             {
@@ -116,6 +111,19 @@ namespace Examination.PL.Areas.Admin.Controllers
 
             if (id > 0)
             {
+
+                if (status == (int)Status.Inactive || status == (int)Status.Deleted)
+                {
+                    var canDeactivateOrDelete = _departmentService.CanDeativateOrDelete(id);
+                    if (canDeactivateOrDelete == -1)
+                    {
+                        response.Success = false;
+                        response.Message = "Department is in use and cannot be deactivated or deleted";
+                        return Json(response);
+                    }
+
+                }
+
                 var result = _departmentService.ChangeStatus(id, status);
                 if (result > 0)
                 {
@@ -179,7 +187,7 @@ namespace Examination.PL.Areas.Admin.Controllers
 
 
 
-       
+
     }
 }
- 
+

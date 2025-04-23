@@ -24,7 +24,7 @@ namespace Examination.PL.ModelViews
         [Required]
         public int BranchId { get; set; }
         public DepartmentBranchMV? DepartmentBranch { get; set; }
-        public List<StudentCourseMV> StudentCourses { get; set; } = null!;
+        public List<StudentCourseMV>? StudentCourses { get; set; } 
 
 
     }
@@ -49,8 +49,8 @@ namespace Examination.PL.ModelViews
 
         public int? FinalGradePercent { get; set; }
 
-        public CourseMV?  Course { get; set; } = null!;
+        public CourseMV?  Course { get; set; }
 
-        public StudentMV? Student { get; set; } = null!;
+        public StudentMV? Student { get; set; }
     }
 }

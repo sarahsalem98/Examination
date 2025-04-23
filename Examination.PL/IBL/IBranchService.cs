@@ -14,6 +14,8 @@ namespace Examination.PL.IBL
         public int ChangeStatus(int id, int status);
         public PaginatedData<BranchMV> GetAllPaginated(BranchSearchMV branchSearch, int pageSize = 10, int page = 1);
         public List<String> GetDistinctBranchLocations();
+        public int CanDeactivateDelete(int id);
+
     }
 
 }
