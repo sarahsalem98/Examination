@@ -220,6 +220,39 @@ namespace Examination.PL.BL
             }
         }
 
+
+
+        public StudentMV GetProfile(int userId)
+        {
+            try
+            {
+                var student = _unitOfWork.StudentRepo
+                    .FirstOrDefault(s => s.UserId == userId, "User,DepartmentBranch.Department,DepartmentBranch.Branch,StudentCourses.Course");
+
+                if (student == null)
+                    return null;
+
+                var studentMV = _mapper.Map<StudentMV>(student);
+
+                studentMV.DepartmentId = student.DepartmentBranch.DepartmentId;
+                studentMV.BranchId = student.DepartmentBranch.BranchId;
+                studentMV.StudentCourses = student.StudentCourses.Select(sc => new StudentCourseMV
+                {
+                    CourseName = sc.Course?.Name ?? "N/A",
+                    FinalGradePercent = sc.FinalGradePercent
+                }).ToList();
+
+                return studentMV; 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving student profile");
+                return null;
+            }
+        }
+
     }
 
+
 }
+

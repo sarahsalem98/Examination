@@ -22,8 +22,13 @@ namespace Examination.PL.ModelViews
         public int DepartmentId { get; set; }
         [Required]
         public int BranchId { get; set; }
-        public DepartmentBranchMV? DepartmentBranch { get; set; } 
-
+        public DepartmentBranchMV? DepartmentBranch { get; set; }
+        public List<StudentCourseMV> StudentCourses { get; internal set; }
+    }
+    public class StudentCourseMV
+    {
+        public string CourseName { get; set; }
+        public int? FinalGradePercent { get; set; }
     }
 
     public class StudentSearchMV { 
