@@ -35,14 +35,14 @@
                     <td>@dept.Name</td>
                     <td>@dept.Capacity</td>
                     <td>
-                        @if (dept.BranchNames != null && dept.BranchNames.Any())
+                        @if (dept.selectedBranches.Count()!=0)
                         {
-                            @string.Join(", ", dept.BranchNames)
+                            @string.Join(", ", dept.selectedBranches.Where(d=>d.Status!=(int)Status.Deleted).Select(b=>b.Name))
                         }
 
                         else
                         {
-                            <span class="text-muted">Unknown</span>
+                            <span class="text-muted">not assigned yet to any branch</span>
                         }
                     </td>
               

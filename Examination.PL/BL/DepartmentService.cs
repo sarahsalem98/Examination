@@ -112,8 +112,13 @@ namespace Examination.PL.BL
                     Capacity = d.Capacity,
                     Status = d.Status,
                     Description = d.Description,
-                    BranchIds = d.DepartmentBranches.Select(b => b.BranchId).ToList(),
-                    BranchNames = d.DepartmentBranches.Select(b => b.Branch?.Name ?? "Unknown").ToList()
+                    selectedBranches = d.DepartmentBranches.Select(b => new SelectedBranches
+                    {
+                        Id = b.BranchId,
+                        Name = b.Branch.Name,
+                        CanBeRemoved = null,
+                        Status=b.Status
+                    }).ToList()
                 }).ToList();
 
                 return new PaginatedData<DepartmentMV>
@@ -154,7 +159,7 @@ namespace Examination.PL.BL
                 else
                 {
                     
-                    if (department.BranchIds == null || !department.BranchIds.Any())
+                    if (department.selectedBranches.Count()==0)
                     {
                         throw new Exception("At least one branch must be selected.");
                     }
@@ -166,9 +171,9 @@ namespace Examination.PL.BL
                     newDepartment.Status = (int)Status.Active;
 
                    
-                    newDepartment.DepartmentBranches = department.BranchIds.Select(branchId => new DepartmentBranch
+                    newDepartment.DepartmentBranches = department.selectedBranches.Select(branch => new DepartmentBranch
                     {
-                        BranchId = branchId
+                        BranchId = branch.Id??0
                     }).ToList();
 
                     _unitOfWork.DepartmentRepo.Insert(newDepartment);
@@ -206,7 +211,7 @@ namespace Examination.PL.BL
                     else
                     {
 
-                        if (department.BranchIds == null)
+                        if (department.selectedBranches.Count == 0)
                         {
                             throw new Exception("At least one branch must be selected.");
                         }
@@ -227,20 +232,34 @@ namespace Examination.PL.BL
 
                         
                         var branchesToRemove = departmentExist.DepartmentBranches
-                            .Where(db => !department.BranchIds.Contains(db.BranchId))
+                            .Where(db => !department.selectedBranches.Select(d=>d.Id).Contains(db.BranchId))
                             .ToList();
                         foreach (var branch in branchesToRemove)
                         {
-                            departmentExist.DepartmentBranches.Remove(branch);
+                            branch.Status = (int)Status.Deleted;
                         }
 
-                        foreach (var branchId in department.BranchIds)
+                        foreach (var branch in department.selectedBranches)
                         {
-                            departmentExist.DepartmentBranches.Add(new DepartmentBranch
+                            var existingBranch = departmentExist.DepartmentBranches
+                                .FirstOrDefault(db => db.BranchId == branch.Id && db.Status == (int)Status.Deleted);
+
+                            if (existingBranch != null)
                             {
-                                BranchId = branchId,
-                                DepartmentId = department.Id
-                            });
+                                existingBranch.Status = 1; 
+                            }
+                            else
+                            {
+                                if (!existingBranchIds.Contains(branch.Id ?? 0))
+                                {
+                                    departmentExist.DepartmentBranches.Add(new DepartmentBranch
+                                    {
+                                        BranchId = branch.Id ?? 0,
+                                        DepartmentId = department.Id,
+                                        Status = 1 
+                                    });
+                                }
+                            }
                         }
 
                         _unitOfWork.DepartmentRepo.Update(departmentExist);
@@ -298,7 +317,19 @@ namespace Examination.PL.BL
                     return null;
 
                 var model = _mapper.Map<DepartmentMV>(department);
-                model.BranchIds = department.DepartmentBranches.Select(b => b.BranchId).ToList();
+                model.selectedBranches = department.DepartmentBranches.Select(b=>
+                   {
+                      var studentWithCoursesUnFinished = _unitOfWork.StudentCourseRepo.FirstOrDefault(s => s.Student.DepartmentBranch.DepartmentId == id && s.Student.DepartmentBranch.BranchId==b.BranchId&& s.FinalGradePercent == null, "Student.DepartmentBranch"); 
+                   return new SelectedBranches
+
+                   {
+                       Id = b.BranchId,
+                       Name = b.Branch.Name,
+                       CanBeRemoved = studentWithCoursesUnFinished == null?true:false,
+                       Status=b.Status
+                    }; 
+                   
+                   }).ToList();
 
                 return model;
             }
@@ -314,7 +345,7 @@ namespace Examination.PL.BL
             try
             {
 
-               var unFinishedCourse=_unitOfWork.StudentCourseRepo.FirstOrDefault(s=>s.Student.DepartmentBranch.DepartmentId==id&& s.FinalGradePercent==null);
+               var unFinishedCourse=_unitOfWork.StudentCourseRepo.FirstOrDefault(s=>s.Student.DepartmentBranch.DepartmentId==id&& s.FinalGradePercent==null, "Student.DepartmentBranch");
                return unFinishedCourse != null ? -1 : 1;
 
             }

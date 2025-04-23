@@ -1,7 +1,10 @@
-﻿@model DepartmentMV
+﻿@using Examination.PL.General
+@model DepartmentMV
 
 @{
     Layout = null;
+    var selectedBranchIds = Model.selectedBranches.Select(d=>d.Id).ToList();
+    var branches = ViewBag.Branches as List<BranchMV>;
 }
 
 <form id="admin-department-form">
@@ -16,14 +19,14 @@
             <!-- Name -->
             <div class="col-md-6 mb-3">
                 <label for="Name" class="form-label">Department Name</label>
-                <input type="text" class="form-control rounded-0 mb-1" id="Name" asp-for="Name" placeholder="Enter department name" required>
+                <input type="text" class="form-control rounded-0 mb-1"  asp-for="Name" id= "NameDp"placeholder="Enter department name" required>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <!-- Capacity -->
             <div class="col-md-6 mb-3">
                 <label for="Capacity" class="form-label">Capacity</label>
-                <input type="number" class="form-control rounded-0 mb-1" id="Capacity" asp-for="Capacity" min="1" placeholder="Enter capacity" required>
+                <input type="number" class="form-control rounded-0 mb-1"  asp-for="Capacity" min="1" placeholder="Enter capacity" required>
                 <span asp-validation-for="Capacity" class="text-danger"></span>
             </div>
         </div>
@@ -32,7 +35,7 @@
             <!-- Description -->
             <div class="col-md-12 mb-3">
                 <label for="Description" class="form-label">Description</label>
-                <textarea class="form-control rounded-0" asp-for="Description" rows="3" placeholder="Enter description..."></textarea>
+                <textarea class="form-control rounded-0"  asp-for="Description" rows="3" placeholder="Enter description..."></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
         </div>
@@ -46,13 +49,28 @@
             <div class="col-md-12 mb-3">
                 <label class="form-label">Branches</label>
                 <div class="border p-2">
-                    @foreach (var branch in ViewBag.Branches)
+                    @for (var i = 0; i < branches.Count(); i++)
                     {
+                        var selectedBranch = Model.selectedBranches.FirstOrDefault(b => b.Id == branches[i].Id);
+                        bool isChecked = selectedBranch != null && selectedBranch.Status!=(int)Status.Deleted ;
+                        bool isDisabled = selectedBranch != null && selectedBranch.CanBeRemoved == false;
+
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="BranchIds" value="@branch.Id" id="branch_@branch.Id"
-                            @(ViewBag.SelectedBranchIds.Contains(branch.Id) ? "checked" : "")>
-                            <label class="form-check-label" for="branch_@branch.Id">
-                                @branch.Name
+                            <!-- Checkbox for BranchId -->
+                            <input class="form-check-input" type="checkbox" id="branch_@branches[i].Id"
+                                   value="@branches[i].Id" @(isChecked ? "checked" : "")
+                            @(isDisabled ? "disabled" : "")  />
+
+                            <!-- Hidden fields for Name and CanBeRemoved -->
+                            <input type="hidden" id="name_@branches[i].Id" value="@branches[i].Name" />
+                            <input type="hidden" id="canBeRemoved_@branches[i].Id" value="@(isDisabled ? "false" : "true")" />
+                            <input type="hidden" id="status_@branches[i].Status" value="@branches[i].Status" />
+
+                            <label class="form-check-label" for="branch_@branches[i].Id">
+                                @branches[i].Name @if (isDisabled)
+                                {
+                                    <span class="text-danger">(Cannot be removed)</span>
+                                }
                             </label>
                         </div>
                     }

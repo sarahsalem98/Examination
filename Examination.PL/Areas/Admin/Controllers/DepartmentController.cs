@@ -53,7 +53,7 @@ namespace Examination.PL.Areas.Admin.Controllers
 
         [HttpGet]
         public IActionResult AddUpdate(int id)
-        {
+            {
             ViewData["Title"] = "Add / Update Department";
             var department = new DepartmentMV();
 
@@ -62,8 +62,6 @@ namespace Examination.PL.Areas.Admin.Controllers
                 department = _departmentService.GetByIdWithBranches(id);
                 if (department == null)
                     return NotFound();
-
-                ViewBag.SelectedBranchIds = department.BranchIds ?? new List<int>();
             }
             else
             {

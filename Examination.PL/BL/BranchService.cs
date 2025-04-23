@@ -207,6 +207,22 @@ namespace Examination.PL.BL
                 return null;
             }
         }
+        public int CanDeactivateDelete(int id)
+        {
+
+            try
+            {
+                var unFinishedCourse = _unitOfWork.StudentCourseRepo.FirstOrDefault(s => s.Student.DepartmentBranch.BranchId == id && s.FinalGradePercent == null, "Student.DepartmentBranch");
+                return unFinishedCourse != null ? -1 : 1;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while checking if the branch can be deactivated or deleted.");
+                return 0;
+            }
+        }
+           
 
     }
 }

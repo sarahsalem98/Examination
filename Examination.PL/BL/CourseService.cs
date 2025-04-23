@@ -52,6 +52,7 @@ namespace Examination.PL.BL
                         TopicId = topic
                     });
                 }
+                this.AddCourseToStudentsByDepartments(crs.Id, course.DepartmentsIds);
                 result = _unitOfWork.Save();
                 return result;
             }
@@ -116,16 +117,16 @@ namespace Examination.PL.BL
 
             }
         }
-      
+
 
         public List<CourseMV> GetCourseByInstructor(int Instructor_Id)
         {
             try
             {
-                List< CourseMV> courseMV = new List<CourseMV>();
-                List<Course> data=_unitOfWork.CourseRepo.GetAll(c=>c.InstructorCourses.Select(c=>c.Instructor.UserId).Contains(Instructor_Id),
-                    "InstructorCourses").Where(c=>c.Status==(int)Status.Active).ToList();
-                courseMV=_mapper.Map<List< CourseMV>>(data);
+                List<CourseMV> courseMV = new List<CourseMV>();
+                List<Course> data = _unitOfWork.CourseRepo.GetAll(c => c.InstructorCourses.Select(c => c.Instructor.UserId).Contains(Instructor_Id),
+                    "InstructorCourses").Where(c => c.Status == (int)Status.Active).ToList();
+                courseMV = _mapper.Map<List<CourseMV>>(data);
                 return courseMV;
             }
             catch (Exception ex)
@@ -135,7 +136,7 @@ namespace Examination.PL.BL
 
             }
         }
-      
+
         public List<CourseMV> GetCoursesByDeaprtment(int id)
         {
             try
@@ -205,16 +206,13 @@ namespace Examination.PL.BL
                 var CourseDeptIdsExist = courseDeptsExists.Select(S => S.DepartmentId).ToList();
                 var NewDeptIds = course.DepartmentsIds;
 
-                var DeptIdsCoursesNeededToAdd = new List<int>();
+                var DeptIdsCoursesNeededToAdd = NewDeptIds
+                                 .Where(id => !CourseDeptIdsExist.Contains(id))
+                                 .ToList();
 
-                foreach(var id in NewDeptIds)
-                {
-                    if (!CourseDeptIdsExist.Contains(id))
-                    {
-                        DeptIdsCoursesNeededToAdd.Add(id);
-
-                    }
-                }
+                var DeptIdsCoursesNeededToRemove = CourseDeptIdsExist
+                    .Where(id => !NewDeptIds.Contains(id))
+                    .ToList();
 
                 if (CourseDeptIdsExist != NewDeptIds)
                 {
@@ -224,10 +222,8 @@ namespace Examination.PL.BL
                         var courseDept = new CourseDepartment() { CourseId = courseExist.Id, DepartmentId = dep };
                         _unitOfWork.CourseDepartmentRepo.Insert(courseDept);
                     }
-                    
+
                 }
-
-
 
                 var courseTopic = courseExist.CourseTopics.ToList();
                 var courseTopicIds = courseTopic.Select(S => S.TopicId).ToList();
@@ -243,11 +239,9 @@ namespace Examination.PL.BL
                     ;
                 }
 
-                
+
                 this.AddCourseToStudentsByDepartments(courseExist.Id, DeptIdsCoursesNeededToAdd);
-
-
-
+                this.RemoveCourseFromStudentByDepartments(courseExist.Id, DeptIdsCoursesNeededToRemove);
 
                 courseExist.UpdatedAt = DateTime.Now;
                 courseExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
@@ -301,7 +295,7 @@ namespace Examination.PL.BL
             }
         }
 
-        public  int AddCourseToStudentsByDepartments(int courseId, List<int> departmentIds)
+        public int AddCourseToStudentsByDepartments(int courseId, List<int> departmentIds)
         {
             try
             {
@@ -325,12 +319,51 @@ namespace Examination.PL.BL
 
                     }
                 }
-              
+
                 return _unitOfWork.Save();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "error occurred while adding Course to Students ");
+                return 0;
+            }
+        }
+
+        public int RemoveCourseFromStudentByDepartments(int courseId, List<int> departmentIds)
+        {
+            try
+            {
+                if (departmentIds.Count() != 0)
+                {
+                    foreach (var id in departmentIds)
+                    {
+                        var students = _unitOfWork.StudentRepo.GetAll(s => s.DepartmentBranch.Department.Id == id && s.EnrollmentDate.Value.Year == DateTime.Now.Year, "StudentCourses");
+                        var studentsNeededToRemoveFromCourse = students.Where(s => s.StudentCourses.Any(sc => sc.CourseId == courseId &&sc.FinalGradePercent==null)).ToList();
+                        if (studentsNeededToRemoveFromCourse.Count() != 0)
+                        {
+                            foreach (var student in studentsNeededToRemoveFromCourse)
+                            {
+
+                                var coursesToRemove = student.StudentCourses
+                                                    .Where(sc => sc.CourseId == courseId && sc.FinalGradePercent == null)
+                                                    .ToList();
+
+                                if (coursesToRemove.Count > 0)
+                                {
+                                    _unitOfWork.StudentCourseRepo.RemoveRange(coursesToRemove);
+                                }
+
+                            }
+                        }
+                    }
+                }
+                return _unitOfWork.Save();
+               
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occurred while removing Course from Students ");
                 return 0;
             }
         }
