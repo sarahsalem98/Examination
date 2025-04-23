@@ -18,6 +18,9 @@ public interface ICourseService
 
     public int ChangeStatus(int id, int status);
     public List<CourseMV> GetCourseByInstructor(int Instructor_Id);
+    public int AddCourseToStudentsByDepartments(int courseId, List<int> departmentIds);
+    public int RemoveCourseFromStudentByDepartments(int courseId, List<int> departmentIds);
+
     public PaginatedData<CourseMV> GetCoursesByStudent(string name, int PageSize = 8, int Page = 1);
 
 }

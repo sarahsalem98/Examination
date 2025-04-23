@@ -108,7 +108,7 @@ namespace Examination.PL.Areas.Admin.Controllers
                 else
                 {
                     var result = _courseService.Add(model);
-                    if (result > 0)
+                    if (result >= 0)
                     {
                         response.Success = true;
                         response.Message = "Course added successfully";
