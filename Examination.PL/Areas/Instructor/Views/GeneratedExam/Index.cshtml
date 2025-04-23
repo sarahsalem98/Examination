@@ -6,7 +6,6 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
-
 }
 
 <div class="d-flex flex-column">
@@ -21,7 +20,7 @@
                             aria-expanded="false">
                         Advanced Search
                     </button>
-                    <div class="dropdown-menu p-4 flex-start">
+                    <div class="dropdown-menu p-4 flex-start" id="ttt">
                         <!-- Dropdown content -->
 
                         <div class="row g-2 mb-2">
@@ -49,8 +48,8 @@
                         </div>
                         <div class="row g-2 mb-2">
                             <div class="col-md-6">
-                                <label for="Status" class="form-label">Status</label>
-                                <select class="form-select" id="Status">
+                                <label for="TrackType" class="form-label">Status:</label>
+                                <select class="form-select" id="TrackType">
                                     <option selected value="">Choose...</option>
                                     @foreach (var item in ViewBag.Status)
                                     {
@@ -59,8 +58,8 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="Course" class="form-label">Course</label>
-                                <select class="form-select" id="CourseId">
+                                <label for="Status" class="form-label">Courses:</label>
+                                <select class="form-select" id="Status">
                                     <option value="" selected>Choose...</option>
                                     @foreach (var item in ViewBag.courses)
                                     {
@@ -72,12 +71,12 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="InstructorCourse.Reset();">
+                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="InstructorGeneratedExam.Reset();">
                                     <i class="bi bi-arrow-counterclockwise"></i> Reset
                                 </button>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="InstructorCourse.Search()">
+                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="InstructorGeneratedExam.Search()">
                                     <i class="bi bi-search"></i> Search
                                 </button>
                             </div>
@@ -88,20 +87,22 @@
                 <div class="d-flex ms-2">
                     <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.."
                            aria-label="Search" />
-                    <button class="btn searchbtn" type="submit" onclick="InstructorCourse.Search();">
+                    <button class="btn searchbtn" type="submit" onclick="InstructorGeneratedExam.Search();">
                         <i class="bi bi-search"></i>
                     </button>
-                    <button class="btn searchbtn mx-2" type="submit" onclick="InstructorCourse.Reset();">
+                    <button class="btn searchbtn mx-2" type="submit" onclick="InstructorGeneratedExam.Reset();">
                         <i class="bi bi-x"></i>
                     </button>
                 </div>
             </div>
 
-
+            <div>
+                <button class="btn btn-add rounded-0" onclick="InstructorGeneratedExam.ShowAddUpdateModal();"> + Create </button>
+            </div>
         </div>
 
 
-        <div class="table-responsive list mt-4" id="courseList"></div>
+        <div class="table-responsive list mt-4" id="generatedexamList"></div>
 
     </div>
 
@@ -111,16 +112,26 @@
 
 </div>
 
+<div class="modal fade" id="addUpdateModal" tabindex="-1" aria-labelledby="addUpdateModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUpdateModal">Generate New Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="addUpdateModalView"></div>
+        </div>
+    </div>
+</div>
 
 
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
-    <script src="~/js/instructor/course.js"></script>
+    <script src="~/js/instructor/generateexam.js"></script>
     <script>
         $(document).ready(function () {
-          InstructorCourse.Fetch(1);
-
+        //  AdminStudent.Fetch(1);
         });
     </script>
 }

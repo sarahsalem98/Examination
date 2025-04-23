@@ -223,8 +223,26 @@ namespace Examination.PL.BL
                 return null;
             }
         }
+        public List<ExamMV> GetByInstructor(int instructor_id)
+        {
+            try
+            {
+                List<ExamMV> exams = new List<ExamMV>();
+                List<Exam> data = _unitOfWork.ExamRepo.GetAll(e => e.Status == (int)Status.Active && e.Course.InstructorCourses.Any(ic => ic.Instructor.UserId == instructor_id),
+                    "Course,Course.InstructorCourses,Course.InstructorCourses.Instructor").ToList();
+                exams = _mapper.Map<List<ExamMV>>(data);
+                return exams;
+            }
 
-
-
-    }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occurred while getting exams");
+                return null;
+            }
+        }
 }
+
+
+
+}
+

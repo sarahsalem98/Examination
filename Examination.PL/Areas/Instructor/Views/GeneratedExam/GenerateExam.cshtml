@@ -1,68 +1,75 @@
-﻿@model StudentMV
-@using Examination.PL.General;
+﻿@model GeneratedExamMV
+
 @{
-    ViewData["Title"] = "Students";
-    Layout = "~/Areas/Instructor/Views/Shared/_Layout.cshtml";
-
+    Layout = null;
 }
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
-}
-
-<input type="hidden" asp-for="Id" id="Id" />
-<input type="hidden" asp-for="UserId" id="UserId" />
 <form id="Instructor-GenerateExam-Form">
 <div class="modal-body mx-3">
-
-    <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
-    <div class="row">
-
-        <div class="col-md-6 mb-3">
-            <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control rounded-0 mb-1" id="firstName" asp-for="User.FirstName">
-
+ <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Main Info</h5>
+        <input type="hidden" name="CreatedBy" asp-for="Id" />
+      
+        <div class="row g-2 mb-3">
+            <div class="col-md-4">
+                <select class="form-select" name="ExamId">
+                    <option value="">Choose Exam...</option>
+                    @foreach (var exam in ViewBag.Exams)
+                    {
+                        <option value="@exam.Id">@exam.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="branchId" class="form-select" name="BranchId" onchange="InstructorGeneratedExam.GetDepartmentsByBranchId()">
+                    <option value="">Choose Branch...</option>
+                    @foreach (var branch in ViewBag.Branches)
+                    {
+                        <option value="@branch.Id">@branch.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" name="DepartmentId" id="departmentDropdown">
+                    <option value="">Choose Department...</option>
+                </select>
+            </div>
         </div>
 
-        <div class="col-md-6 mb-3">
-            <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control rounded-0 mb-1" id="lastName" asp-for="User.LastName">
+       
+        <div class="row g-2 mb-3">
+            <div class="col-md-6">
+                <input type="number" class="form-control" name="NumsTS" placeholder="TS" min="0" />
+            </div>
+            <div class="col-md-6">
+                <input type="number" class="form-control" name="NumsMCQ" placeholder="MCQ" min="0" />
+            </div>
+        </div>
 
+      
+        <div class="row g-2 mb-3">
+            <div class="col-md-6">
+                <input type="time" class="form-control" name="takenTime" />
+            </div>
+            <div class="col-md-6">
+                <input type="date" class="form-control" name="TakenDate" />
+            </div>
         </div>
 
 
-    </div>
-    <div class="row">
-
-        <div class="col-md-6 mb-3">
-            <label for="Branch" class="form-label">Branch</label>
-            <input type="text" class="form-control rounded-0 mb-1" id="Branch" asp-for="DepartmentBranch.Branch.Name">
-
-        </div>
-        <div class="col-md-6 mb-3">
-            <label for="Department" class="form-label">Department</label>
-            <input type="text" class="form-control rounded-0 mb-1" id="Department" asp-for="DepartmentBranch.Department.Name">
-
-        </div>
-    </div>
-    <div class="col-md-6 mb-3">
-        <label for="TrackType" class="form-label">TrackType</label>
-        <input type="text" class="form-control rounded-0 mb-1" id="TrackType" value="@Enum.GetName(typeof(TrackType), Model.TrackType)">
-
-    </div>
-
-
-
+           
 </div>
-</form>
 
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn advanced-search-btn" onclick="InstructorGeneratedExam.GenerateExam(event)">Save Data</button>
+    </div>
+
+
+</form>
+<partial name="_ValidationScriptsPartial" />
 
 
 <script>
     $(document).ready(function(){
-
-
-
     });
 </script>
 

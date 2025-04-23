@@ -7,7 +7,7 @@
         $("#loader").addClass("show");
         $.ajax({
             type: "POST",
-            url: "/Instructor/GenereateExam/List",
+            url: "/Instructor/GeneratedExam/List",
             data: { GeneratedExamSearch: InstructorGeneratedExam.currentSearchData, PageSize: InstructorGeneratedExam.pageSize, Page: Page },
 
             success: function (response) {
@@ -69,23 +69,52 @@
         $("#BranchId").val("");
         $("#Status").val("");
         $("#CourseId").val("");
-        InstructorCourse.currentSearchData = {};
-        InstructorCourse.Fetch(1);
+        InstructorGeneratedExam.currentSearchData = {};
+        InstructorGeneratedExam.Fetch(1);
     },
-    GetDepartmentsByBranchId: function (branchId, dropdown) {
+    GetDepartmentsByBranchId: function () {
+        var branchId = $('#branchId').val();
+        console.log(branchId);
+
         $.ajax({
             type: "GET",
-            url: "/Instructor/GenereateExam/GetDepartmentsByBranchId",
+            url: "/Instructor/GeneratedExam/GetDepartmentsByBranchId",
             data: { BranchId: branchId },
             success: function (response) {
-                if (response.success) {
-                    $.each(response.data, function (index, department) {
-                        dropdown.append(`<option value="${department.id}">${department.name}</option>`);
-                    });
-                }
+                console.log(response);
+                var departmentDropdown = $("#departmentDropdown");
+                departmentDropdown.empty();
+
+                departmentDropdown.append('<option selected >select department</option>');
+
+                $.each(response.data, function (index, department) {
+
+                    departmentDropdown.append(`<option value="${department.id}">${department.name}</option>`);
+                });
+
+               
+
             },
-            error: function () {
-                console.error("Error loading departments");
+            error: function (xhr, status, error) {
+                console.error("Error fetching department data:", error);
+            }
+        });
+
+    }, 
+    ShowAddUpdateModal: function () {
+       
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Instructor/GeneratedExam/GenerateExam",
+            success: function (response) {
+
+                $("#loader").removeClass("show");
+                $("#addUpdateModalView").html(response);
+                $('#addUpdateModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:", error);
             }
         });
     },

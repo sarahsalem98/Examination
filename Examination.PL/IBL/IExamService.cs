@@ -13,6 +13,7 @@ namespace Examination.PL.IBL
 
         #endregion
         public List<ExamMV> GetByStatus(int? status=null);
+        public List<ExamMV> GetByInstructor(int instructor_id);
 
 
     }

@@ -18,7 +18,8 @@ namespace Examination.PL.Areas.Instructor.Controllers
         private readonly ICourseService _courseService;
         private readonly IInstructorCourseService _instructorCourseService;
         private readonly IGeneratedExamService _generatedExamService;
-        public GeneratedExamController(IStudentService studentService, IDepartmentService departmentService, IBranchService branchService, ICourseService courseService, IInstructorCourseService instructorCourseService,IGeneratedExamService generatedExamService)
+        private readonly IExamService _examService;
+        public GeneratedExamController(IStudentService studentService, IDepartmentService departmentService, IBranchService branchService, ICourseService courseService, IInstructorCourseService instructorCourseService,IGeneratedExamService generatedExamService,IExamService examService)
         {
             _studentService = studentService;
             _departmentService = departmentService;
@@ -26,17 +27,26 @@ namespace Examination.PL.Areas.Instructor.Controllers
             _courseService = courseService;
             _instructorCourseService = instructorCourseService;
             _generatedExamService = generatedExamService;
+            _examService = examService;
 
         }
         public IActionResult Index()
         {
+            var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
+            ViewBag.Departments = _departmentService.GetByStatus((int)Status.Active);
+            ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
+            ViewBag.Status = Enum.GetValues(typeof(CourseStatus)).Cast<CourseStatus>().Select(e => new { Id = (int)e, Name = e.ToString() }).ToList();
+            ViewBag.courses = _courseService.GetCourseByInstructor(Loggedinuser);
 
             return View();
         }
+        [HttpGet]
         public IActionResult GenerateExam()
         {
-            
+            var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ViewBag.Branches = _branchService.GetByStatus((int)Status.Active);
+            ViewBag.Exams=_examService.GetByInstructor(Loggedinuser);
+            
           
             return View();
         }
