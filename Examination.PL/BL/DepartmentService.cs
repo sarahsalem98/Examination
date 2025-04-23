@@ -215,11 +215,7 @@ namespace Examination.PL.BL
                         department.CreatedAt = departmentExist.CreatedAt;
                         department.CreatedBy = departmentExist.CreatedBy;
                         department.Status = departmentExist.Status;
-
-                        
                         _mapper.Map(department, departmentExist);
-
-                     
                         departmentExist.UpdatedAt = DateTime.Now;
                         departmentExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
                         departmentExist.Name = department.Name;
@@ -313,6 +309,36 @@ namespace Examination.PL.BL
             }
         }
 
+        public int CanDeativateOrDelete(int id)
+        {
+            try
+            {
+
+               var unFinishedCourse=_unitOfWork.StudentCourseRepo.FirstOrDefault(s=>s.Student.DepartmentBranch.DepartmentId==id&& s.FinalGradePercent==null);
+               return unFinishedCourse != null ? -1 : 1;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in CanDeativateAndDelete - DepartmentService");
+                return 0;
+            }
+
+        }
+
+        public int CanRemoveDepartmentFromBranch(int departmentId, int branchId)
+        {
+            try
+            {
+                var unFinishedCourse = _unitOfWork.StudentCourseRepo.FirstOrDefault(s => s.Student.DepartmentBranch.DepartmentId == departmentId && s.Student.DepartmentBranch.BranchId == branchId && s.FinalGradePercent == null);
+                return unFinishedCourse != null ? -1 : 1;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in CanRemoveDepartmentFromBranch - DepartmentService");
+                return 0;
+            }
+        }
 
 
     }

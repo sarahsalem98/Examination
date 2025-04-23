@@ -10,6 +10,7 @@ public partial class DepartmentBranch
     public int BranchId { get; set; }
 
     public int DepartmentId { get; set; }
+    public int? Status { get; set; }    
 
     public virtual Branch Branch { get; set; } = null!;
 

@@ -197,28 +197,35 @@ namespace Examination.PL.BL
                 courseExist.Description = course.Description;
                 courseExist.Hours = course.Hours;
 
-                var courseDepts = courseExist.CourseDepartments.ToList();
-                var CourseDeptIds = courseDepts.Select(S => S.DepartmentId).ToList();
+                var courseDeptsExists = courseExist.CourseDepartments.ToList();
+                var CourseDeptIdsExist = courseDeptsExists.Select(S => S.DepartmentId).ToList();
+                var NewDeptIds = course.DepartmentsIds;
 
-                if (CourseDeptIds != course.DepartmentsIds)
+                var DeptIdsCoursesNeededToAdd = new List<int>();
+
+                foreach(var id in NewDeptIds)
                 {
-                    CourseDeptIds = course.DepartmentsIds;
-                    _unitOfWork.CourseDepartmentRepo.RemoveRange(courseDepts);
-                    foreach (var dep in CourseDeptIds)
+                    if (!CourseDeptIdsExist.Contains(id))
+                    {
+                        DeptIdsCoursesNeededToAdd.Add(id);
+
+                    }
+                }
+
+                if (CourseDeptIdsExist != NewDeptIds)
+                {
+                    _unitOfWork.CourseDepartmentRepo.RemoveRange(courseDeptsExists);
+                    foreach (var dep in NewDeptIds)
                     {
                         var courseDept = new CourseDepartment() { CourseId = courseExist.Id, DepartmentId = dep };
                         _unitOfWork.CourseDepartmentRepo.Insert(courseDept);
                     }
-                    ;
+                    
                 }
-
+                
+                this.AddCourseToStudentsByDepartments(courseExist.Id, DeptIdsCoursesNeededToAdd);
                 courseExist.UpdatedAt = DateTime.Now;
                 courseExist.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
-
-
-
-                courseExist.UpdatedAt = DateTime.Now;
-
                 _unitOfWork.CourseRepo.Update(courseExist);
                 result = _unitOfWork.Save();
                 return result;
@@ -265,6 +272,40 @@ namespace Examination.PL.BL
             catch (Exception ex)
             {
                 _logger.LogError(ex, "error occuired while changing Course status ");
+                return 0;
+            }
+        }
+
+        public  int AddCourseToStudentsByDepartments(int courseId, List<int> departmentIds)
+        {
+            try
+            {
+
+                if (departmentIds.Count() != 0)
+                {
+                    foreach (var id in departmentIds)
+                    {
+                        var studentsNeededToAddCourseTo = _unitOfWork.StudentRepo.GetAll(s => s.DepartmentBranch.Department.Id == id && s.EnrollmentDate.Value.Year == DateTime.Now.Year);
+                        foreach (var student in studentsNeededToAddCourseTo)
+                        {
+                            var studentCourse = new StudentCourse()
+                            {
+                                StudentId = student.Id,
+                                CourseId = courseId,
+
+                            };
+
+                            _unitOfWork.StudentCourseRepo.Insert(studentCourse);
+                        }
+
+                    }
+                }
+              
+                return _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occurred while adding Course to Students ");
                 return 0;
             }
         }
