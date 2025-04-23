@@ -1,4 +1,5 @@
 ﻿using Examination.DAL.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Examination.PL.ModelViews
 {
@@ -10,7 +11,9 @@ namespace Examination.PL.ModelViews
 
         public string ExamName { get; set; } = null!;
 
+
         public DateOnly TakenDate { get; set; }
+
 
         public TimeOnly TakenTime { get; set; }
 
@@ -22,12 +25,20 @@ namespace Examination.PL.ModelViews
 
         public int ExamId { get; set; }
 
-        public  InstructorMV CreatedByNavigation { get; set; } = null!;
+        public InstructorMV CreatedByNavigation { get; set; } = null!;
 
         public DepartmentBranchMV DepartmentBranch { get; set; } = null!;
 
         public ExamMV Exam { get; set; } = null!;
 
-     
+
+    }
+    public class GeneratedExamSearchMV
+    {
+        public string? Name { get; set; }
+        public int? CourseId { get; set; }
+        public int? BranchId { get;set; }
+        public int? DepartmentId { get; set; }
+        public string ?ExamType { get; set; }
     }
 }

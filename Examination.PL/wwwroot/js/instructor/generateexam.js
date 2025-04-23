@@ -8,7 +8,7 @@
         $.ajax({
             type: "POST",
             url: "/Instructor/GeneratedExam/List",
-            data: { GeneratedExamSearch: InstructorGeneratedExam.currentSearchData, PageSize: InstructorGeneratedExam.pageSize, Page: Page },
+            data: { search: InstructorGeneratedExam.currentSearchData, PageSize: InstructorGeneratedExam.pageSize, Page: Page },
 
             success: function (response) {
                 $("#loader").removeClass("show");
@@ -52,7 +52,7 @@
             Name: $("#Name").val(),
             BranchId: $("#BranchId").val(),
             DepartmentId: $("#DepartmentId").val(),
-            Status: $("#Status").val(),
+            ExamType: $("#ExamType").val(),
             CourseId: $("#CourseId").val()
         }
     },
@@ -67,7 +67,7 @@
         $("#Name").val("");
         $("#DepartmentId").val("");
         $("#BranchId").val("");
-        $("#Status").val("");
+        $("#ExamType").val("");
         $("#CourseId").val("");
         InstructorGeneratedExam.currentSearchData = {};
         InstructorGeneratedExam.Fetch(1);
@@ -101,6 +101,37 @@
         });
 
     }, 
+    GetExamsByBranchInstructorDepartment: function () {
+        var branchId = $('#branchId').val();
+        var departmentId = $("#departmentDropdown").val()
+        console.log(branchId);
+        console.log(departmentId)
+
+        $.ajax({
+            type: "GET",
+            url: "/Instructor/GeneratedExam/GetExamsByInstructorDepartmentBranch",
+            data: { department_id: departmentId, branch_id: branchId },
+            success: function (response) {
+                console.log(response);
+                var examsDropdown = $("#examsmentDropdown");
+                examsDropdown.empty();
+
+                examsDropdown.append('<option selected >Select Exam</option>');
+
+                $.each(response.data, function (index, exam) {
+
+                    examsDropdown.append(`<option value="${exam.id}">${exam.name}</option>`);
+                });
+
+
+
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching exam data:", error);
+            }
+        });
+
+    },
     ShowAddUpdateModal: function () {
        
         $("#loader").addClass("show");
@@ -115,6 +146,51 @@
             },
             error: function (xhr, status, error) {
                 console.error("Error:", error);
+            }
+        });
+    },
+    GenerateExam: function (e) {
+       
+        e.preventDefault();
+        var examId = $('#examsmentDropdown').val();
+        var departmentId = $('#departmentDropdown').val();
+        var branchId = $('#branchId').val();
+        var numsTS = $('input[name="NumsTS"]').val();
+        var numsMCQ = $('input[name="NumsMCQ"]').val();
+        var takenDate = $('input[name="TakenDate"]').val();
+        var takenTime = $('input[name="takenTime"]').val();
+
+        if (!examId || !departmentId || !branchId || !numsTS || !numsMCQ || !takenDate || !takenTime) {
+            toastr.error("Please fill in all required fields.");
+            return;
+        }
+
+        var formData = {
+            ExamId: examId,
+            DepartmentId: departmentId,
+            BranchId: branchId,
+            NumsTS: numsTS,
+            NumsMCQ: numsMCQ,
+            TakenDate: takenDate,
+            TakenTime: takenTime
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Instructor/GeneratedExam/GenerateExam",
+            data: formData, 
+            success: function (response) {
+               
+                if (response.success) {
+                    InstructorGeneratedExam.Fetch(InstructorGeneratedExam.currentPage);
+                   
+                    $('#addUpdateModal').modal('hide');
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error generateexam:", error);
             }
         });
     },

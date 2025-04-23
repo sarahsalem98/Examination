@@ -20,11 +20,8 @@ namespace Examination.DAL.Repos
         }
         public int GenerateExam(int ExamId, int DepartmentId, int BranchId, int NumsTS, int NumsMCQ,int CreatedBy, DateOnly TakenDate, TimeOnly takenTime)
         {
-            var GeneratedExamId = new SqlParameter("@GeneratedExamId", SqlDbType.Int)
-            {
-                Direction = ParameterDirection.Output
-            };
-            _db.Database.ExecuteSqlRaw("[Exam].[sp_Generate_Exam] @ExamId, @DepartmentId, @BranchId, @NumsTS, @NumsMCQ, @CreatedBy, @TakenDate, @TakenTime, @GeneratedExamId OUT",
+            
+          var res=  _db.Database.ExecuteSqlRaw("[Exam].[sp_Generate_Exam] @ExamId, @DepartmentId, @BranchId, @NumsTS, @NumsMCQ, @CreatedBy, @TakenDate, @TakenTime",
              new SqlParameter("@ExamId", ExamId),
             new SqlParameter("@DepartmentId", DepartmentId),
             new SqlParameter("@BranchId", BranchId),
@@ -32,9 +29,13 @@ namespace Examination.DAL.Repos
             new SqlParameter("@NumsMCQ", NumsMCQ),
             new SqlParameter("@CreatedBy", CreatedBy),
            new SqlParameter("@TakenDate", TakenDate.ToDateTime(TimeOnly.MinValue)),
-           new SqlParameter("@TakenTime", takenTime.ToTimeSpan()),
-        GeneratedExamId);
-            return (int)GeneratedExamId.Value;
+           new SqlParameter("@TakenTime", takenTime.ToTimeSpan()));
+            //if (res > 0)
+            //    return 1;
+            //else
+            //    return 0;
+            return 1;
+         
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Students";
+    ViewData["Title"] = "Generated Exams";
     Layout = "~/Areas/Instructor/Views/Shared/_Layout.cshtml";
 
 }
@@ -48,18 +48,17 @@
                         </div>
                         <div class="row g-2 mb-2">
                             <div class="col-md-6">
-                                <label for="TrackType" class="form-label">Status:</label>
-                                <select class="form-select" id="TrackType">
+                                <label for="ExamType" class="form-label">Exam Type:</label>
+                                <select class="form-select" id="ExamType">
                                     <option selected value="">Choose...</option>
-                                    @foreach (var item in ViewBag.Status)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
+                                    <option value="final">Final</option>
+                                        <option value="secondtry">Second Try</option>
+                                    
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="Status" class="form-label">Courses:</label>
-                                <select class="form-select" id="Status">
+                                <select class="form-select" id="CourseId">
                                     <option value="" selected>Choose...</option>
                                     @foreach (var item in ViewBag.courses)
                                     {
@@ -131,7 +130,7 @@
     <script src="~/js/instructor/generateexam.js"></script>
     <script>
         $(document).ready(function () {
-        //  AdminStudent.Fetch(1);
+         InstructorGeneratedExam.Fetch(1);
         });
     </script>
 }
