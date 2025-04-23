@@ -90,7 +90,7 @@ namespace Examination.PL.BL
                              e.Exam.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim()))
                         ),
                     "DepartmentBranch.InstructorCourses.Instructor,DepartmentBranch.Department,DepartmentBranch.Branch,Exam.Course"
-                ).ToList();
+                ).OrderByDescending(e=>e.CreatedAt).ToList();
 
                 exams = mapper.Map<List<GeneratedExamMV>>(data);
                 int TotalCounts = exams.Count();

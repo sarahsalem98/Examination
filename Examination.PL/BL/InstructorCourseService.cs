@@ -63,7 +63,7 @@ namespace Examination.PL.BL
                     //means failed students doeasn't have corrective exam (tested)
                     return -5;
                 }
-               
+
                 else
                 {
                     foreach (var student in DepartmentBranchCourse.DepartmentBranch.Students)
@@ -118,7 +118,7 @@ namespace Examination.PL.BL
 
 
          , "Course,Instructor,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch").Where(ic=>ic.DepartmentBranch.Department.Status==(int)Status.Active&&ic.Course.Status== (int)Status.Active
-        &&ic.DepartmentBranch.Branch.Status== (int)Status.Active).ToList();
+        &&ic.DepartmentBranch.Branch.Status== (int)Status.Active).OrderByDescending(ic=>ic.Course.CreatedAt).ToList();
                 instructorcourseMV = mapper.Map<List<InstructorCourseMV>>(data);
                 int TotalCounts = instructorcourseMV.Count();
                 if (TotalCounts > 0)
