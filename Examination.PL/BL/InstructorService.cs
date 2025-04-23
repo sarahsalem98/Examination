@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Internal.Mappers;
 using Examination.DAL.Entities;
+using Examination.DAL.Repos;
 using Examination.DAL.Repos.IRepos;
 using Examination.PL.General;
 using Examination.PL.IBL;
@@ -223,6 +224,57 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
+
+
+        public InstructorMV GetProfile(int userId)
+        {
+            try
+            {
+                var instructor = unitOfWork.InstructorRepo.FirstOrDefault(
+                    i => i.UserId == userId,
+                    "User,InstructorCourses.Course,InstructorCourses.DepartmentBranch.Department,InstructorCourses.DepartmentBranch.Branch"
+                );
+
+                if (instructor == null) return null;
+
+                var instructorMV = mapper.Map<InstructorMV>(instructor);
+                return instructorMV;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error retrieving instructor profile");
+                return null;
+            }
+        }
+
+
+        public int UpdatePassword(InstructorPasswordUpdateMV model)
+        {
+            try
+            {
+                var user = unitOfWork.UserRepo.FirstOrDefault(u => u.Id == model.UserId);
+                if (user == null) return 0;
+
+                // Validate current password
+                if (!PasswordHelper.VerifyPassword(model.CurrentPassword, user.Password))
+                    return -1;
+
+                user.Password = PasswordHelper.HashPassword(model.NewPassword);
+                user.UpdatedAt = DateTime.Now;
+                user.UpdatedBy = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("UserId").Value);
+
+                unitOfWork.UserRepo.Update(user);
+                return unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error updating password.");
+                return 0;
+            }
+        }
+
+
+
 
     }
 }

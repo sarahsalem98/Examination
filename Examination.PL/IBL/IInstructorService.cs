@@ -10,5 +10,8 @@ namespace Examination.PL.IBL
         public int Update(InstructorMV instructor);
         public InstructorMV getById(int Id);
         public int ChangeStatus(int Id,int status);
+
+        InstructorMV GetProfile(int userId);
+        int UpdatePassword(InstructorPasswordUpdateMV model);
     }
 }
