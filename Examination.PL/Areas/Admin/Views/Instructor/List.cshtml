@@ -3,13 +3,13 @@
 
 @{
     Layout = null;
-
+    var i = (Model.CurrentPage - 1) * Model.PageSize + 1;
 }
 <input type="hidden" id="totalCount" value="@Model.TotalCount" />
 <table class="table data-table table-bordered table-hover mt-2">
     <thead>
         <tr>
-
+            <th>#</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
@@ -33,7 +33,7 @@
             @foreach (var item in Model.Items)
             {
                 <tr>
-
+                    <td>@i</td>
                     <td>@item.User?.FirstName  @item.User?.LastName</td>
                     <td>@item.User?.Email</td>
                     <td>@item.User?.Phone</td>
@@ -67,7 +67,7 @@
                         }
                     </td>
                 </tr>
-
+                i++;
             }
         }
 

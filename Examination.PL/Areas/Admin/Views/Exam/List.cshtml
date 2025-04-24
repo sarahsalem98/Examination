@@ -3,7 +3,7 @@
 
 @{
     Layout = null;
-    var i = 1;
+    var i = (Model.CurrentPage - 1) * Model.PageSize + 1;
 
 }
 <input type="hidden" id="totalCount" value="@Model.TotalCount" />

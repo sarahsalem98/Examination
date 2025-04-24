@@ -223,6 +223,20 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
+        public int GetInstructorIdbyUserID(int UserID)
+        {
+            try
+            {
+               
+               var insrtucotr_Id = unitOfWork.InstructorRepo.FirstOrDefault(i=>i.UserId==UserID).Id;
+                return insrtucotr_Id;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while getting user id.");
+                return 0;
+            }
+        }
 
     }
 }
