@@ -3,8 +3,10 @@ using Examination.DAL.Entities;
 using Examination.DAL.Repos.IRepos;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
+using Microsoft.AspNetCore.Server.IISIntegration;
 
 namespace Examination.PL.BL;
+
 
 public class TopicService : ITopicService
 {
@@ -102,6 +104,29 @@ public class TopicService : ITopicService
             _logger.LogError(e, "Error in fetch Topics ");
             return null;
         }
+    }
+
+    public bool SafeToDalete(int id)
+    {
+        var topic = _unitOfWork.TopicRepo.FirstOrDefault(i => i.Id == id, "CourseTopics");
+
+        // No Courses Found 
+        if (topic.CourseTopics == null || !topic.CourseTopics.Any()) return true;
+
+        // Check if this is the only topic in its course
+        foreach (var crsTopic in topic.CourseTopics)
+        {
+            var topicsInCourse = _unitOfWork.CourseTopicRepo.GetAll(s => s.CourseId == crsTopic.CourseId).Count();
+            if (topicsInCourse <= 1)
+            {
+                // Not safe to delete
+                return false;
+            }
+        }
+        _unitOfWork.CourseTopicRepo.RemoveRange(topic.CourseTopics);
+        _unitOfWork.TopicRepo.Remove(id);
+        _unitOfWork.Save();
+        return true;
     }
 
     public int Update(TopicMV topic)

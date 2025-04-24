@@ -11,5 +11,7 @@ public interface ITopicService
     public int Update(TopicMV topic);
     public TopicMV GetTopicByID(int id);
 
+    public bool SafeToDalete(int id);
+
 
 }

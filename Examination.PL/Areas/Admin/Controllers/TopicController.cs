@@ -116,5 +116,35 @@ public class TopicController : Controller
     }
 
 
+    [HttpPost]
+    public IActionResult DeleteTopic(int id)
+    {
+        ResponseMV response = new ResponseMV();
+        if (id > 0)
+        {
+            var SafeToDelete = _topicService.SafeToDalete(id);
+            if (SafeToDelete == true)
+            {
+
+                response.Success = true;
+                response.Message = "Topic Deleted successfully";
+                response.RedirectUrl = null;
+            }
+            else
+            {
+                response.Success = false;
+                response.Message = "Can't be Deleted";
+            }
+        }
+        else
+        {
+            response.Success = false;
+            response.Message = "Invalid Topic id";
+        }
+        return Json(response);
+
+
+    }
+
 
 }
