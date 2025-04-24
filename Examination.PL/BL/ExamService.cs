@@ -223,8 +223,41 @@ namespace Examination.PL.BL
                 return null;
             }
         }
+        public List<ExamMV> GetByInstructorDepartmentBranch(int instructor_id,int department_id,int branch_id)
+        {
+            try
+            {
 
+                var departmentBranchId = _unitOfWork.DepartmentBranchRepo.GetAll(d => d.DepartmentId == department_id && d.BranchId == branch_id).FirstOrDefault()?.Id;
+                if (departmentBranchId == null)
+                {
 
+                    throw new Exception("Department Branch not found");
 
-    }
+                }
+                List<ExamMV> exams = new List<ExamMV>();
+                List<Exam> data = _unitOfWork.ExamRepo.GetAll(e => e.Status == (int)Status.Active && e.Course.InstructorCourses.Any(ic => ic.Instructor.UserId == instructor_id&&ic.DepartmentBranchId==departmentBranchId),
+                    "Course,Course.InstructorCourses.Instructor").ToList();
+               
+                //exams = _mapper.Map<List<ExamMV>>(data);
+                exams = data.Select(e => new ExamMV
+                {
+                    Id = e.Id,
+                    Name = e.Name
+                }).ToList();
+
+                return exams;
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occurred while getting exams");
+                return null;
+            }
+        }
 }
+
+
+
+}
+

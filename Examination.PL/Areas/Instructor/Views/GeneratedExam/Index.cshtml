@@ -1,6 +1,6 @@
-﻿﻿@{
-    ViewData["Title"] = "Exams";
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+﻿@{
+    ViewData["Title"] = "Generated Exams";
+    Layout = "~/Areas/Instructor/Views/Shared/_Layout.cshtml";
 
 }
 
@@ -20,39 +20,47 @@
                             aria-expanded="false">
                         Advanced Search
                     </button>
-                    <div class="dropdown-menu p-4 flex-start">
+                    <div class="dropdown-menu p-4 flex-start" id="ttt">
                         <!-- Dropdown content -->
 
                         <div class="row g-2 mb-2">
-                            <div class="col-md-12">
-                                <label for="CourseId" class="form-label">Course</label>
-                                <select class="form-select rounded-0" id="CourseId">
+                            <div class="col-md-6">
+                                <label for="DepartmentId" class="form-label">Department</label>
+                                <select class="form-select rounded-0" id="DepartmentId">
                                     <option selected value="null"> Choose...</option>
-                                    @foreach (var department in ViewBag.Courses)
+                                    @foreach (var department in ViewBag.Departments)
                                     {
                                         <option value="@department.Id">@department.Name</option>
                                     }
 
                                 </select>
                             </div>
-
+                            <div class="col-md-6">
+                                <label for="BranchId" class="form-label">Branch</label>
+                                <select class="form-select rounded-0" id="BranchId">
+                                    <option selected>Choose...</option>
+                                    @foreach (var branch in ViewBag.Branches)
+                                    {
+                                        <option value="@branch.Id">@branch.Name</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
                         <div class="row g-2 mb-2">
                             <div class="col-md-6">
-                                <label for="Type" class="form-label">Type:</label>
-                                <select class="form-select" id="Type">
+                                <label for="ExamType" class="form-label">Exam Type:</label>
+                                <select class="form-select" id="ExamType">
                                     <option selected value="">Choose...</option>
-                                    <option value="@ExamTypes.Midterm">@ExamTypes.Midterm</option>
-                                    <option value="@ExamTypes.Final">@ExamTypes.Final</option>
-                                    <option value="@ExamTypes.SecondTry">@ExamTypes.SecondTry</option>
-                                    <option value="@ExamTypes.Quiz">@ExamTypes.Quiz</option>
+                                    <option value="final">Final</option>
+                                        <option value="secondtry">Second Try</option>
+                                    
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="Status" class="form-label">Status:</label>
-                                <select class="form-select" id="Status">
+                                <label for="Status" class="form-label">Courses:</label>
+                                <select class="form-select" id="CourseId">
                                     <option value="" selected>Choose...</option>
-                                    @foreach (var item in ViewBag.Statuses)
+                                    @foreach (var item in ViewBag.courses)
                                     {
 
                                         <option value="@item.Id">@item.Name</option>
@@ -62,12 +70,12 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="AdminExam.Reset();">
+                                <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="InstructorGeneratedExam.Reset();">
                                     <i class="bi bi-arrow-counterclockwise"></i> Reset
                                 </button>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="AdminExam.Search()">
+                                <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="InstructorGeneratedExam.Search()">
                                     <i class="bi bi-search"></i> Search
                                 </button>
                             </div>
@@ -78,22 +86,22 @@
                 <div class="d-flex ms-2">
                     <input class="form-control rounded-0" id="Name" type="search" placeholder="Search by name.."
                            aria-label="Search" />
-                    <button class="btn searchbtn" type="submit" onclick="AdminExam.Search();">
+                    <button class="btn searchbtn" type="submit" onclick="InstructorGeneratedExam.Search();">
                         <i class="bi bi-search"></i>
                     </button>
-                    <button class="btn searchbtn mx-2" type="submit" onclick="AdminExam.Reset();">
+                    <button class="btn searchbtn mx-2" type="submit" onclick="InstructorGeneratedExam.Reset();">
                         <i class="bi bi-x"></i>
                     </button>
                 </div>
             </div>
 
             <div>
-                <button class="btn btn-add rounded-0" onclick="AdminExam.ShowAddUpdateModal();"> + Create </button>
+                <button class="btn btn-add rounded-0" onclick="InstructorGeneratedExam.ShowAddUpdateModal();"> + Create </button>
             </div>
         </div>
 
 
-        <div class="table-responsive list mt-4" id="List"></div>
+        <div class="table-responsive list mt-4" id="generatedexamList"></div>
 
     </div>
 
@@ -107,7 +115,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addUpdateModal">Create New Exam</h5>
+                <h5 class="modal-title" id="addUpdateModal">Generate New Exam</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="addUpdateModalView"></div>
@@ -119,11 +127,10 @@
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
-    <script src="~/js/admin/Exam.js"></script>
+    <script src="~/js/instructor/generateexam.js"></script>
     <script>
         $(document).ready(function () {
-          AdminExam.Fetch(1);
-
+         InstructorGeneratedExam.Fetch(1);
         });
     </script>
 }

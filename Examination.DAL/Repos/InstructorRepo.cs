@@ -19,25 +19,39 @@ namespace Examination.DAL.Repos
         public int UpdateCourses(List<InstructorCourse> newInstructorCourses, int instructorId)
         {
             var res = 0;
-            var instructor = db.Instructors.Include(i => i.InstructorCourses).FirstOrDefault(i => i.Id == instructorId);
-            foreach (var item in newInstructorCourses)
+            var instructor = db.Instructors.Include(i => i.InstructorCourses).ThenInclude(i=>i.DepartmentBranch).FirstOrDefault(i => i.Id == instructorId);
+            if (instructor == null)
             {
-                var existing = db.InstructorCourses.Include(s=>s.Instructor).ThenInclude(s=>s.User)
-                                 .FirstOrDefault(ic =>
-                                     ic.InstructorId != instructorId &&
-                                     ic.Instructor.User.Status!=-1&&
-                                     ic.DepartmentBranch.BranchId == item.DepartmentBranch.BranchId &&
-                                     ic.DepartmentBranch.DepartmentId==item.DepartmentBranch.DepartmentId&&
-                                     ic.CourseId == item.CourseId);
+                return 0;
+            }
+            foreach (var newCourse in newInstructorCourses)
+            {
+                var existing = instructor.InstructorCourses
+                    .FirstOrDefault(ic =>ic.Id==newCourse.Id);
 
                 if (existing != null)
                 {
-                    return 0;
+                    existing.CourseId = newCourse.CourseId;
+                    existing.DepartmentBranch =newCourse.DepartmentBranch ;
+                    existing.TotalStudents = db.Departments.FirstOrDefault(d=>d.Id==newCourse.DepartmentBranch.DepartmentId).Capacity;
+                    existing.StartDate = newCourse.StartDate;
+                    existing.EndDate = newCourse.EndDate;
+
+                    
+                }
+                else
+                {
+                    newCourse.TotalStudents = db.Departments.FirstOrDefault(d => d.Id == newCourse.DepartmentBranch.DepartmentId).Capacity;
+                    instructor.InstructorCourses.Add(newCourse);
                 }
             }
-
-            db.InstructorCourses.RemoveRange(instructor.InstructorCourses);
-            db.InstructorCourses.AddRange(newInstructorCourses);
+            var coursesToRemove = instructor.InstructorCourses
+                .Where(ic => !newInstructorCourses.Any(nc =>
+                    nc.DepartmentBranch.BranchId == ic.DepartmentBranch.BranchId &&
+                    nc.DepartmentBranch.DepartmentId == ic.DepartmentBranch.DepartmentId &&
+                    nc.CourseId == ic.CourseId))
+                . ToList();
+            db.InstructorCourses.RemoveRange(coursesToRemove);
             res = db.SaveChanges();
             return res;
 
@@ -63,7 +77,10 @@ namespace Examination.DAL.Repos
                         {
                             CourseId = item.CourseId,
                             DepartmentBranchId = (int)departmentBranchId,
-                            InstructorId = item.InstructorId
+                            InstructorId = item.InstructorId,
+                            TotalStudents = db.Departments.FirstOrDefault(d=>d.Id==item.DepartmentBranch.DepartmentId).Capacity,
+                            StartDate = item.StartDate,
+                            EndDate = item.EndDate,
                         };
                         res.Add(instructorCourse);
 
