@@ -11,23 +11,12 @@ body {
 }
 
 
-.container {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-    width: 100%;
-    max-width: 950px;
-    margin: 50px auto;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
 
 /* Card Styles */
 .card {
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     overflow: hidden;
     padding: 20px;
     flex: 1;
@@ -41,7 +30,9 @@ body {
     background: #ffffff;
     padding-top: 30px;
 }
-
+.name {
+    color: var(--secondary-color);
+}
 .prof-img-container {
     width: 140px;
     height: 140px;
@@ -101,10 +92,10 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     padding: 20px;
     flex: 1 1 100%;
-    max-width: calc(300px + 800px + 20px); /* Matches both cards' width with gap */
     text-align: center;
-    border: 5px solid var(--primary-color);
+    width: 100%;
 }
+
 
 .grades-card-container {
     display: flex;
