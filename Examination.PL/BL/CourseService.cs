@@ -299,6 +299,7 @@ namespace Examination.PL.BL
         {
             try
             {
+                
                 var userIdString = _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value;
 
                 if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
@@ -315,22 +316,31 @@ namespace Examination.PL.BL
                     return new PaginatedData<CourseMV> { Items = new List<CourseMV>(), TotalCount = 0 };
                 }
 
-                var studentCourses = student.StudentCourses.Select(sc => sc.Course).ToList();
+                //var studentCourses = student.StudentCourses.Select(sc => sc.Course).ToList();
 
-                var courseMVs = _mapper.Map<List<CourseMV>>(studentCourses);
+                //var courseMVs = _mapper.Map<List<CourseMV>>(studentCourses);
+
+                var mappedCourses = student.StudentCourses.Select(sc => new
+                {
+                    Courses = _mapper.Map<CourseMV>(sc.Course),
+                    CourseId = sc.Course.Id,
+                    Grade = sc.FinalGradePercent
+                });
 
                 // Filter by name if provided
                 if (!string.IsNullOrEmpty(name))
                 {
-                    courseMVs = courseMVs.Where(c => c.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+                    mappedCourses = mappedCourses.Where(c => c.Courses.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
 
-                int totalCount = courseMVs.Count();
-                var paginatedCourses = courseMVs.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
+                int totalCount = mappedCourses.Count();
+                var paginatedCourses = mappedCourses.Skip((Page - 1) * PageSize).Take(PageSize).ToList();
 
+
+                _httpContextAccessor.HttpContext.Items["Grades"] =paginatedCourses.ToDictionary(p => p.CourseId, p => p.Grade);
                 return new PaginatedData<CourseMV>
-                {
-                    Items = paginatedCourses,
+                {                    
+                    Items = paginatedCourses.Select(p=>p.Courses).ToList(),
                     TotalCount = totalCount,
                     PageSize = PageSize,
                     CurrentPage = Page
