@@ -1,0 +1,64 @@
+﻿@model PaginatedData<GeneratedExamMV>
+
+
+@{
+    Layout = null;
+    var i = (Model.CurrentPage - 1) * Model.PageSize + 1;
+
+}
+
+
+<input type="hidden" id="totalCount" value="@Model.TotalCount" />
+<table class="table data-table table-bordered table-hover mt-2">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th scope="col">Exam Name</th>
+            <th scope="col">Course</th>
+            <th scope="col">Taken Date</th>
+            <th scope="col">Taken Time</th>
+            <th scope="col">Exam Type</th>
+            <th scope="col">Branch</th>
+            <th scope="col">Department</th>
+
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class=" alert-info text-center">No Generated Exams found</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+
+
+                <tr>
+                    <td>@i</td>
+                    <td>@item.Exam.Name</td>
+                    <td>@item.Exam.Course.Name</td>
+                    <td>@item.TakenDate</td>
+                    <td>@item.TakenTime</td>
+                    <td> @item.Exam.Type</td>
+                    <td>@item.DepartmentBranch.Branch.Name</td>
+                    <td>@item.DepartmentBranch.Department.Name</td>
+                    <td>
+                        <button onclick="" class="btn btn-Results rounded-0">Update</button>
+                    </td>
+
+                </tr>
+                i++;
+            }
+        }
+
+
+
+    </tbody>
+</table>
+
+
+

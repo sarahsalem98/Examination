@@ -62,6 +62,11 @@ namespace Examination.PL.BL
                 else
                 {
                     instructorMV=mapper.Map<InstructorMV>(instructor);
+                    foreach(var item in instructorMV.InstructorCourses)
+                    {
+                        //item.CanBeEdited = 1;
+                        item.CanBeEdited =(item.LastGeneratedExamType==null)? 1 : 0;    
+                    }
                     return instructorMV;
                 }
             }
@@ -133,6 +138,7 @@ namespace Examination.PL.BL
                 {
                     var NewInstructor=mapper.Map<Instructor>(instructor);
                     var instructorCourses = unitOfWork.InstructorRepo.GetInstructorCoursesWithDepartmentBranchId(mapper.Map<List<InstructorCourse>>(instructor.InstructorCourses));
+                    
                     if(instructorCourses.Count()==0 && instructor.InstructorCourses.Count() != 0)
                     {
                         return -2;
@@ -221,6 +227,20 @@ namespace Examination.PL.BL
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error occurred while Updating instructor courses data.");
+                return 0;
+            }
+        }
+        public int GetInstructorIdbyUserID(int UserID)
+        {
+            try
+            {
+               
+               var insrtucotr_Id = unitOfWork.InstructorRepo.FirstOrDefault(i=>i.UserId==UserID).Id;
+                return insrtucotr_Id;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while getting user id.");
                 return 0;
             }
         }

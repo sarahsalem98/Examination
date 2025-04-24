@@ -42,7 +42,7 @@ namespace Examination.PL.BL
                 (!String.IsNullOrEmpty(s.User.LastName) && s.User.LastName.ToLower().Trim().Contains(studentSearch.Name)))
 
                 ),
-            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).Where(s=>s.User.Status==(int)Status.Active).ToList();
+            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).OrderByDescending(s=>s.User.CreatedAt).Where(s=>s.User.Status==(int)Status.Active).ToList();
                 studentsMV =_mapper.Map<List< StudentMV>>(data);
                 int TotalCounts = studentsMV.Count();
                 if (TotalCounts > 0)

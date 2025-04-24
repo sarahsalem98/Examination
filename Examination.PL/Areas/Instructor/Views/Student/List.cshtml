@@ -3,17 +3,17 @@
 
 @{
     Layout = null;
-   
 
+    var i = (Model.CurrentPage - 1) * Model.PageSize + 1;
 }
 <input type="hidden" id="totalCount" value="@Model.TotalCount" />
 <table class="table data-table table-bordered table-hover mt-2">
     <thead>
         <tr>
-           
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col" class="sort-arrows"> tracktype </th>
-             <th scope="col">Branch</th>
+            <th scope="col">Branch</th>
             <th scope="col" class="sort-arrows"> Department </th>
             <th scope="col">Status</th>
             <th scope="col">Actions</th>
@@ -33,21 +33,22 @@
 
 
                 <tr>
-                   
+                    <td>@i</td>
                     <td>@(item.User.FirstName + " " + item.User.LastName)</td>
                     <td> @Enum.GetName(typeof(TrackType), item.TrackType)</td>
                     <td>@item.DepartmentBranch.Branch.Name</td>
                     <td>@item.DepartmentBranch.Department.Name</td>
-                    
+
                     <td class="@((item.User.Status==(int)Status.Active)?"text-success":"text-danger")">@Enum.GetName(typeof(Status), item?.User?.Status)</td>
                     <td>
                         <a href="/Instructor/Student/StudentDetails/@item.Id">
                             <button class="btn btn-Results">Details</button>
                         </a>
-   
+
                     </td>
                 </tr>
-                
+                i++;
+
 
             }
         }

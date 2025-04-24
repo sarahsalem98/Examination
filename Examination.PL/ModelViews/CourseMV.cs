@@ -49,32 +49,34 @@ public class InstructorCourseMV
 
     public int CourseId { get; set; }
 
-        public int? DepartmentBranchId { get; set; }
-        public int? TotalStudents { get; set; }
-        public int? IsCompleted { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public string? LastGeneratedExamType { get; set; }
+    public int? DepartmentBranchId { get; set; }
+    public int? TotalStudents { get; set; }
+    public int? IsCompleted { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    public string? LastGeneratedExamType { get; set; }
 
-        public int? FinalPassedStudentCount { get; set; }
-        public int? CorrectivePassedStudentCount { get; set; }
+    public int? FinalPassedStudentCount { get; set; }
+    public int? CorrectivePassedStudentCount { get; set; }
 
-        public CourseMV Course { get; set; } = null!;
+    public int?CanBeEdited { get; set; }    
+
+    public CourseMV Course { get; set; } = null!;
 
     public DepartmentBranchMV DepartmentBranch { get; set; } = null!;
 
-        public InstructorMV Instructor { get; set; } = null!;
-    }
-    public class CourseSearchMV
-    {
-        public string ? Name { get; set; }  
-        public int? CourseId { get; set; }
-        public int? DepartmentId { get; set; }
-        public int? BranchId { get; set; }
-        public int ?Status { get; set; }
+    public InstructorMV Instructor { get; set; } = null!;
+}
+public class CourseSearchMV
+{
+    public string? Name { get; set; }
+    public int? CourseId { get; set; }
+    public int? DepartmentId { get; set; }
+    public int? BranchId { get; set; }
+    public int? Status { get; set; }
     public int? TrackType { get; set; }
 
 }
-   
+
 
 

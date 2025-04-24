@@ -222,7 +222,25 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
-           
+        public List<BranchMV> GetBranchesByInstructor(int instructor_id)
+        {
+            try 
+            {
+              List<  BranchMV> branches = new List< BranchMV>();
+                var data = _unitOfWork.BranchRepo.GetAll(
+                    b => b.DepartmentBranches.Any(db => db.Status == (int)Status.Active && db.InstructorCourses.Any(ic => ic.Instructor.UserId == instructor_id))
+                    , "DepartmentBranches,DepartmentBranches.InstructorCourses.Instructor"
+
+                   ).Distinct().ToList();
+                branches=_mapper.Map<List<BranchMV>>(data);
+                return branches;
+            }
+           catch (Exception ex)
+            {
+                _logger.LogError( "An error occurred while loading branches.");
+                return null;
+            }
+        }
 
     }
 }
