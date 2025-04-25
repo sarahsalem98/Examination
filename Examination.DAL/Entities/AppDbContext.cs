@@ -56,7 +56,14 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<CourseDepartment> CourseDepartments { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<DepartmentBranch>()
+            .Property(d => d.Status)
+            .HasDefaultValue(1);
 
+        modelBuilder.Entity<DepartmentBranch>()
+                     .HasIndex(d => new { d.BranchId, d.DepartmentId })
+                     .IsUnique()
+                     .HasDatabaseName("UQ_DepartmentBranches_Branch_Department");
 
 
 
