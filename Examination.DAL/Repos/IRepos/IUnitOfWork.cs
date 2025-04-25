@@ -25,7 +25,7 @@ namespace Examination.DAL.Repos.IRepos
         public IInstructorCourseRepo InstructorCourseRepo { get; }
         public IGeneratedExamRepo GeneratedExamRepo { get; }
         public IStudentCourseRepo StudentCourseRepo { get; }
-
+        public IGeneratedExamQRepo GeneratedExamQRepo { get; }
         public ITopicRepo TopicRepo { get; }
         public ICourseTopicRepo CourseTopicRepo { get; }
         public int Save();

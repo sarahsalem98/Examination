@@ -37,12 +37,12 @@ namespace Examination.PL.BL
                 var generatedExamExsist = unitOfWork.GeneratedExamRepo.GetAll(e => e.ExamId == ExamId &&e.DepartmentBranchId==departmentBranchId);
                 if (instructorCourses.Any(ic => DateOnly.FromDateTime(ic.EndDate.Value) > TakenDate))
                 {
-                   
+
                     return -1;
                 }
                 else if (generatedExamExsist != null)
                 {
-                  
+
                     return -2;
                 }
 

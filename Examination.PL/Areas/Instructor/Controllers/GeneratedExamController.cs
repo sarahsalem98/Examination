@@ -46,25 +46,14 @@ namespace Examination.PL.Areas.Instructor.Controllers
 
         }
         [HttpGet]
-        public IActionResult GenerateExam(int id)
+        public IActionResult GenerateExam()
         {
             var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ViewBag.Branches = _branchService.GetBranchesByInstructor(Loggedinuser);
 
-            GeneratedExamMV exam=new GeneratedExamMV();
-            if (id > 0)
-            {
-                 exam = _generatedExamService.GetByID(id);
-                if (exam == null)
-                {
-                    return NotFound();
-                }
-            }
-          
-        
             
           
-            return View(exam);
+            return View();
         }
        [HttpPost]
         public IActionResult GenerateExam(int ExamId, int DepartmentId, int BranchId, int NumsTS, int NumsMCQ,  DateOnly TakenDate, TimeOnly takenTime)

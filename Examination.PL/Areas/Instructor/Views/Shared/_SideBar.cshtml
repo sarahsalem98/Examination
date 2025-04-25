@@ -23,16 +23,21 @@
 
     <ul class="nav flex-column mt-3">
         <!-- Calender -->
-        <li class="nav-item">
+        <li class="nav-item mt-2">
             <a  asp-controller="Student" asp-action="Index" asp-area="Instructor" class="sidebar-link nav-link text-white rounded-0 @IsActive("Instructor","Student","Index")">
-                <i class="bi bi-person"></i> <span class="ms-2">Students</span>
+                <i class="bi bi-people-fill"></i> <span class="ms-2">Students</span>
             </a>
+            </li>
+        <li class="nav-item mt-2">
             <a asp-controller="Course" asp-action="Index" asp-area="Instructor" class="sidebar-link nav-link text-white rounded-0 @IsActive("Instructor","Course","Index")">
-                <i class="bi bi-person"></i> <span class="ms-2">Courses</span>
+                <i class="bi bi-book-fill"></i> <span class="ms-2">Courses</span>
             </a>
+        </li>
+        <li class="nav-item mt-2">
             <a asp-controller="GeneratedExam" asp-action="Index" asp-area="Instructor" class="sidebar-link nav-link text-white rounded-0 @IsActive("Instructor","GeneratedExam","Index")">
-                <i class="bi bi-person"></i> <span class="ms-2">Generated Exams</span>
+                <i class="bi bi-file-earmark-text-fill"></i> <span class="ms-2">Generated Exams</span>
             </a>
+
         </li>
      
    

@@ -72,5 +72,22 @@ Reset: function () {
     InstructorStudent.currentSearchData = {};
     InstructorStudent.Fetch(1);
 },
-   
+    ShowExamModal: function (Student_id, GeneretaedExam_id) {
+
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Instructor/Student/ShowExam",
+            data: { Student_id: Student_id, GeneretaedExam_id: GeneretaedExam_id },
+            success: function (response) {
+                console.log(Student_id, GeneretaedExam_id);
+                $("#loader").removeClass("show");
+                $("#QuestionsModalView").html(response);
+                $('#QuestionsModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    }
 }
