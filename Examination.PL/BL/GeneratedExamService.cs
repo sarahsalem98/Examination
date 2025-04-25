@@ -115,5 +115,59 @@ namespace Examination.PL.BL
                 return null;
             }
         }
+        public int UpdateGeneratedExam(int GeneratedExamID, DateOnly TakenDate, TimeOnly takenTime)
+        {
+            try
+            {
+                var exsistingexam=unitOfWork.GeneratedExamRepo.FirstOrDefault(e=>e.Id == GeneratedExamID);
+                if (exsistingexam == null)
+                {
+                    return 0;
+                }else
+                {
+                    exsistingexam.TakenDate = TakenDate;
+                    exsistingexam.TakenTime = takenTime;
+                    unitOfWork.GeneratedExamRepo.Update(exsistingexam);
+                   var res= unitOfWork.Save();
+                    if(res>0)
+                    {
+                        return 1;
+                    }else
+                    {
+                        return 0;
+                    }
+                }
+            }catch
+            {
+                logger.LogError( "error occuired while Updating exams");
+                return 0;
+            }
+        }
+        public GeneratedExamMV GetByID(int GeneratedExamId)
+        {
+            try
+            {
+                var exam = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.Id == GeneratedExamId, "DepartmentBranch");
+             
+                
+
+                if (exam != null)
+                {
+                    var GeneratedExam = mapper.Map<GeneratedExamMV>(exam);
+                    return GeneratedExam;
+                }
+                else
+                {
+                    return null;
+
+                }
+            }
+            catch
+            {
+                logger.LogError("error occuired while getting exam");
+                return null;
+            }
+        }
+
     }
 }

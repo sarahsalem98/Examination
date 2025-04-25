@@ -1,4 +1,4 @@
-﻿
+﻿@model GeneratedExamMV
 @{
     Layout = null;
 }
@@ -10,7 +10,7 @@
         <div class="row g-2 mb-3">
             
             <div class="col-md-4">
-                <select id="branchId" class="form-select" name="BranchId" onchange="InstructorGeneratedExam.GetDepartmentsByBranchId()">
+                <select id="branchId" class="form-select" asp-for="DepartmentBranch.BranchId" name="BranchId" onchange="InstructorGeneratedExam.GetDepartmentsByBranchId()">
                     <option value="">Choose Branch...</option>
                     @foreach (var branch in ViewBag.Branches)
                     {
@@ -20,12 +20,12 @@
             </div>
             
             <div class="col-md-4">
-                <select class="form-select" name="DepartmentId" id="departmentDropdown" onchange="InstructorGeneratedExam.GetExamsByBranchInstructorDepartment()">
+                <select class="form-select" name="DepartmentId" asp-for="DepartmentBranch.DepartmentId" id="departmentDropdown" onchange="InstructorGeneratedExam.GetExamsByBranchInstructorDepartment()">
                     <option value="">Choose Department...</option>
                 </select>
             </div>
             <div class="col-md-4">
-                <select class="form-select" name="ExamId" id="examsmentDropdown">
+                <select class="form-select" asp-for="ExamId" name="ExamId"  id="examsmentDropdown">
                     <option value="">Choose Exam...</option>
                   
                 </select>
@@ -45,10 +45,10 @@
       
         <div class="row g-2 mb-3">
             <div class="col-md-6">
-                <input type="time" class="form-control" name="takenTime" />
+                <input type="time" asp-for="TakenTime" class="form-control" name="takenTime" />
             </div>
             <div class="col-md-6">
-                <input type="date" class="form-control" name="TakenDate" />
+                <input type="date" asp-for="TakenDate" class="form-control" name="TakenDate" />
             </div>
         </div>
 

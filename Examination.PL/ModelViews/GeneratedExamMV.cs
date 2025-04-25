@@ -33,6 +33,43 @@ namespace Examination.PL.ModelViews
 
 
     }
+    public class GeneratedExamQMV
+    {
+        public int Id { get; set; }
+
+        public int GeneratedExamId { get; set; }
+
+        public int QsOrder { get; set; }
+
+        public int ExamQsId { get; set; }
+
+        public virtual ExamQ ExamQs { get; set; } = null!;
+
+        public  List<ExamStudentAnswerMV> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswerMV>();
+
+        public GeneratedExamMV GeneratedExam { get; set; } = null!;
+    }
+    public class ExamStudentAnswerMV
+        {
+        public int Id { get; set; }
+
+        public int GeneratedExamId { get; set; }
+
+        public int GeneratedExamQsId { get; set; }
+
+        public int StudentId { get; set; }
+
+        public string StdAnswer { get; set; } = null!;
+
+        public DateTime? SubmittedAt { get; set; }
+
+        public  GeneratedExamMV GeneratedExam { get; set; } = null!;
+
+        public  GeneratedExamQMV GeneratedExamQs { get; set; } = null!;
+
+        public  StudentMV Student { get; set; } = null!;
+
+    }
     public class GeneratedExamSearchMV
     {
         public string? Name { get; set; }

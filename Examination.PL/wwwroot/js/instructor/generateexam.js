@@ -132,12 +132,13 @@
         });
 
     },
-    ShowAddUpdateModal: function () {
+    ShowAddUpdateModal: function (id) {
        
         $("#loader").addClass("show");
         $.ajax({
             type: "GET",
             url: "/Instructor/GeneratedExam/GenerateExam",
+            data: {id:id},
             success: function (response) {
 
                 $("#loader").removeClass("show");
