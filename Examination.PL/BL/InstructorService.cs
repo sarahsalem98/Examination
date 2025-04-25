@@ -61,6 +61,11 @@ namespace Examination.PL.BL
                 else
                 {
                     instructorMV=mapper.Map<InstructorMV>(instructor);
+                    foreach(var item in instructorMV.InstructorCourses)
+                    {
+                        //item.CanBeEdited = 1;
+                        item.CanBeEdited =(item.LastGeneratedExamType==null)? 1 : 0;    
+                    }
                     return instructorMV;
                 }
             }
@@ -132,6 +137,7 @@ namespace Examination.PL.BL
                 {
                     var NewInstructor=mapper.Map<Instructor>(instructor);
                     var instructorCourses = unitOfWork.InstructorRepo.GetInstructorCoursesWithDepartmentBranchId(mapper.Map<List<InstructorCourse>>(instructor.InstructorCourses));
+                    
                     if(instructorCourses.Count()==0 && instructor.InstructorCourses.Count() != 0)
                     {
                         return -2;
