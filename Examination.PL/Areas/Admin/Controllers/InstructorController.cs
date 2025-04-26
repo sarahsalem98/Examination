@@ -56,7 +56,7 @@ namespace Examination.PL.Areas.Admin.Controllers
             return View(instructor);
         }
         [HttpPost]
-        public IActionResult AddUpdate([FromBody] InstructorMV instructor)
+        public IActionResult AddUpdate(InstructorMV instructor)
         {
             ResponseMV response = new ResponseMV();
 

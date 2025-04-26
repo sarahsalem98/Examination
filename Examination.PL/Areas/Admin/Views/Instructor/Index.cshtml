@@ -37,7 +37,7 @@
                             <div class="col-md-6">
                                 <label for="BranchId" class="form-label">Branch</label>
                                 <select class="form-select rounded-0" id="BranchId">
-                                    <option selected value="null" >Choose...</option>
+                                    <option selected value="null">Choose...</option>
                                     @foreach (var branch in ViewBag.Branches)
                                     {
                                         <option value="@branch.Id">@branch.Name</option>
@@ -46,16 +46,16 @@
                             </div>
                         </div>
                         <div>
-                       
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
+
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
                                     <label for="IsExternal" class="form-label">Instructor Type:</label>
                                     <select class="form-select" id="IsExternal">
-                                    <option selected value="">Choose...</option>
-                                    <option value="false">Internal</option>
-                                    <option value="true">External</option>
-                                </select>
-                            </div>
+                                        <option selected value="">Choose...</option>
+                                        <option value="false">Internal</option>
+                                        <option value="true">External</option>
+                                    </select>
+                                </div>
                                 <div class="col-md-6">
                                     <label for="Status" class="form-label">Status:</label>
                                     <select class="form-select" id="Status">
@@ -66,7 +66,7 @@
                                         }
                                     </select>
                                 </div>
-                        </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -131,8 +131,9 @@
     <script src="~/js/admin/instructor.js"></script>
     <script>
         $(document).ready(function () {
-          
-          AdminInstructor.Fetch(1)
+
+          AdminInstructor.Fetch(1);
+       
         });
     </script>
 }

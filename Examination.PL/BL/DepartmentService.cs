@@ -49,7 +49,8 @@ namespace Examination.PL.BL
         {
             try
             {
-                var departments = _unitOfWork.DepartmentRepo.GetAll(d => d.DepartmentBranches.Select(b => b.BranchId).Contains(branchId));
+                var departments = _unitOfWork.DepartmentRepo.GetAll(d => d.DepartmentBranches.Where(d=>d.Status==(int)Status.Active).Select(b => b.BranchId).Contains(branchId), "DepartmentBranches");
+                departments = departments.Where(d => d.Status == (int)Status.Active).ToList();
                 if (departments == null || !departments.Any())
                 {
                     return new List<DepartmentMV>();
@@ -65,8 +66,30 @@ namespace Examination.PL.BL
 
             }       
         }
+        public List<DepartmentMV> GetByBranchAndInstructor(int branchId,int instructorId)
+        {
+            try
+            {
+                var departments = _unitOfWork.DepartmentRepo.GetAll(d => d.DepartmentBranches.Any(db=>db.BranchId==branchId&&db.InstructorCourses.Any(ic=>ic.Instructor.UserId==instructorId))
+                , "DepartmentBranches,DepartmentBranches.InstructorCourses.Instructor");
+                if (departments == null || !departments.Any())
+                {
+                    return new List<DepartmentMV>();
+                }
+                var departmentMVs = _mapper.Map<List<DepartmentMV>>(departments);
+                return departmentMVs;
 
- 
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetByBranchAndInstrictor DepartmentService");
+                return null;
+
+            }
+        }
+
+
         public DepartmentMV GetById(int id)
         {
             try
