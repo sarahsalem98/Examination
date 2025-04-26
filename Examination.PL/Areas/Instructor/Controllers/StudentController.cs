@@ -16,13 +16,15 @@ namespace Examination.PL.Areas.Instructor.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IBranchService _branchService;
         private readonly ICourseService _courseService;
+        private readonly IGeneratedExamQService _generatedExamQService;
        
-        public StudentController(IStudentService studentService, IDepartmentService departmentService, IBranchService branchService, ICourseService courseService)
+        public StudentController(IStudentService studentService, IDepartmentService departmentService, IBranchService branchService, ICourseService courseService, IGeneratedExamQService generatedExamQService)
         {
             _studentService = studentService;
             _departmentService = departmentService;
             _branchService = branchService;
             _courseService = courseService;
+            _generatedExamQService = generatedExamQService;
         }
         public IActionResult Index()
         {
@@ -58,6 +60,14 @@ namespace Examination.PL.Areas.Instructor.Controllers
                 return View(student);
             }
             
+        }
+        public IActionResult ShowExam(int Student_id, int GeneretaedExam_id)
+        {
+            ViewBag.Studentid = Student_id;
+            var questions = new List< GeneratedExamQMV>();
+            questions=_generatedExamQService.GetGeneratedExam( GeneretaedExam_id);
+
+            return View(questions);
         }
         
     }

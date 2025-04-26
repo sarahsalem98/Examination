@@ -42,7 +42,7 @@ namespace Examination.PL.BL
                 (!String.IsNullOrEmpty(s.User.LastName) && s.User.LastName.ToLower().Trim().Contains(studentSearch.Name)))
 
                 ),
-            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).OrderByDescending(s=>s.User.CreatedAt).Where(s=>s.User.Status==(int)Status.Active).ToList();
+            "User,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).OrderByDescending(s=>s.User.CreatedAt).Where(s=>s.User.Status==(int)Status.Active).ToList();
                 studentsMV =_mapper.Map<List< StudentMV>>(data);
                 int TotalCounts = studentsMV.Count();
                 if (TotalCounts > 0)
@@ -194,13 +194,13 @@ namespace Examination.PL.BL
         {
             try
             {
-
-
-                StudentMV studentMV = new StudentMV();
+          
+              
+               StudentMV studentMV = new StudentMV();
                 var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == Student_Id &&
-                 s.DepartmentBranch.InstructorCourses.Any(ic => ic.Instructor.UserId == Instructor_ID),
-                "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course,DepartmentBranch.Department,DepartmentBranch.Branch");
-
+                 s.DepartmentBranch.InstructorCourses.Any(ic=>ic.Instructor.UserId== Instructor_ID),
+                "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course.Exams.GeneratedExams,DepartmentBranch.Department,DepartmentBranch.Branch");
+          
                 if (student == null)
                 {
                     return studentMV;

@@ -28,6 +28,7 @@ public class CourseMV
     public List<InstructorCourseMV>? InstructorCourses { get; set; } = null!;
     public List<CourseDepartmentMV>? CourseDepartments { get; set; } = null!;
     public virtual ICollection<CourseTopic>? CourseTopics { get; set; } = null!;
+    public List <ExamMV> Exams { get; set; } = new List<ExamMV>();
 
 
 }

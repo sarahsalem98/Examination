@@ -23,6 +23,9 @@ namespace Examination.PL.ModelViews
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public CourseMV? Course { get; set; } = null!;
+        public  List<ExamQuestionMV> ExamQs { get; set; } = new List<ExamQuestionMV>();
+
+        public List<GeneratedExamMV> GeneratedExams { get; set; } = new List<GeneratedExamMV>();
 
     }
 

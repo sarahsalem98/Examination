@@ -13,7 +13,7 @@ namespace Examination.PL.ModelViews
         [Required(ErrorMessage = "Instructor type (External/Internal) is required.")]
         public bool IsExternal { get; set; }
 
-      
+        public List<GeneratedExamMV> GeneratedExams { get; set; } = new List<GeneratedExamMV>();
         public int? UserId { get; set; }
 
         public List<InstructorCourseMV> InstructorCourses { get; set; } = new List<InstructorCourseMV>();

@@ -24,9 +24,9 @@ namespace Examination.PL.ModelViews
         [Required]
         public int BranchId { get; set; }
         public DepartmentBranchMV? DepartmentBranch { get; set; }
-        public List<StudentCourseMV>? StudentCourses { get; set; } 
+        public List<StudentCourseMV>? StudentCourses { get; set; }
 
-
+        public List<ExamStudentAnswerMV> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswerMV>();
     }
 
     public class StudentSearchMV { 
@@ -52,6 +52,27 @@ namespace Examination.PL.ModelViews
         public CourseMV?  Course { get; set; }
 
         public StudentMV? Student { get; set; }
+    }
+    public class ExamStudentAnswerMV
+    {
+        public int Id { get; set; }
+
+        public int GeneratedExamId { get; set; }
+
+        public int GeneratedExamQsId { get; set; }
+
+        public int StudentId { get; set; }
+
+        public string StdAnswer { get; set; } = null!;
+
+        public DateTime? SubmittedAt { get; set; }
+
+        public GeneratedExamMV GeneratedExam { get; set; } = null!;
+
+        public GeneratedExamQMV GeneratedExamQs { get; set; } = null!;
+
+        public StudentMV Student { get; set; } = null!;
+
     }
 
     public class StudentUpdateProfileMV
