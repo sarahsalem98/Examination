@@ -295,12 +295,10 @@ namespace Examination.PL.BL
             }
         }
 
-        public PaginatedData<CourseMV> GetCoursesByStudent( string name, int PageSize = 8,int Page = 1)
+        public PaginatedData<CourseMV> GetCoursesByStudent( string name, string userIdString, int PageSize = 8,int Page = 1)
         {
             try
             {
-                var userIdString = _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value;
-
                 if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
                 {
                     _logger.LogWarning("UserId is not found or invalid in the HttpContext.");

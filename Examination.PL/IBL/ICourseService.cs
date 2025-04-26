@@ -21,6 +21,6 @@ public interface ICourseService
     public int AddCourseToStudentsByDepartments(int courseId, List<int> departmentIds);
     public int RemoveCourseFromStudentByDepartments(int courseId, List<int> departmentIds);
 
-    public PaginatedData<CourseMV> GetCoursesByStudent(string name, int PageSize = 8, int Page = 1);
+    public PaginatedData<CourseMV> GetCoursesByStudent(string name, string userIdString, int PageSize = 8, int Page = 1);
 
 }

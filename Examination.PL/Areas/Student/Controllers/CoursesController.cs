@@ -28,7 +28,8 @@ namespace Examination.PL.Areas.Student.Controllers
         }
         public IActionResult List(string name, int page = 1, int pagesize = 8)
         {
-            var courses = courseService.GetCoursesByStudent(name, pagesize, page);
+            var userId = User.FindFirst("UserId")?.Value;
+            var courses = courseService.GetCoursesByStudent(name,userId.ToString(), pagesize, page);
             return View(courses);
         }
 
