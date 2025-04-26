@@ -318,6 +318,69 @@ namespace Examination.PL.BL
             }
         }
 
+
+
+
+        public StudentMV GetProfile(int userId)
+        {
+            try
+            {
+                var student = _unitOfWork.StudentRepo
+                    .FirstOrDefault(s => s.UserId == userId, "User,DepartmentBranch.Department,DepartmentBranch.Branch,StudentCourses.Course");
+
+                if (student == null)
+                    return null;
+
+                var studentMV = _mapper.Map<StudentMV>(student);
+
+                studentMV.DepartmentId = student.DepartmentBranch.DepartmentId;
+                studentMV.BranchId = student.DepartmentBranch.BranchId;
+                studentMV.StudentCourses = student.StudentCourses.Select(sc => new StudentCourseMV
+                {
+                    Course = _mapper.Map<CourseMV>(sc.Course),
+                    FinalGradePercent = sc.FinalGradePercent
+                }).ToList();
+
+                return studentMV; 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving student profile");
+                return null;
+            }
+        }
+
+        public int UpdateProfile(StudentUpdateProfileMV student)
+        {
+            try
+            {
+                var studentExist = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == student.Id, "User");
+
+                if (studentExist == null) return 0;
+
+                studentExist.User.FirstName = student.User.FirstName;
+                studentExist.User.LastName = student.User.LastName;
+                studentExist.User.Email = student.User.Email;
+                studentExist.User.Phone = student.User.Phone;
+
+                studentExist.User.UpdatedAt = DateTime.Now;
+                studentExist.User.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId").Value);
+
+                _unitOfWork.StudentRepo.Update(studentExist);
+                return _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while updating student profile.");
+                return 0;
+            }
+        }
+
+
+
+
     }
 
+
 }
+

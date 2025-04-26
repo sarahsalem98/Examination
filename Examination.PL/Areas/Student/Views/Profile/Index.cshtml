@@ -1,0 +1,106 @@
+﻿@model StudentMV
+
+@{
+   
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/StudentProfle.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+}
+<button class="open-popup" onclick="openPopup()"> <i class="bi bi-gear"></i> Update Profile</button>
+@await Html.PartialAsync("UpdateProfile", Model)
+
+
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- Profile Card -->
+        <div class=" col-md-4 d-flex">
+            <div class="card text-center p-4 shadow-sm flex-fill">
+                <div class="prof-img-container mb-3">
+                    <img src="~/imgs/Profile-PNG-Photo (1).png" class="rounded-circle mx-auto" width="120" height="120" alt="Student Photo" />
+                </div>
+                <h3 class="name" >@Model.User?.FirstName @Model.User?.LastName</h3>
+                <p><strong>Student ID:</strong> @Model.Id</p>
+                <p>
+                    <strong>Courses:</strong> @Model.StudentCourses?.Count() |
+                    <strong>Department:</strong> @Model.DepartmentBranch?.Department?.Name
+                </p>
+            </div>
+        </div>
+
+        <!-- General Information Card -->
+        <div class="col-md-8 d-flex">
+            <div class="card details-card flex-fill p-4">
+                <h3><i class="bi bi-info-circle"></i> General Information</h3>
+                <table>
+                    <tr>
+                        <th>Role</th>
+                        <td>Student</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>@Model.User?.Email</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>@Model.User?.Phone</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth</th>
+                        <td>@(Model.DateOfBirth?.ToString("dd/MM/yyyy") ?? "Unknown")</td>
+                    </tr>
+                    <tr>
+                        <th>Enrollment Date</th>
+                        <td>@(Model.EnrollmentDate?.ToString("dd/MM/yyyy") ?? "Unknown")</td>
+                    </tr>
+                    <tr>
+                        <th>Branch</th>
+                        <td>@Model.DepartmentBranch?.Branch?.Name</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card grades-card">
+            <h3><i class="bi bi-journal-bookmark"></i> Courses & Grades</h3>
+
+            @if (Model.StudentCourses != null && Model.StudentCourses.Any())
+            {
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Final Grade (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                        @foreach (var course in Model.StudentCourses)
+                        {
+                            <tr>
+                                <td>@course.Course.Name</td>
+                                <td>@(course.FinalGradePercent.HasValue ? $"{course.FinalGradePercent}%" : "Not Assigned Yet")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No courses available.</p>
+            }
+            </div> 
+        </div> 
+    </div> 
+</div> 
+
+    @section Scripts {
+
+        <script src="~/js/student/StudentProfile.js"></script>
+    }

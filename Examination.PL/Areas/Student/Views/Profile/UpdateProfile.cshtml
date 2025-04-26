@@ -1,0 +1,35 @@
+﻿@model StudentMV
+
+<!-- Popup Background (Overlay) -->
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
+
+<!-- Popup Form -->
+<div class="popup-form" id="popupForm">
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+    <form id="update-profile-form">
+        <input type="hidden" id="studentId" value="@Model.Id" />
+        <input type="hidden" id="userId" value="@Model.UserId" />
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" value="@Model.User?.FirstName" required />
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" value="@Model.User?.LastName" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="@Model.User?.Email" required />
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" value="@Model.User?.Phone" required />
+
+        <input type="hidden" id="departmentId" value="@Model.DepartmentId" />
+        <input type="hidden" id="branchId" value="@Model.BranchId" />
+        <input type="hidden" id="trackType" value="@Model.TrackType" />
+        <input type="hidden" id="enrollmentDate" value="@Model.EnrollmentDate?.ToString("yyyy-MM-dd")" />
+
+
+        <button type="submit">Submit</button>
+    </form>
+
+
+</div>
