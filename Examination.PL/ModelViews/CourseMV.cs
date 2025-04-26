@@ -22,6 +22,8 @@ public class CourseMV
     public int? UpdatedBy { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public string? ImgUrl { get; set; }
+    public IFormFile? ImgFile { get; set; }   
 
     public List<int> DepartmentsIds { get; set; }
     public List<int> TopicsIds { get; set; }

@@ -73,11 +73,17 @@
     },
     AddUpdata: function (e) {
         // $("#loader").addClass("show");
+        debugger;
+        var form = $('#admin-Course-form')[0];
+        var formData = new FormData(form);
+        console.log(formData);
         e.preventDefault();
         $.ajax({
             type: "POST",
             url: "/Admin/course/AddUpdate",
-            data: $("#admin-Course-form").serialize(),
+            data: formData,
+            processData: false, 
+            contentType: false,   
             success: function (response) {
                 // $("#loader").removeClass("show");
                 if (response.success) {
@@ -137,6 +143,19 @@
                 console.error("Error changing student status:", error);
             }
         });
+    },
+    ViewImg: function (e) {
+        debugger;
+        console.log(e)
+        const file = e.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imgPreview').attr('src', e.target.result);
+                $('#imgPreview').show();
+            }
+            reader.readAsDataURL(file);
+        }
     }
 
 

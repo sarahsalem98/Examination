@@ -201,6 +201,7 @@ namespace Examination.PL.BL
                 courseExist.Name = course.Name;
                 courseExist.Description = course.Description;
                 courseExist.Hours = course.Hours;
+                courseExist.ImgUrl = course.ImgUrl;
 
                 var courseDeptsExists = courseExist.CourseDepartments.ToList();
                 var CourseDeptIdsExist = courseDeptsExists.Select(S => S.DepartmentId).ToList();

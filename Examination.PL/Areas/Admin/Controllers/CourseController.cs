@@ -5,6 +5,7 @@ using Examination.PL.General;
 using Examination.PL.IBL;
 using Examination.PL.ModelViews;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Examination.PL.Areas.Admin.Controllers
 {
@@ -78,16 +79,33 @@ namespace Examination.PL.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public IActionResult AddUpdate(CourseMV model)
+        public async Task<IActionResult> AddUpdate(CourseMV model)
         {
 
             ResponseMV response = new ResponseMV();
             if (ModelState.IsValid)
             {
 
+                string uniqueFileName = null;
+                if (model.ImgFile != null)
+                {
+                    string UploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/public/courses");
+                    Directory.CreateDirectory(UploadsFolder);
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImgFile.FileName;
+                    string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+                    using(var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImgFile.CopyToAsync(stream);
+                        model.ImgUrl = uniqueFileName;
+                    }
+                }
+
+
+
                 if (model.Id > 0)
                 {
                     var result = _courseService.Update(model);
+                   // var result = 1;
                     if (result > 0)
                     {
                         response.Success = true;
