@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Examination.PL.ModelViews;
 using Examination.PL.BL;
 using Examination.PL.General;
+using Examination.DAL.Entities;
 
 namespace Examination.PL.Areas.Student.Controllers
 {
@@ -30,6 +31,7 @@ namespace Examination.PL.Areas.Student.Controllers
         {
             var userId = User.FindFirst("UserId")?.Value;
             var courses = courseService.GetCoursesByStudent(name,userId.ToString(), pagesize, page);
+            ViewBag.Grades=HttpContext.Items["Grades"];
             return View(courses);
         }
 

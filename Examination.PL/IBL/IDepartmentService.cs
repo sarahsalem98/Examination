@@ -6,6 +6,7 @@ namespace Examination.PL.IBL
     {
         public List<DepartmentMV> GetByStatus(int status);
         public List<DepartmentMV> GetByBranch(int branchId);
+        public List<DepartmentMV> GetByBranchAndInstructor(int branchId,int instructorId);
 
         //List<DepartmentMV> GetAll();
         DepartmentMV GetById(int id);

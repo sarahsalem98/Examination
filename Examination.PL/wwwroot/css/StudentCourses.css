@@ -44,6 +44,14 @@
     z-index: 1;
 }
 
+    .course-title.graded {
+        background-color: #00520060; /* Green if graded */
+    }
+
+    .course-title.failed {
+        background-color: #e0000086; /* Red if grade < 50 */
+    }
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

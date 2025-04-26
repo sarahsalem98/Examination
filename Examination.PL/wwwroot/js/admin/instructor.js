@@ -86,7 +86,9 @@
 
                 $("#loader").removeClass("show");
                 $("#addUpdateModalView").html(response);
+                //AdminInstructor.initDatePickers();
                 $('#addUpdateModal').modal('show');
+                //$(".date-range").trigger('apply.daterangepicker');
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching Instructor data:", error);
@@ -96,7 +98,7 @@
 
     AddUpdate: function (e) {
         e.preventDefault();
-        var DepartmentBranchIdSelectedId = 0;
+        //$(".date-range").trigger('apply.daterangepicker');
         var instructorData = {
             User: {
                 Id: $("#UserId").val() ? parseInt($("#UserId").val()) : 0,
@@ -112,10 +114,13 @@
             InstructorCourses: []
         };
         $("#InstructorAssignmentTable tbody tr").each(function () {
+            debugger;
             var instructorCourseBranchId = $(this).find(".instructorCourseBranchId").val();
             var branchId = $(this).find(".branch").val();
             var departmentId = $(this).find(".department").val();
             var courseId = $(this).find(".course").val();
+            var startDate = $(this).find(".start-date").val();
+            var endDate = $(this).find(".end-date").val();
             if (branchId && departmentId && courseId) {
                 instructorData.InstructorCourses.push({
                     CourseId: parseInt(courseId),
@@ -124,8 +129,9 @@
                         DepartmentId: parseInt(departmentId)
                     },
                     InstructorId: instructorData.Id,
-                    Id: parseInt(instructorCourseBranchId)
-
+                    Id: isNaN(parseInt(instructorCourseBranchId)) ? 0 : parseInt(instructorCourseBranchId),
+                    StartDate: startDate,
+                    EndDate: endDate,
                 });
             }
         });
@@ -133,8 +139,8 @@
         $.ajax({
             type: "POST",
             url: "/Admin/instructor/AddUpdate",
-            contentType: "application/json",
-            data: JSON.stringify(instructorData),
+            //contentType: "application/json",
+            data: instructorData,
             success: function (response) {
 
                 if (response.success) {
@@ -246,7 +252,7 @@
 
     HandleAssignRow: function () {
         $("#assignBtn").click(function () {
-            debugger;
+            
             var rowCount = $("#InstructorAssignmentTable tbody tr").length;
             var selectedBranchIds = [];
             $("#InstructorAssignmentTable tbody tr .branch").each(function () {
@@ -255,7 +261,7 @@
             });
             var availableBranches = allBranches.filter(b => !selectedBranchIds.includes(b.id.toString()));
             var branchOptions = '<option value="">Choose...</option>';
-            availableBranches.forEach(b => {
+            allBranches.forEach(b => {
                 branchOptions += `<option value="${b.id}">${b.name}</option>`;
             });
         
@@ -277,6 +283,13 @@
                  <option value="">Choose...</option>
             </select>
         </td>
+         <td>
+
+         <input type="text" class="form-control date-range"   placeholder="Select date range" />
+          <input type="hidden" name="instructorCourses[${rowCount}].startDate" class="start-date" />
+          <input type="hidden" name="instructorCourses[${rowCount}].endDate" class="end-date" />
+        
+         </td>
         <td>
             <a href="javascriot:void(0);" class="removeRow" onclick="AdminInstructor.HandleDeleteRow(this)">
                 <i class="bi bi-x-circle text-danger"></i>
@@ -285,7 +298,17 @@
     </tr>
 `;
             $("#InstructorAssignmentTable tbody").append(newRow);
+            $("#InstructorAssignmentTable tbody tr:last .date-range").daterangepicker({
+                drops: 'up',
+                locale: { format: 'YYYY-MM-DD' }
+            }).on('apply.daterangepicker', function (ev, picker) {
+                const $row = $(this).closest('tr');
+                    $row.find('.start-date').val(picker.startDate.format('YYYY-MM-DD'));
+                $row.find('.end-date').val(picker.endDate.format('YYYY-MM-DD'));
+                console.log("ttt");
+            });
         });
+      
     },
 
     HandleDeleteRow: function (e) {
@@ -294,6 +317,22 @@
         var data = $(e).closest("tr");
         data.remove();
 
+    },
+    initDatePickers: function () {
+        // Initialize date pickers for all inputs with the .date-range class
+        $(".date-range").daterangepicker({
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            showDropdowns: true
+        })
     }
+
+,
+    customAction: function (startDate, endDate) {
+        // Example action: logging the selected dates
+        console.log("Custom Action Triggered with dates: ", startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
+    }
+
 };
 

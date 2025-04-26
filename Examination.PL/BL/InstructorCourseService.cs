@@ -28,7 +28,7 @@ namespace Examination.PL.BL
             try
             {
                 var DepartmentBranchCourse = unitOfWork.InstructorCourseRepo.FirstOrDefault(ic => ic.DepartmentBranchId == DepartmentBranchId && ic.CourseId == course_id && ic.Instructor.UserId == instructor_id,
-                    "DepartmentBranch.Students.StudentCourses,Course,Course.Exams,Course.Exams.GeneratedExams,Instructor,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.Students,DepartmentBranch.Students.ExamStudentGrades,DepartmentBranch.Students.ExamStudentGrades.GeneratedExam.Exam");
+                    "DepartmentBranch.Students.StudentCourses,Course.Exams.GeneratedExams,Instructor,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.Students.ExamStudentGrades.GeneratedExam.Exam");
                 if (DepartmentBranchCourse == null)
                 {
                     return 0;
@@ -36,8 +36,13 @@ namespace Examination.PL.BL
                 var TakenDateExamForCourse = DepartmentBranchCourse.Course.Exams.Where(e=>e.CourseId==course_id)
                     .SelectMany(e=>e.GeneratedExams.Select(ge=>ge.TakenDate)).FirstOrDefault();
 
+                  if (DepartmentBranchCourse.IsCompleted == 1)
 
-                if (DepartmentBranchCourse.EndDate > DateTime.Now)
+                {
+                    //means he already put the grades
+                    return -6;
+                }
+               else if (DepartmentBranchCourse.EndDate > DateTime.Now)
                 {
                     //means course doasn't end (tested)
                     return -2;
@@ -58,24 +63,20 @@ namespace Examination.PL.BL
                     //means failed students doeasn't have corrective exam (tested)
                     return -5;
                 }
-                else if (DepartmentBranchCourse.IsCompleted==1||DepartmentBranchCourse.DepartmentBranch.Students.Any(s=>s.StudentCourses.Any(sc=>sc.CourseId==course_id)&&s.DepartmentBranchId==DepartmentBranchId))
-               
-                {
-                    //means he already put the grades
-                    return -6;
-                }
+
                 else
                 {
-                    var studentCourses = DepartmentBranchCourse.DepartmentBranch.Students.Select(s => new StudentCourse
-                    {
-                        StudentId = s.Id,
-                        CourseId = course_id,
-                        FinalGradePercent = (int)(s.ExamStudentGrades
-                                        .FirstOrDefault(es => es.GeneratedExam?.Exam?.CourseId == course_id)
-                                        ?.GradePercent ?? 0)
+                    foreach (var student in DepartmentBranchCourse.DepartmentBranch.Students)
 
-                    });
-                    DepartmentBranchCourse.Course.StudentCourses.AddRange(studentCourses);
+                    {
+                        var studentCourse = student.StudentCourses.FirstOrDefault(sc => sc.CourseId == course_id);
+                        if (studentCourse != null)
+                        {
+                            var finalgradepercent = student.ExamStudentGrades.FirstOrDefault(es => es.GeneratedExam?.Exam?.CourseId == course_id)?.GradePercent ?? 0;
+                            studentCourse.FinalGradePercent = (int)finalgradepercent;
+                            unitOfWork.StudentCourseRepo.Update(studentCourse);
+                        }
+                    }
                     DepartmentBranchCourse.IsCompleted = 1;
                     unitOfWork.InstructorCourseRepo.Update(DepartmentBranchCourse);
                  
@@ -117,7 +118,7 @@ namespace Examination.PL.BL
 
 
          , "Course,Instructor,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch").Where(ic=>ic.DepartmentBranch.Department.Status==(int)Status.Active&&ic.Course.Status== (int)Status.Active
-        &&ic.DepartmentBranch.Branch.Status== (int)Status.Active).ToList();
+        &&ic.DepartmentBranch.Branch.Status== (int)Status.Active).OrderByDescending(ic=>ic.Course.CreatedAt).ToList();
                 instructorcourseMV = mapper.Map<List<InstructorCourseMV>>(data);
                 int TotalCounts = instructorcourseMV.Count();
                 if (TotalCounts > 0)
