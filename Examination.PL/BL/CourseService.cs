@@ -300,7 +300,6 @@ namespace Examination.PL.BL
             try
             {
                 
-                var userIdString = _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value;
 
                 if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
                 {
