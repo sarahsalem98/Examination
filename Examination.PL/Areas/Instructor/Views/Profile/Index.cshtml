@@ -12,17 +12,17 @@
 
 }
 
-<button class="open-popup" onclick="openPopup()"> <i class="bi bi-gear"></i> Update Profile</button>
 
 <!-- Include Update Form -->
 @await Html.PartialAsync("UpdatePassword", new InstructorPasswordUpdateMV { UserId = Model.UserId ?? 0 })
+
 
 <div class="container">
     <!-- Profile Card -->
     <div class="card profile-card">
         <div class="profile-header">
             <div class="prof-img-container">
-                <img class="prof-img" src="~/imgs/Profile-PNG-Photo (1).png" alt="Instructor Photo" />
+                <img class="prof-img" src="~/public/imgs/profile.png" alt="Instructor Photo" />
             </div>
             <h2>@Model.User?.FirstName @Model.User?.LastName</h2>
             <p><strong>Instructor ID:</strong> @Model.Id</p>
@@ -31,11 +31,15 @@
                 <strong>Type:</strong> @(Model.IsExternal ? "External" : "Internal")
             </p>
         </div>
+            <button class="open-popup" onclick="openPopup()"> <i class="bi bi-gear"></i> Update Password</button>
     </div>
 
     <!-- General Information Card -->
     <div class="card details-card">
+        <div>
         <h3><i class="fas fa-info-circle"></i> General Information</h3>
+   
+        </div>
         <table>
             <tr>
                 <th>Role</th>
