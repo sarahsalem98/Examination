@@ -120,4 +120,24 @@ public class TopicService : ITopicService
             return 0;
         }
     }
+
+    public List<TopicMV> GetTopicsByCourseId(int ID)
+    {
+        try
+        {
+            var topics = _unitOfWork.CourseTopicRepo.GetAll(i => i.CourseId == ID,"Topic").Select(i => i.Topic).ToList();
+            if (topics == null)  return new List<TopicMV>();
+
+            var mapperdTopics = _mapper.Map<List<TopicMV>>(topics);
+            
+            return mapperdTopics;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "error Occurred while getting all Topics ");
+            return new List<TopicMV>();
+        }
+    }
+
+
 }
