@@ -21,10 +21,11 @@
                     <img src="~/public/imgs/profile.png" class="rounded-circle mx-auto" width="120" height="120" alt="Student Photo" />
                
                 <h3 class="name mt-2" >@Model.User?.FirstName @Model.User?.LastName</h3>
-                <p><strong>Student ID:</strong> @Model.Id</p>
                 <p>
-                    <strong>Courses:</strong> @Model.StudentCourses?.Count() |
-                    <strong>Department:</strong> @Model.DepartmentBranch?.Department?.Name
+                    <strong>Student ID:</strong> @Model.Id<br />
+                    <strong>Courses:</strong> @Model.StudentCourses?.Count() <br/>
+                    <strong>Department:</strong> @Model.DepartmentBranch?.Department?.Name<br />
+                    <strong>Branch: </strong>@Model.DepartmentBranch?.Branch?.Name
                 </p>
             </div>
         </div>
@@ -34,10 +35,6 @@
             <div class="card details-card flex-fill p-4">
                 <h3><i class="bi bi-info-circle"></i> General Information</h3>
                 <table>
-                    <tr>
-                        <th>Role</th>
-                        <td>Student</td>
-                    </tr>
                     <tr>
                         <th>Email</th>
                         <td>@Model.User?.Email</td>

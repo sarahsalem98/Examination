@@ -22,7 +22,7 @@
 
         <div class="col-md-6 mb-3">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control rounded-0 mb-1" id="firstName" asp-for="User.FirstName" disabled  >
+            <input type="text" class="form-control rounded-0 mb-1" id="firstName" asp-for="User.FirstName" disabled>
 
         </div>
 
@@ -64,44 +64,50 @@
             <div class="mb-3">
                 <table class="table table-bordered" id="StudentCourseTable">
                     <thead>
-                        <tr>
+                        <tr style="background:#dbefd7">
 
                             <th >@course.Course.Name</th>
-                           
-                                <th>Exam Type</th>
-                                <th>Actions</th>
-                            
 
-                    </tr>
-                </thead>
-                <tbody>
-                   @if (course.IsCompleted == 1)
+                            <th>Exam Type</th>
+                            <th>Actions</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (course.IsCompleted == 1)
                         {
-                   @foreach(var exam in course.Course.Exams)
-                   {
-                    
-                            
-                       @foreach(var generated in exam.GeneratedExams)
-                       {
-                                <tr>
-                                    <td>@generated.Exam.Name</td>
-                                <td>@generated.Exam.Type</td>
+                            @foreach (var exam in course.Course.Exams)
+                            {
+
+
+                                @foreach (var generated in exam.GeneratedExams)
+                                {
+                                    <tr>
+                                        <td>@generated.Exam.Name</td>
+                                        <td>@generated.Exam.Type</td>
                                         <td>
-  
+
                                             <button class="btn btn-Results" onclick="InstructorStudent.ShowExamModal(@Model.Id,@generated.Id)">Show Exam</button>
-                                           
+
                                         </td>
+                                    </tr>
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3"class="alert-danger text-center"> No Exams Generated Yet</td>
                             </tr>
-                       }
-                            
-                   }
-                   }
-                      
-                   
-                </tbody>
-            </table>
-        </div>
-    }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        }
     }
     else
     {
@@ -110,7 +116,7 @@
 
 
 
-    </div>
+</div>
 <div class="modal fade" id="QuestionsModal" tabindex="-1" aria-labelledby="QuestionsModal" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -128,7 +134,7 @@
 
     <script>
         $(document).ready(function () {
-         
+
 
         });
     </script>
