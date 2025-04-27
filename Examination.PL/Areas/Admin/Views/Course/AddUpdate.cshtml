@@ -149,10 +149,8 @@
      $(document).ready(function () {
         var img= "@Model.ImgUrl";
          if (img == "" || img == null) {
-        // Show the 'Add Image' button if no image is present
         $('#addImageButton').show();
     } else {
-        // Hide the 'Add Image' button if image URL is available
         $('#addImageButton').hide();
     }
         $('#addImageButton').click(function () {
