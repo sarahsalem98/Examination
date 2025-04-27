@@ -22,6 +22,8 @@ public partial class GeneratedExam
     public int CreatedBy { get; set; }
 
     public int ExamId { get; set; }
+    public int? CountTF { get; set; }
+    public int? CountMCQ { get; set; }
 
     public virtual Instructor CreatedByNavigation { get; set; } = null!;
 

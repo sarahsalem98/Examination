@@ -91,6 +91,15 @@ namespace Examination.PL.Areas.Admin.Controllers
                 {
                     string UploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/public/courses");
                     Directory.CreateDirectory(UploadsFolder);
+                    if (!string.IsNullOrEmpty(model.ImgUrl))
+                    {
+                        string oldFilePath = Path.Combine(UploadsFolder, model.ImgUrl);
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
+
                     uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImgFile.FileName;
                     string filePath = Path.Combine(UploadsFolder, uniqueFileName);
                     using(var stream = new FileStream(filePath, FileMode.Create))
