@@ -25,26 +25,35 @@ namespace Examination.PL.BL
         {
             try
             {
-                var instructorCourses = unitOfWork.InstructorCourseRepo.GetAll(ic => ic.InstructorId == CreatedBy && ic.Course.Exams.Any(e => e.Id == ExamId),
-                    "Course.Exams").ToList();
-                var departmentBranchId = unitOfWork.DepartmentBranchRepo.GetAll(d => d.DepartmentId == DepartmentId && d.BranchId == BranchId).FirstOrDefault()?.Id;
+                var departmentBranchId = unitOfWork.DepartmentBranchRepo.FirstOrDefault(d => d.DepartmentId == DepartmentId && d.BranchId == BranchId)?.Id;
+                var instructorCourses = unitOfWork.InstructorCourseRepo.FirstOrDefault(ic => ic.InstructorId == CreatedBy &&ic.DepartmentBranchId==departmentBranchId&& ic.Course.Exams.Any(e => e.Id == ExamId),
+                    "Course.Exams");
+               
                 if (departmentBranchId == null)
                 {
 
                     throw new Exception("Department Branch not found");
 
                 }
-                var generatedExamExsist = unitOfWork.GeneratedExamRepo.GetAll(e => e.ExamId == ExamId && e.DepartmentBranchId == departmentBranchId);
-                if (instructorCourses.Any(ic => DateOnly.FromDateTime(ic.EndDate.Value) > TakenDate))
-                {
+             
 
-                    return -1;
+                var generatedExamExsist = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.ExamId == ExamId && e.DepartmentBranchId == departmentBranchId&&e.TakenDate.Year == TakenDate.Year);
+                if(instructorCourses.IsCompleted==1)
+                {
+                    return -3;
                 }
-                else if (generatedExamExsist != null && generatedExamExsist.Count()>0)
+               else if (generatedExamExsist != null)
                 {
 
                     return -2;
                 }
+
+                else if (DateOnly.FromDateTime(instructorCourses.EndDate.Value) > TakenDate)
+                {
+
+                    return -1;
+                }
+                 
 
                 var DepartmentBranchCourse = unitOfWork.InstructorCourseRepo.FirstOrDefault(ic => ic.Course.Exams.Any(e => e.Id == ExamId) && ic.InstructorId == CreatedBy,
                    "Course.Exams");
@@ -52,11 +61,8 @@ namespace Examination.PL.BL
                 {
                     return 0;
                 }
-                DepartmentBranchCourse.LastGeneratedExamType = instructorCourses
-                                                    .SelectMany(ic => ic.Course.Exams)
-                                                   .Where(e => e.Id == ExamId)
-                                                   .Select(e => e.Type.Trim().ToLower())
-                                                    .FirstOrDefault();
+                DepartmentBranchCourse.LastGeneratedExamType = instructorCourses.Course.Exams.FirstOrDefault(e => e.Id == ExamId)?.Type;
+                                                 
                 unitOfWork.InstructorCourseRepo.Update(DepartmentBranchCourse);
 
                 unitOfWork.Save();
@@ -120,10 +126,17 @@ namespace Examination.PL.BL
             try
             {
                 var exsistingexam = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.Id == GeneratedExamID);
+               
                 if (exsistingexam == null)
                 {
                     return 0;
                 }
+                var exams = unitOfWork.GeneratedExamRepo.GetAll(e => e.DepartmentBranchId == exsistingexam.DepartmentBranchId && e.ExamId == exsistingexam.ExamId);
+                if(exams.Any(e=>e.TakenDate.Year==TakenDate.Year&&e.Id!=exsistingexam.Id))
+                 {
+                    return -1;
+                }
+                
                 else
                 {
                     exsistingexam.TakenDate = TakenDate;

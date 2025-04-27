@@ -28,8 +28,8 @@ namespace Examination.DAL.Repos
             new SqlParameter("@NumsTS", NumsTS),
             new SqlParameter("@NumsMCQ", NumsMCQ),
             new SqlParameter("@CreatedBy", CreatedBy),
-           new SqlParameter("@TakenDate", TakenDate.ToDateTime(TimeOnly.MinValue)),
-           new SqlParameter("@TakenTime", takenTime.ToTimeSpan()));
+           new SqlParameter("@TakenDate", TakenDate),
+           new SqlParameter("@TakenTime", takenTime));
             //if (res > 0)
             //    return 1;
             //else
