@@ -75,6 +75,12 @@ namespace Examination.PL.Areas.Instructor.Controllers
                 response.Message = "Exam Generated Failed";
 
             }
+            else if (res == -3)
+            {
+                response.Success = false;
+                response.Message = "Course Already Fisnhed";
+
+            }
             else if (res== -1)
             {
                 response.Success = false;
@@ -86,6 +92,46 @@ namespace Examination.PL.Areas.Instructor.Controllers
                 response.Success = false;
                 response.Message = "You already Generate Exam Before";
             }
+            return Json(response);
+        }
+        public IActionResult UpdateGenerateExam(int GeneratedExamId)
+        {
+            
+            var GeneretedExam=_generatedExamService.GetByID(GeneratedExamId);
+
+            if (GeneretedExam == null)
+            {
+                return NotFound();
+            }
+
+            return View(GeneretedExam);
+        }
+        [HttpPost]
+
+        public IActionResult UpdateGenerateExam(int GeneratedExamId,  DateOnly TakenDate, TimeOnly takenTime)
+        {
+
+          
+            ResponseMV response = new ResponseMV();
+            var res = _generatedExamService.UpdateGeneratedExam(GeneratedExamId, TakenDate, takenTime); 
+            if (res == 1)
+            {
+                response.Success = true;
+                response.Message = "Generated Exam Updated Successfully";
+
+            }
+            else if(res==-1)
+            {
+                response.Success = false;
+                response.Message = "Exam In This Patch Already Generated";
+            }
+            else if (res == 0)
+            {
+                response.Success = false;
+                response.Message = "Generated Exam Update Failed";
+
+            }
+           
             return Json(response);
         }
         public IActionResult GetDepartmentsByBranchId(int BranchId)

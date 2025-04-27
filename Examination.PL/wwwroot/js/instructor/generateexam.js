@@ -132,7 +132,7 @@
         });
 
     },
-    ShowAddUpdateModal: function () {
+    ShowAddModal: function () {
        
         $("#loader").addClass("show");
         $.ajax({
@@ -141,8 +141,8 @@
             success: function (response) {
 
                 $("#loader").removeClass("show");
-                $("#addUpdateModalView").html(response);
-                $('#addUpdateModal').modal('show');
+                $("#GenerateModalView").html(response);
+                $('#GenerateModal').modal('show');
             },
             error: function (xhr, status, error) {
                 console.error("Error:", error);
@@ -183,7 +183,7 @@
                 if (response.success) {
                     InstructorGeneratedExam.Fetch(InstructorGeneratedExam.currentPage);
                    
-                    $('#addUpdateModal').modal('hide');
+                    $('#GenerateModal').modal('hide');
                     toastr.success(response.message);
                 } else {
                     toastr.error(response.message);
@@ -194,6 +194,61 @@
             }
         });
     },
-    
+    ShowUpdateModal: function (GeneratedExamId) {
+
+        $("#loader").addClass("show");
+        $.ajax({
+            type: "GET",
+            url: "/Instructor/GeneratedExam/UpdateGenerateExam",
+            data: { GeneratedExamId: GeneratedExamId },
+            success: function (response) {
+
+                $("#loader").removeClass("show");
+                $("#UpdateGenerateExamModalView").html(response);
+                $('#UpdateGenerateExamModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    },
+    UpdateGenerateExam: function (e) {
+
+        e.preventDefault();
+   
+        var takenDate = $('input[name="TakenDate"]').val();
+        var takenTime = $('input[name="takenTime"]').val();
+        var GenereatedExamId = $('#GenereatedExamId').val();
+        if ( !takenDate || !takenTime) {
+            toastr.error("Please fill in all required fields.");
+            return;
+        }
+
+        var formData = {
+            GeneratedExamId: GenereatedExamId,
+            TakenDate: takenDate,
+            TakenTime: takenTime
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Instructor/GeneratedExam/UpdateGenerateExam",
+            data: formData,
+            success: function (response) {
+
+                if (response.success) {
+                    InstructorGeneratedExam.Fetch(InstructorGeneratedExam.currentPage);
+
+                    $('#UpdateGenerateExamModal').modal('hide');
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error generateexam:", error);
+            }
+        });
+    },
+
 
 }

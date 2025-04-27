@@ -96,7 +96,7 @@
             </div>
 
             <div>
-                <button class="btn btn-add rounded-0" onclick="InstructorGeneratedExam.ShowAddUpdateModal();"> + Create </button>
+                <button class="btn btn-add rounded-0" onclick="InstructorGeneratedExam.ShowAddModal();"> + Create </button>
             </div>
         </div>
 
@@ -111,23 +111,35 @@
 
 </div>
 
-<div class="modal fade" id="addUpdateModal" tabindex="-1" aria-labelledby="addUpdateModal" aria-hidden="true">
+<div class="modal fade" id="GenerateModal" tabindex="-1" aria-labelledby="GenerateModal" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addUpdateModal">Generate New Exam</h5>
+                <h5 class="modal-title" id="GenerateModal">Generate New Exam</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="addUpdateModalView"></div>
+            <div id="GenerateModalView"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="UpdateGenerateExamModal" tabindex="-1" aria-labelledby="UpdateGenerateExamModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="UpdateGenerateExamModal">Update Generated Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="UpdateGenerateExamModalView"></div>
         </div>
     </div>
 </div>
 
 
 
+
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
-    <script src="~/js/instructor/generateexam.js"></script>
+    <script src="~/js/instructor/generateexam.js" asp-append-version="true"></script>
     <script>
         $(document).ready(function () {
          InstructorGeneratedExam.Fetch(1);
