@@ -40,7 +40,7 @@ namespace Examination.PL.BL
 
                     return -1;
                 }
-                else if (generatedExamExsist != null)
+                else if (generatedExamExsist != null && generatedExamExsist.Count()>0)
                 {
 
                     return -2;
