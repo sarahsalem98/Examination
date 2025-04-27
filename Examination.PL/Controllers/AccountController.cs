@@ -57,7 +57,7 @@ namespace Examination.PL.Controllers
 
                              redirectUrl = userType.TypeName switch
                             {
-                                Constants.UserTypes.Student => "/Student/Exam/Previous",
+                                Constants.UserTypes.Student => "/Student/Courses/Index",
                                 Constants.UserTypes.Admin => "/Admin/Student/Index",
                                 Constants.UserTypes.Instructor => "/Instructor/Student/Index",
 

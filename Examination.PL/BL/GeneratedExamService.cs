@@ -180,16 +180,15 @@ namespace Examination.PL.BL
                 if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
                 {
                     logger.LogWarning("UserId is not found or invalid in the HttpContext.");
-                    return null;
                 }
 
                 // Get the student branch department ID from the database
-                var studentBranchDepId = unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId).DepartmentBranchId;
+                var studentBranchDepId = unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == int.Parse(userIdString)).DepartmentBranchId;
 
                 if (studentBranchDepId == null)
                 {
                     logger.LogWarning("Student's Department Branch ID is not found.");
-                    return null;
+                    
                 }
 
                 //get Student comming exam
@@ -208,7 +207,7 @@ namespace Examination.PL.BL
                 if (!commingExam.Any())
                 {
                     logger.LogWarning("No upcoming exam found for the student.");
-                    return null;
+                    
                 }
 
                 var commingExamList = mapper.Map<List<GeneratedExamMV>>(commingExam);

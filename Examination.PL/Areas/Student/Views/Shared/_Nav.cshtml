@@ -15,6 +15,7 @@
                 <a class="nav-link d-flex align-items-center text-decoration-none" href="profile.html"
                    id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="~/public/imgs/profile.png" alt="Profile" class="profile-img">
+                    <span class="text-black ms-2"> @User.Identity.Name </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                     <li>
@@ -23,9 +24,9 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item text-danger" href="logout.html">
-                            <i class="bi bi-box-arrow-right me-2"></i>
-                            Logout
+                        <a class="dropdown-item text-danger" asp-area="null" asp-controller="Account" asp-action="Logout">
+                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                            
                         </a>
                     </li>
                 </ul>

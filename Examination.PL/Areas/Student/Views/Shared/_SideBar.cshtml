@@ -10,6 +10,21 @@
 
         return isActive ? "active" : "";
     }
+
+    public string ISExamDropDownActive()
+    {
+        var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        if (currentArea == "Student" && (currentController == "CommingExam") && (currentAction == "Index"))
+        {
+            return "active";
+        }
+        else
+        {
+            return "";
+        }
+    }
 }
 
 <nav class="sidebar p-2" id="sidebar">
@@ -22,20 +37,20 @@
 
     <ul class="nav flex-column mt-3">
         <!-- Calender -->
-        <li class="nav-item">
-            <a href="Dashbord.html" class="nav-link text-white">
+        <li class="nav-item mt-2">
+            <a href="Dashbord.html" class="sidebar-link  nav-link text-white">
                 <i class="bi bi-calendar"></i> <span class="ms-2">Calendar</span>
             </a>
         </li>
         <!-- Courses -->
-        <li class="nav-item">
+        <li class="nav-item mt-2">
             <a asp-controller="Courses" asp-action="Index" asp-area="Student" class="sidebar-link nav-link text-white rounded-0 @IsActive("Student","Courses","Index")">
                 <i class="bi bi-book"></i> <span class="ms-2">Courses</span>
             </a>
         </li>
         <!-- Exams -->
-        <li class="nav-item">
-            <a href="" class="nav-link text-white d-flex align-items-center" data-bs-toggle="collapse"
+        <li class="nav-item mt-2  rounded-0 sidebar-link">
+            <a href="" class="nav-link text-white d-flex align-items-center @ISExamDropDownActive() rounded-0" data-bs-toggle="collapse"
                data-bs-target="#examDropdown" aria-expanded="false">
                 <i class="bi bi-pencil"></i> <span class="ms-2">Exams</span>
                 <span class="ms-auto dropdown-icons">
@@ -43,12 +58,17 @@
                     <i class="bi bi-caret-up-fill up-icon"></i>
                 </span>
             </a>
-            <ul class="collapse list-unstyled ms-4" id="examDropdown">
-                    <a asp-controller="CommingExam" asp-action="Index" asp-area="Student" class="sidebar-link nav-link text-white rounded-0 @IsActive("Student","CommingExam","Index")">
-                    <span class="ms-2">Comming Exam</span>
+            <ul class="collapse list-unstyled ms-3 mt-3" id="examDropdown">
+                    <a asp-controller="CommingExam" asp-action="Index" asp-area="Student" class=" nav-link text-white rounded-0 @IsActive("Student","CommingExam","Index")">
+                    <span class="">Comming Exam</span>
                     </a>
-                </li>
-                <li><a href="previous.html" class="nav-link text-white">Previous Exams</a></li>
+              
+            </ul>
+            <ul class="collapse list-unstyled ms-3 mt-3" id="examDropdown">
+                <a asp-controller="CommingExam" asp-action="Index" asp-area="Student" class=" nav-link text-white rounded-0 ">
+                    <span class="">Previous Exam</span>
+                </a>
+
             </ul>
         </li>
     </ul>

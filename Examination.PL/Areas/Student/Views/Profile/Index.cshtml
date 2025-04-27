@@ -17,10 +17,10 @@
         <!-- Profile Card -->
         <div class=" col-md-4 d-flex">
             <div class="card text-center p-4 shadow-sm flex-fill">
-                <div class="prof-img-container mb-3">
+              
                     <img src="~/public/imgs/profile.png" class="rounded-circle mx-auto" width="120" height="120" alt="Student Photo" />
-                </div>
-                <h3 class="name" >@Model.User?.FirstName @Model.User?.LastName</h3>
+               
+                <h3 class="name mt-2" >@Model.User?.FirstName @Model.User?.LastName</h3>
                 <p><strong>Student ID:</strong> @Model.Id</p>
                 <p>
                     <strong>Courses:</strong> @Model.StudentCourses?.Count() |
