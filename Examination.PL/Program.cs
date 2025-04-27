@@ -46,6 +46,7 @@ builder.Services.AddScoped<ITopicService, TopicService>();
 
 builder.Services.AddScoped<IInstructorCourseService, InstructorCourseService>();
 builder.Services.AddScoped<IGeneratedExamService, GeneratedExamService>();
+builder.Services.AddScoped<IGeneratedExamQService, GeneratedExamQService>();
 #endregion
 
 

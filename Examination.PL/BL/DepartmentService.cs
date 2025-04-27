@@ -49,7 +49,8 @@ namespace Examination.PL.BL
         {
             try
             {
-                var departments = _unitOfWork.DepartmentRepo.GetAll(d => d.DepartmentBranches.Select(b => b.BranchId).Contains(branchId));
+                var departments = _unitOfWork.DepartmentRepo.GetAll(d => d.DepartmentBranches.Where(d=>d.Status==(int)Status.Active).Select(b => b.BranchId).Contains(branchId), "DepartmentBranches");
+                departments = departments.Where(d => d.Status == (int)Status.Active).ToList();
                 if (departments == null || !departments.Any())
                 {
                     return new List<DepartmentMV>();

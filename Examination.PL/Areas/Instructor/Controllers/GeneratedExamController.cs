@@ -50,7 +50,7 @@ namespace Examination.PL.Areas.Instructor.Controllers
         {
             var Loggedinuser = int.Parse(User.FindFirst("UserId")?.Value);
             ViewBag.Branches = _branchService.GetBranchesByInstructor(Loggedinuser);
-        
+
             
           
             return View();

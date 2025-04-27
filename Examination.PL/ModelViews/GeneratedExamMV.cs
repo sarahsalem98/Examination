@@ -30,9 +30,28 @@ namespace Examination.PL.ModelViews
         public DepartmentBranchMV DepartmentBranch { get; set; } = null!;
 
         public ExamMV Exam { get; set; } = null!;
+        public List<GeneratedExamQMV> GeneratedExamQs { get; set; } = new List<GeneratedExamQMV>();
+        public virtual List<ExamStudentAnswerMV> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswerMV>();
 
 
     }
+    public class GeneratedExamQMV
+    {
+        public int Id { get; set; }
+
+        public int GeneratedExamId { get; set; }
+
+        public int QsOrder { get; set; }
+
+        public int ExamQsId { get; set; }
+
+        public virtual ExamQ ExamQs { get; set; } = null!;
+
+        public  List<ExamStudentAnswerMV> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswerMV>();
+
+        public GeneratedExamMV GeneratedExam { get; set; } = null!;
+    }
+   
     public class GeneratedExamSearchMV
     {
         public string? Name { get; set; }

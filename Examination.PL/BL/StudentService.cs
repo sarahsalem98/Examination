@@ -23,26 +23,26 @@ namespace Examination.PL.BL
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
-     
+
 
         public PaginatedData<StudentMV> GetStudentsByInstructorPaginated(int Instructor_Id, StudentSearchMV studentSearch, int PageSize = 10, int Page = 1)
         {
             try
             {
-               
+
                 List<StudentMV> studentsMV = new List<StudentMV>();
                 List<Student> data = _unitOfWork.StudentRepo.GetAll((s => s.DepartmentBranch.InstructorCourses.Any(c => c.Instructor.UserId == Instructor_Id) &&
                 (studentSearch.DepartmentId == null || s.DepartmentBranch.DepartmentId == studentSearch.DepartmentId) &&
                (studentSearch.BranchId == null || s.DepartmentBranch.BranchId == studentSearch.BranchId) &&
                (studentSearch.TrackType == null || s.TrackType == studentSearch.TrackType) &&
-               (studentSearch.courseId == null || s.StudentCourses.Any(sc => sc.CourseId == studentSearch.courseId))&&
+               (studentSearch.courseId == null || s.StudentCourses.Any(sc => sc.CourseId == studentSearch.courseId)) &&
 
                (String.IsNullOrEmpty(studentSearch.Name) ||
                 (!String.IsNullOrEmpty(s.User.FirstName) && s.User.FirstName.ToLower().Trim().Contains(studentSearch.Name)) ||
                 (!String.IsNullOrEmpty(s.User.LastName) && s.User.LastName.ToLower().Trim().Contains(studentSearch.Name)))
 
                 ),
-            "User,DepartmentBranch,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).OrderByDescending(s=>s.User.CreatedAt).Where(s=>s.User.Status==(int)Status.Active).ToList();
+            "User,DepartmentBranch.Department,DepartmentBranch.Branch,DepartmentBranch.InstructorCourses,StudentCourses.Course").GroupBy(s => s.Id).Select(s => s.First()).OrderByDescending(s=>s.User.CreatedAt).Where(s=>s.User.Status==(int)Status.Active).ToList();
                 studentsMV =_mapper.Map<List< StudentMV>>(data);
                 int TotalCounts = studentsMV.Count();
                 if (TotalCounts > 0)
@@ -65,7 +65,7 @@ namespace Examination.PL.BL
 
                 _logger.LogError(ex, "error occuired while Fetching Students by instructor ID ");
                 return null;
-                
+
             }
 
         }
@@ -89,7 +89,7 @@ namespace Examination.PL.BL
 
                     }
                     student.DepartmentBranchId = (int)departmentBranchId;
-                     newStudent = _mapper.Map<Student>(student);
+                    newStudent = _mapper.Map<Student>(student);
                     newStudent.User.CreatedAt = DateTime.Now;
                     newStudent.User.Password = PasswordHelper.HashPassword("123456");
                     newStudent.User.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
@@ -190,24 +190,24 @@ namespace Examination.PL.BL
                 return null;
             }
         }
-        public StudentMV GetStudentCoursesWithInstructor(int Student_Id,int Instructor_ID)
+        public StudentMV GetStudentCoursesWithInstructor(int Student_Id, int Instructor_ID)
         {
             try
             {
           
               
-        StudentMV studentMV = new StudentMV();
+               StudentMV studentMV = new StudentMV();
                 var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == Student_Id &&
                  s.DepartmentBranch.InstructorCourses.Any(ic=>ic.Instructor.UserId== Instructor_ID),
-                "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course,DepartmentBranch.Department,DepartmentBranch.Branch");
+                "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course.Exams.GeneratedExams,DepartmentBranch.Department,DepartmentBranch.Branch");
           
                 if (student == null)
                 {
                     return studentMV;
                 }
-             student.DepartmentBranch.InstructorCourses=student.DepartmentBranch.InstructorCourses.Where(ic => ic.Instructor.UserId == Instructor_ID).ToList();
+                student.DepartmentBranch.InstructorCourses = student.DepartmentBranch.InstructorCourses.Where(ic => ic.Instructor.UserId == Instructor_ID).ToList();
                 studentMV = _mapper.Map<StudentMV>(student);
-                
+
                 return studentMV;
             }
             catch (Exception ex)
@@ -233,7 +233,7 @@ namespace Examination.PL.BL
                     }
                     else
                     {
-                        if (studentExist.DepartmentBranch.DepartmentId != student.DepartmentId&& _unitOfWork.StudentRepo.DoesStudentFinishedAtLeastOneCourse(studentExist.Id)==1)
+                        if (studentExist.DepartmentBranch.DepartmentId != student.DepartmentId && _unitOfWork.StudentRepo.DoesStudentFinishedAtLeastOneCourse(studentExist.Id) == 1)
                         {
                             result = -2;
 
@@ -260,7 +260,7 @@ namespace Examination.PL.BL
                             result = _unitOfWork.Save();
 
                         }
-                     
+
                     }
 
 
@@ -295,7 +295,92 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
-      
+
+        public int? GetStudentGrade(int Courseid)
+        {
+            try
+            {
+                var userIdString = _httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value;
+
+                if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+                {
+                    _logger.LogWarning("UserId is not found or invalid in the HttpContext.");
+                    return 0;
+                }
+                var studentId = _unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId).Id;
+                var studentgrade = _unitOfWork.StudentCourseRepo.GetAll(s => s.CourseId == Courseid && s.StudentId == studentId).Select(c => c.FinalGradePercent).FirstOrDefault();
+                return studentgrade;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "error occuired while geting course grade ");
+                return 0;
+            }
+        }
+
+
+
+
+        public StudentMV GetProfile(int userId)
+        {
+            try
+            {
+                var student = _unitOfWork.StudentRepo
+                    .FirstOrDefault(s => s.UserId == userId, "User,DepartmentBranch.Department,DepartmentBranch.Branch,StudentCourses.Course");
+
+                if (student == null)
+                    return null;
+
+                var studentMV = _mapper.Map<StudentMV>(student);
+
+                studentMV.DepartmentId = student.DepartmentBranch.DepartmentId;
+                studentMV.BranchId = student.DepartmentBranch.BranchId;
+                studentMV.StudentCourses = student.StudentCourses.Select(sc => new StudentCourseMV
+                {
+                    Course = _mapper.Map<CourseMV>(sc.Course),
+                    FinalGradePercent = sc.FinalGradePercent
+                }).ToList();
+
+                return studentMV; 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving student profile");
+                return null;
+            }
+        }
+
+        public int UpdateProfile(StudentUpdateProfileMV student)
+        {
+            try
+            {
+                var studentExist = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == student.Id, "User");
+
+                if (studentExist == null) return 0;
+
+                studentExist.User.FirstName = student.User.FirstName;
+                studentExist.User.LastName = student.User.LastName;
+                studentExist.User.Email = student.User.Email;
+                studentExist.User.Phone = student.User.Phone;
+
+                studentExist.User.UpdatedAt = DateTime.Now;
+                studentExist.User.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId").Value);
+
+                _unitOfWork.StudentRepo.Update(studentExist);
+                return _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while updating student profile.");
+                return 0;
+            }
+        }
+
+
+
+
     }
 
+
 }
+

@@ -57,7 +57,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Branches__3214EC0765A92EC8");
 
-                    b.ToTable("Branches", (string)null);
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.Course", b =>
@@ -100,7 +100,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Courses__3214EC074391AACD");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.CourseDepartment", b =>
@@ -123,7 +123,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("CourseDepartments", (string)null);
+                    b.ToTable("CourseDepartments");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.CourseTopic", b =>
@@ -188,7 +188,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Departme__3214EC0748EFB9B1");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.DepartmentBranch", b =>
@@ -206,14 +206,18 @@ namespace Examination.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id")
                         .HasName("PK__Departme__3214EC078803B4B7");
 
-                    b.HasIndex("BranchId");
-
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("BranchId", "DepartmentId")
+                        .IsUnique()
+                        .HasDatabaseName("UQ_DepartmentBranches_Branch_Department");
 
                     b.ToTable("Department_Branches", (string)null);
                 });
@@ -264,7 +268,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.ExamQ", b =>
@@ -489,7 +493,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex(new[] { "UserId" }, "IX_Instructors_UserId");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.InstructorCourse", b =>
@@ -573,7 +577,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasIndex(new[] { "UserId" }, "IX_Students_UserId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.StudentCourse", b =>
@@ -619,7 +623,7 @@ namespace Examination.DAL.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Topics__3214EC073196F110");
 
-                    b.ToTable("Topics", (string)null);
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.User", b =>
@@ -668,7 +672,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Examination.DAL.Entities.UserType", b =>
@@ -685,7 +689,7 @@ namespace Examination.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTypes", (string)null);
+                    b.ToTable("UserTypes");
                 });
 
             modelBuilder.Entity("UserUserType", b =>

@@ -1,0 +1,71 @@
+﻿@model List<GeneratedExamQMV>
+@{
+    Layout = null;
+    var i = 1;
+    var CurrentStudentId = ViewBag.Studentid;
+}
+<div class="modal-body mx-3">
+    <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Questions</h5>
+
+    @foreach (var question in Model)
+    {
+        <div class="row g-2 mb-3">
+            <div class="col-md-12 mb-2">
+
+                <div class="form-control mb-2">@i) @question.ExamQs.Question</div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    <div class="d-flex flex-column gap-2">
+                        @{
+                            var answers = question.ExamQs.Answers.Split(';');
+                            var studentAnswer = question.ExamStudentAnswers
+                            .FirstOrDefault(sa => sa.GeneratedExamQsId == question.Id && sa.StudentId == CurrentStudentId)?
+                            .StdAnswer?.Trim().ToLower();
+                            var rightAnswer = question.ExamQs.RightAnswer.Trim().ToLower();
+
+                            foreach (var answer in answers)
+                            {
+                                if (!string.IsNullOrWhiteSpace(answer))
+                                {
+                                    var answerLetter = answer.Trim().Substring(0, 1).ToLower();
+                                    string choiceClass = "";
+
+                                    if (answerLetter == rightAnswer && answerLetter == studentAnswer)
+                                    {
+                                        choiceClass = "border-success";
+                                    }
+                                    else if (answerLetter == rightAnswer)
+                                    {
+                                        choiceClass = "border-success";
+                                    }
+                                    else if (answerLetter == studentAnswer)
+                                    {
+                                        choiceClass = "border-danger";
+                                    }
+
+                                    <div class="form-control @choiceClass">
+                                        @answer.Trim()
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        i++;
+    }
+
+
+
+   
+
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+</div>

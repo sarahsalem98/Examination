@@ -23,7 +23,7 @@ namespace Examination.DAL.Repos
         public IDepartmentBranch DepartmentBranchRepo { get { return new DepartmentBranchRepo(_db); } }
         public ICourseRepo CourseRepo { get { return new CourseRepo(_db); } }
         public IExamQuestionRepo ExamQuestionRepo { get { return new ExamQuestionRepo(_db); } }
-
+        public IGeneratedExamQRepo GeneratedExamQRepo { get { return new GeneratedExamQRepo(_db); } }
         public IInstructorCourseRepo InstructorCourseRepo { get { return new InstructorCourseRepo(_db); } }
         public IGeneratedExamRepo GeneratedExamRepo { get { return new GeneratedExamRepo(_db); } }
         public ICourseDepartmentRepo CourseDepartmentRepo { get { return new CourseDepartmentRepo(_db); } }
