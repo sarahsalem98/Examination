@@ -97,4 +97,6 @@ namespace Examination.PL.ModelViews
         [Required]
         public string Phone { get; set; }
     }
+
+   
 }
