@@ -25,7 +25,7 @@ namespace Examination.PL.BL
         {
             try
             {
-                var instructorCourses = unitOfWork.InstructorCourseRepo.GetAll(ic=>ic.InstructorId==CreatedBy&&ic.Course.Exams.Any(e=>e.Id==ExamId),
+                var instructorCourses = unitOfWork.InstructorCourseRepo.GetAll(ic => ic.InstructorId == CreatedBy && ic.Course.Exams.Any(e => e.Id == ExamId),
                     "Course.Exams").ToList();
                 var departmentBranchId = unitOfWork.DepartmentBranchRepo.GetAll(d => d.DepartmentId == DepartmentId && d.BranchId == BranchId).FirstOrDefault()?.Id;
                 if (departmentBranchId == null)
@@ -34,7 +34,7 @@ namespace Examination.PL.BL
                     throw new Exception("Department Branch not found");
 
                 }
-                var generatedExamExsist = unitOfWork.GeneratedExamRepo.GetAll(e => e.ExamId == ExamId &&e.DepartmentBranchId==departmentBranchId);
+                var generatedExamExsist = unitOfWork.GeneratedExamRepo.GetAll(e => e.ExamId == ExamId && e.DepartmentBranchId == departmentBranchId);
                 if (instructorCourses.Any(ic => DateOnly.FromDateTime(ic.EndDate.Value) > TakenDate))
                 {
 
@@ -60,7 +60,7 @@ namespace Examination.PL.BL
                 unitOfWork.InstructorCourseRepo.Update(DepartmentBranchCourse);
 
                 unitOfWork.Save();
-                var res = unitOfWork.GeneratedExamRepo.GenerateExam(ExamId,DepartmentId,BranchId,NumsTS,NumsMCQ,CreatedBy,TakenDate,takenTime);
+                var res = unitOfWork.GeneratedExamRepo.GenerateExam(ExamId, DepartmentId, BranchId, NumsTS, NumsMCQ, CreatedBy, TakenDate, takenTime);
                 return 1;
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace Examination.PL.BL
                              e.Exam.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim()))
                         ),
                     "DepartmentBranch.InstructorCourses.Instructor,DepartmentBranch.Department,DepartmentBranch.Branch,Exam.Course"
-                ).OrderByDescending(e=>e.CreatedAt).ToList();
+                ).OrderByDescending(e => e.CreatedAt).ToList();
 
                 exams = mapper.Map<List<GeneratedExamMV>>(data);
                 int TotalCounts = exams.Count();
@@ -119,27 +119,30 @@ namespace Examination.PL.BL
         {
             try
             {
-                var exsistingexam=unitOfWork.GeneratedExamRepo.FirstOrDefault(e=>e.Id == GeneratedExamID);
+                var exsistingexam = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.Id == GeneratedExamID);
                 if (exsistingexam == null)
                 {
                     return 0;
-                }else
+                }
+                else
                 {
                     exsistingexam.TakenDate = TakenDate;
                     exsistingexam.TakenTime = takenTime;
                     unitOfWork.GeneratedExamRepo.Update(exsistingexam);
-                   var res= unitOfWork.Save();
-                    if(res>0)
+                    var res = unitOfWork.Save();
+                    if (res > 0)
                     {
                         return 1;
-                    }else
+                    }
+                    else
                     {
                         return 0;
                     }
                 }
-            }catch
+            }
+            catch
             {
-                logger.LogError( "error occuired while Updating exams");
+                logger.LogError("error occuired while Updating exams");
                 return 0;
             }
         }
@@ -148,8 +151,8 @@ namespace Examination.PL.BL
             try
             {
                 var exam = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.Id == GeneratedExamId, "DepartmentBranch");
-             
-                
+
+
 
                 if (exam != null)
                 {
@@ -165,6 +168,55 @@ namespace Examination.PL.BL
             catch
             {
                 logger.LogError("error occuired while getting exam");
+                return null;
+            }
+        }
+
+        public List<GeneratedExamMV> CommingExam(string userIdString)
+        {
+            try
+            {
+
+                if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+                {
+                    logger.LogWarning("UserId is not found or invalid in the HttpContext.");
+                    return null;
+                }
+
+                // Get the student branch department ID from the database
+                var studentBranchDepId = unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId).DepartmentBranchId;
+
+                if (studentBranchDepId == null)
+                {
+                    logger.LogWarning("Student's Department Branch ID is not found.");
+                    return null;
+                }
+
+                //get Student comming exam
+                var commingExam = unitOfWork.GeneratedExamRepo
+                    .GetAll(e => e.DepartmentBranchId == studentBranchDepId,"Exam"
+                    ).ToList()
+                    .Where(e =>
+                    {
+                        var startDate = e.TakenDate.ToDateTime(e.TakenTime);
+                        var endDate = startDate.AddMinutes(e.Exam.Duration);
+                        return startDate > DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate);
+                    })
+                    .OrderBy(e => e.TakenDate.ToDateTime(e.TakenTime))
+                    .ToList();
+
+                if (!commingExam.Any())
+                {
+                    logger.LogWarning("No upcoming exam found for the student.");
+                    return null;
+                }
+
+                var commingExamList = mapper.Map<List<GeneratedExamMV>>(commingExam);
+                return commingExamList;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "error occurred while getting the comming exam");
                 return null;
             }
         }
