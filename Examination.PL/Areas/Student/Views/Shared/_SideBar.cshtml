@@ -29,7 +29,7 @@
         </li>
         <!-- Courses -->
         <li class="nav-item">
-            <a asp-controller="Courses" asp-action="Index" asp-area="Student" class="sidebar-link nav-link text-white rounded-0 @IsActive("Studend","Courses","Index")">
+            <a asp-controller="Courses" asp-action="Index" asp-area="Student" class="sidebar-link nav-link text-white rounded-0 @IsActive("Student","Courses","Index")">
                 <i class="bi bi-book"></i> <span class="ms-2">Courses</span>
             </a>
         </li>
@@ -44,7 +44,10 @@
                 </span>
             </a>
             <ul class="collapse list-unstyled ms-4" id="examDropdown">
-                <li><a href="ComingExam.html" class="nav-link text-white">Coming Exams</a></li>
+                    <a asp-controller="CommingExam" asp-action="Index" asp-area="Student" class="sidebar-link nav-link text-white rounded-0 @IsActive("Student","CommingExam","Index")">
+                    <span class="ms-2">Comming Exam</span>
+                    </a>
+                </li>
                 <li><a href="previous.html" class="nav-link text-white">Previous Exams</a></li>
             </ul>
         </li>

@@ -1,0 +1,128 @@
+﻿.header {
+    color: var(--primary-color);
+    margin: 2rem 0 2rem 0;
+}
+
+.quiz-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+
+.quiz-card {
+    flex: 1 1 calc(50% - 20px);
+    max-width: calc(50% - 20px);
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.schedule-box {
+    background: #fff7e6;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+    .schedule-box p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+.stats {
+    display: flex;
+    justify-content: left;
+    margin: 20px 0;
+    font-weight: bold;
+    color: #28a745;
+}
+
+    .stats div {
+        margin-left: 20px;
+        font-size: 18px;
+    }
+
+    .stats span {
+        display: block;
+        font-size: 14px;
+        color: gray;
+        font-weight: normal;
+    }
+
+.unlock-btn {
+    text-align: right;
+}
+
+    .unlock-btn button {
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+.lit-ball {
+    position: relative;
+    display: inline-flex;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
+    margin-right: 5px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* search style */
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+    .search-container input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .search-container button {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .search-container button:hover {
+            background: #2f1d5b;
+        }
+
+.dropdown-menu {
+    transform: translateY(0px) !important;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 4px rgba(255, 165, 0, 0.5);
+    }
+
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 16px rgba(255, 165, 0, 1);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 4px rgba(255, 165, 0, 0.5);
+    }
+}
+
+@media (max-width: 768px) {
+    .quiz-card {
+        flex: 1 1 100%; /* Full width on small screens */
+        max-width: 100%;
+    }
+}

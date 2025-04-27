@@ -1,0 +1,40 @@
+﻿@model List<GeneratedExamMV>
+@{
+	Layout ="~/Areas/Student/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Comming Exam";
+}
+@section Styles {
+	<link rel="stylesheet" href="~/css/ComminExam.css" />
+}
+
+
+<h3 class="header fw-bold">Live Quizzes <span class="text-danger"><span class="lit-ball"></span></h3>
+<div class="quiz-container">
+@foreach(var item in Model)
+{
+        
+        var endDateTime = item.TakenTime.AddMinutes(item.Exam.Duration);
+	<div class="quiz-card">
+
+          <h4 class="fw-bold mt-2">@item.Exam.Name</h4>
+
+            <div class="schedule-box mt-3">
+                <p class="text-warning fw-bold">SCHEDULE TIME</p>
+                <p><i class="bi bi-calendar text-success"></i> @item.TakenDate.ToString("ddd, MMM dd, yyyy")</p>
+                <p><i class="bi bi-clock text-danger"></i> @item.TakenTime - @endDateTime</p>
+                <p><i class="bi bi-globe text-primary"></i> Timezone - UTC</p>
+            </div>
+
+            <div class="stats">
+                <div>(@item.)<span>Questions</span></div>
+                <div>@item.Exam.Duration<span>Minutes</span></div>
+                <div>@item.Grade<span>Marks</span></div>
+            </div>
+
+            <div class="unlock-btn">
+                <a href="#"><button class="btn btn-dark btn-sm"><i class="bi bi-lock"></i> UNLOCK</button></a>
+            </div>
+	</div>
+
+        
+}
