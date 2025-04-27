@@ -114,6 +114,8 @@ public class TopicService : ITopicService
         if (topic.CourseTopics == null || !topic.CourseTopics.Any())
         {
             _unitOfWork.TopicRepo.Remove(id);
+            _unitOfWork.Save();
+
             return true;
 
         }
@@ -160,11 +162,11 @@ public class TopicService : ITopicService
     {
         try
         {
-            var topics = _unitOfWork.CourseTopicRepo.GetAll(i => i.CourseId == ID,"Topic").Select(i => i.Topic).ToList();
-            if (topics == null)  return new List<TopicMV>();
+            var topics = _unitOfWork.CourseTopicRepo.GetAll(i => i.CourseId == ID, "Topic").Select(i => i.Topic).ToList();
+            if (topics == null) return new List<TopicMV>();
 
             var mapperdTopics = _mapper.Map<List<TopicMV>>(topics);
-            
+
             return mapperdTopics;
         }
         catch (Exception ex)
