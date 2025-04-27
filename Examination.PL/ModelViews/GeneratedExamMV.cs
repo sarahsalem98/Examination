@@ -25,6 +25,9 @@ namespace Examination.PL.ModelViews
 
         public int ExamId { get; set; }
 
+        public int? CountTF { get; set; }
+        public int? CountMCQ { get; set; }
+
         public InstructorMV CreatedByNavigation { get; set; } = null!;
 
         public DepartmentBranchMV DepartmentBranch { get; set; } = null!;

@@ -14,6 +14,7 @@
 {
         
         var endDateTime = item.TakenTime.AddMinutes(item.Exam.Duration);
+		var Qcount = (item.CountMCQ + item.CountTF) ?? 0;
 	<div class="quiz-card">
 
           <h4 class="fw-bold mt-2">@item.Exam.Name</h4>
@@ -26,7 +27,7 @@
             </div>
 
             <div class="stats">
-                <div>(@item.)<span>Questions</span></div>
+                <div>@Qcount<span>Questions</span></div>
                 <div>@item.Exam.Duration<span>Minutes</span></div>
                 <div>@item.Grade<span>Marks</span></div>
             </div>
