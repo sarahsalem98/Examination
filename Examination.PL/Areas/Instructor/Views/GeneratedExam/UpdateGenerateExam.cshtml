@@ -1,0 +1,45 @@
+﻿@model GeneratedExamMV
+@{
+    Layout = null;
+}
+<form id="Instructor-Update-GenerateExam-Form">
+    <div class="modal-body mx-3">
+        <h5 class="mb-3" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Change Time</h5>
+
+
+
+
+        <input id="GenereatedExamId" type="hidden" asp-for="Id" />
+
+        <div class="row g-2 mb-3">
+           
+            <div class="col-md-6">
+                <input type="time" class="form-control" name="takenTime" />
+            </div>
+            <div class="col-md-6">
+                <input type="date" class="form-control" name="TakenDate" />
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn advanced-search-btn" onclick="InstructorGeneratedExam.UpdateGenerateExam(event)">Update Data</button>
+    </div>
+
+
+</form>
+
+
+
+<script>
+
+    $(document).ready(function(){
+    });
+</script>
+
+
+

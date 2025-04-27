@@ -121,13 +121,13 @@ namespace Examination.PL.Areas.Admin.Controllers
                 {
                     response.Success = true;
                     response.Message = "Status Changed Successfully";
-                    response.Data = exam;
+                   
                 }
                 else
                 {
-                    response.Success = true;
-                    response.Message = "Status Changed Successfully";
-                    response.Data = exam;
+                    response.Success = false;
+                    response.Message = "Status Changed Failed";
+                   
                 }
 
             }
