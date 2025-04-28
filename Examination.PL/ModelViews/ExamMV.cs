@@ -84,6 +84,7 @@ namespace Examination.PL.ModelViews
     public class OnGoingExamMV { 
         public string? ExamTitle { get; set; }
         public DateTime StartTime { get; set; }
+        public int? GeneratedExamId { get; set; }
 
         public DateTime EndTime { get; set; }
         public int Duration { get; set; }
