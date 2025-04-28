@@ -79,4 +79,30 @@ namespace Examination.PL.ModelViews
         public string? QuestionType { get; set; }
         public int? Status { get; set; }
     }
+
+
+    public class OnGoingExamMV { 
+        public string? ExamTitle { get; set; }
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
+        public int Duration { get; set; }
+        public List<OnGoingExamQuestion> Questions { get; set; } = new List<OnGoingExamQuestion>();
+
+
+
+    }
+    public class OnGoingExamQuestion
+    {
+        public int QId { get; set; }
+        public int ? GeneratedExamId { get; set; }
+        public int Qorder { get; set; }
+
+        public string? Question { get;set; }
+        public string? Answers { get; set; }
+        public string ? RightAnswer { get; set; }
+        public int Degree { get; set; }
+
+    }
+
 }

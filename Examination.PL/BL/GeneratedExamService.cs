@@ -163,7 +163,7 @@ namespace Examination.PL.BL
         {
             try
             {
-                var exam = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.Id == GeneratedExamId, "DepartmentBranch");
+                var exam = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.Id == GeneratedExamId , "DepartmentBranch,GeneratedExamQs.ExamQs,Exam");
 
 
 
