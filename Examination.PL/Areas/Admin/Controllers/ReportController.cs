@@ -7,9 +7,14 @@ namespace Examination.PL.Areas.Admin.Controllers
     [UserTypeAuthorize(Constants.UserTypes.Admin)]
     public class ReportController : Controller
     {
-        public IActionResult GetTopics()
+        public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult GetReport(string ReportName)
+        {
+            ViewBag.ReportName= ReportName;
+          return  View();
         }
     }
 }
