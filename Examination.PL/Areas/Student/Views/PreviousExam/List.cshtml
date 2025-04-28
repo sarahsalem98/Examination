@@ -1,0 +1,43 @@
+﻿@model PaginatedData<GeneratedExamMV>
+@{
+    Layout = null;
+    var ExamGrades = ViewBag.ExamGrades as Dictionary<int, int?>;
+}
+<input type="hidden" id="TotalCount" value="@Model.TotalCount" />
+<table class="table data-table table-bordered table-hover mt-2">
+    <thead>
+        <tr>
+
+            <th scope="col">Exam Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Grade</th>
+            <th scope="col">Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class=" alert-info text-center">No data found</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+				var grade = ExamGrades?.GetValueOrDefault(item.Id);
+                <tr>
+
+                    <td>@item?.Exam.Name</td>
+                    <td>@item?.TakenDate</td>
+                    <td>@grade</td>
+                    <td>@item.Exam.Type</td>
+                </tr>
+
+            }
+        }
+
+
+
+    </tbody>
+</table>

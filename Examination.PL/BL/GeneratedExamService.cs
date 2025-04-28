@@ -233,5 +233,80 @@ namespace Examination.PL.BL
             }
         }
 
+        public PaginatedData<GeneratedExamMV> GetPreviousExams(string userIdString, GeneratedExamSearchMV search, int pageSize = 10, int page = 1)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+                {
+                    logger.LogWarning("UserId is not found or invalid in the HttpContext.");
+                    return new PaginatedData<GeneratedExamMV> { Items = new List<GeneratedExamMV>(), TotalCount = 0 };
+                }
+
+                var student = unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId);
+
+                if (student == null)
+                {
+                    logger.LogWarning("Student not found.");
+                    return new PaginatedData<GeneratedExamMV> { Items = new List<GeneratedExamMV>(), TotalCount = 0 };
+                }
+
+                var studentBranchDepId = student.DepartmentBranchId;
+
+                var examsQuery = unitOfWork.GeneratedExamRepo.GetAll(
+                    e =>
+                        e.DepartmentBranchId == studentBranchDepId &&
+                        (search.ExamType == null || e.Exam.Type == search.ExamType) &&
+                        (string.IsNullOrEmpty(search.Name) ||
+                         (!string.IsNullOrEmpty(e.Exam.Name) && e.Exam.Name.ToLower().Trim().Contains(search.Name.ToLower().Trim()))
+                        ),
+                    includeProperties: "Exam,ExamStudentGrades"
+                ).ToList()
+                .Where(e =>
+                {
+                    var startDate = e.TakenDate.ToDateTime(e.TakenTime);
+                    var endDate = startDate.AddMinutes(e.Exam.Duration);
+                    return endDate < DateTime.Now;
+                })
+                .OrderByDescending(e => e.TakenDate.ToDateTime(e.TakenTime))
+                .ToList();
+
+                // Map exams
+                var mappedExams = examsQuery.Select(e => new
+                {
+                    ExamMV = mapper.Map<GeneratedExamMV>(e),
+                    ExamId = e.Id,
+                    Grade = e.ExamStudentGrades
+                 .Where(g => g.StudentId == student.Id && g.GeneratedExamId == e.Id)
+                 .FirstOrDefault()?.GradePercent
+                });
+
+                // Filtered & paginated
+                int totalCount = mappedExams.Count();
+                var paginatedExams = mappedExams.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+                // Store Grades in HttpContext.Items
+                httpContextAccessor.HttpContext.Items["ExamGrades"] = paginatedExams.ToDictionary(e => e.ExamId, e => e.Grade);
+
+                return new PaginatedData<GeneratedExamMV>
+                {
+                    Items = paginatedExams.Select(e => e.ExamMV).ToList(),
+                    TotalCount = totalCount,
+                    PageSize = pageSize,
+                    CurrentPage = page
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while retrieving previous exams.");
+                return new PaginatedData<GeneratedExamMV> { Items = new List<GeneratedExamMV>(), TotalCount = 0 };
+            }
+        }
+
+
     }
+
+
+
 }
+

@@ -10,6 +10,7 @@ namespace Examination.PL.IBL
         public int UpdateGeneratedExam(int GeneratedExamID, DateOnly TakenDate, TimeOnly takenTime);
         public List<GeneratedExamMV> CommingExam(string userIdString);
 
+        public PaginatedData<GeneratedExamMV> GetPreviousExams(string userIdString, GeneratedExamSearchMV search, int pageSize = 10, int page = 1);
 
     }
 }
