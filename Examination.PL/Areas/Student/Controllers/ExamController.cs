@@ -20,7 +20,7 @@ namespace Examination.PL.Areas.Student.Controllers
         {
 
             OnGoingExamMV examGoing = new OnGoingExamMV();
-            GeneratedExamId = 18;
+            //GeneratedExamId = 18;
             var exam = _generatedExamService.GetByID(GeneratedExamId);
             if (exam.TakenDate != DateOnly.FromDateTime(DateTime.Now)) {
 
