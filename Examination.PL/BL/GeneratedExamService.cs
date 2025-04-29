@@ -208,8 +208,8 @@ namespace Examination.PL.BL
                     {
                         var startDate = e.TakenDate.ToDateTime(e.TakenTime);
                         var endDate = startDate.AddMinutes(e.Exam.Duration);
-                        var studentGradefinal = student.StudentCourses.FirstOrDefault(s => s.CourseId == e.Exam.CourseId);
-                        return (startDate > DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate)) &&(studentGradefinal.FinalGradePercent== null);
+                        var studentExamTaken = e.ExamStudentGrades.FirstOrDefault(d=>d.GeneratedExamId==e.Id&&d.StudentId==student.Id);
+                        return (startDate > DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate)) &&(studentExamTaken == null);
                     })
                     .OrderBy(e => e.TakenDate.ToDateTime(e.TakenTime))
                     .ToList();
