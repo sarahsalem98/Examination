@@ -16,9 +16,7 @@ namespace Examination.PL.IBL
         StudentMV GetProfile(int userId);
         public StudentMV GetStudentCoursesWithInstructor(int Student_Id, int Instructor_Id);
         public int? GetStudentGrade(int Courseid);
-
-
-
         int UpdateProfile(StudentUpdateProfileMV student);
+    
     }
 }

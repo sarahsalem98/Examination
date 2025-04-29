@@ -9,5 +9,6 @@ namespace Examination.DAL.Repos.IRepos
 {
     public interface IStudentCourseRepo:IRepo<StudentCourse>
     {
+       
     }
 }

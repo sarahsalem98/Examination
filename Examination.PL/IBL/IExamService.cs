@@ -1,4 +1,5 @@
-﻿using Examination.PL.ModelViews;
+﻿using Examination.DAL.Entities;
+using Examination.PL.ModelViews;
 
 namespace Examination.PL.IBL
 {
@@ -14,6 +15,11 @@ namespace Examination.PL.IBL
         #endregion
         public List<ExamMV> GetByStatus(int? status=null);
         public List<ExamMV> GetByInstructorDepartmentBranch(int instructor_id,  int department_id, int branch_id);
+
+        #region OnGoingExam
+        int SubmitQuestionAnswer(int StudentId, int QId, int GeneratedExamId, string StdAnswer);
+   
+        #endregion
 
 
     }

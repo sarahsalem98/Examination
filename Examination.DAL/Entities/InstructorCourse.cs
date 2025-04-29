@@ -29,4 +29,5 @@ public partial class InstructorCourse
     public virtual DepartmentBranch? DepartmentBranch { get; set; }
 
     public virtual Instructor Instructor { get; set; } = null!;
+    public virtual ICollection<GeneratedExam> GeneratedExams { get; set; } = new List<GeneratedExam>();
 }

@@ -24,6 +24,7 @@ public partial class GeneratedExam
     public int ExamId { get; set; }
     public int? CountTF { get; set; }
     public int? CountMCQ { get; set; }
+    public int ? InstructorCourseId { get; set; }
 
     public virtual Instructor CreatedByNavigation { get; set; } = null!;
 
@@ -36,4 +37,5 @@ public partial class GeneratedExam
     public virtual ICollection<ExamStudentGrade> ExamStudentGrades { get; set; } = new List<ExamStudentGrade>();
 
     public virtual ICollection<GeneratedExamQ> GeneratedExamQs { get; set; } = new List<GeneratedExamQ>();
+    public virtual InstructorCourse? InstructorCourse { get; set; } = null!;    
 }

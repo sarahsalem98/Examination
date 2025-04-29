@@ -1,8 +1,11 @@
 ﻿var StudentExam = {
     questions: [],
+    GeneratedExamId: 0,
     currentOrder: 1,
+    totalTime: 0,
+    timeLeft: 0,
     loadQuestion: function (order) {
-        //debugger;
+        debugger;
         //console.log(order);
         var questionContainer = document.getElementById("question-container");
         var question = this.findQuestionByOrder(order);
@@ -45,11 +48,11 @@
         this.updateProgressBar();
     },
 
-    nextQuestion: function () {
-        var res = this.submitQuestion(this.currentOrder);
+    nextQuestion: async function () {
+        var res = await this.submitQuestion(this.currentOrder);
         if (res == 1) {
-        this.currentOrder++;
-        this.loadQuestion(this.currentOrder);
+            this.currentOrder++;
+            this.loadQuestion(this.currentOrder);
 
         }
     },
@@ -74,28 +77,51 @@
         progressBar.setAttribute("aria-valuenow", progress);
 
     },
-    submitQuestion: function (order) {
-        debugger;
+    submitQuestion: async function (order) {
+        // debugger;
         var question = this.findQuestionByOrder(order);
         var radios = document.getElementsByName(`q${question.qId}`);
 
         var selectedAnswer = null;
         for (var i = 0; i < radios.length; i++) {
             if (radios[i].checked) {
-                selectedAnswer = radios[i].value; 
+                selectedAnswer = radios[i].value;
                 break;
             }
         }
+
         if (!selectedAnswer) {
             this.displayWarningMessage(order);
             return 0;
+        } else {
+            var data = {
+                GenratedExamId: StudentExam.GeneratedExamId,
+                QId: question.qId,
+                StdAnswer: selectedAnswer
+            };
+
+            try {
+                const response = await $.ajax({
+                    type: "POST",
+                    url: "/Student/Exam/SubmitAnswer",
+                    data: data
+                });
+                console.log("Question submitted successfully:", response);
+                if (response.success) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+                return 1;
+            } catch (error) {
+                console.error("Error submitting question:", error);
+                return 0;
+            }
         }
-        return 1;
-
-
     },
+
     displayWarningMessage: function (order) {
-        debugger;
+        //debugger;
         var questionContainer = document.getElementById(`question-${order}`);
         var existingWarning = questionContainer.querySelector('.warning-message');
         if (!existingWarning) {
@@ -107,7 +133,7 @@
         }
     },
     removeWarningMessage: function (order) {
-        debugger;
+        // debugger;
         var questionContainer = document.getElementById(`question-${order}`);
         var warningMessage = questionContainer.querySelector('.warning-message');
         if (warningMessage) {
@@ -115,7 +141,7 @@
         }
     },
     addRadioButtonEventListeners: function (order) {
-        debugger;
+        //debugger;
         var question = this.findQuestionByOrder(order);
         if (!question) return;
 
@@ -127,6 +153,19 @@
             }
         });
     },
+    updateTimer: function () {
+        //debugger;
+        var minutes = Math.floor(StudentExam.timeLeft / 60);
+        var seconds = Math.floor(StudentExam.timeLeft % 60); 
+        document.getElementById('time').textContent = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+        if (StudentExam.timeLeft <= 0) {
+            clearInterval(timer);
+            submitAndClose();
+        } else {
+            StudentExam.timeLeft--; 
+        }
+    }
 
 
 };

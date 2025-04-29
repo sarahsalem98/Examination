@@ -10,9 +10,11 @@ namespace Examination.PL.Areas.Student.Controllers
     public class ExamController : Controller
     {
         private readonly IGeneratedExamService _generatedExamService;
-        public ExamController(IGeneratedExamService generatedExamService)
+        private readonly IExamService _examService;
+        public ExamController(IGeneratedExamService generatedExamService, IExamService examService)
         {
             _generatedExamService = generatedExamService;
+            _examService = examService;
         }
         public IActionResult Index(int GeneratedExamId)
         {
@@ -20,7 +22,7 @@ namespace Examination.PL.Areas.Student.Controllers
             GeneratedExamId = 18;
             var exam = _generatedExamService.GetByID(GeneratedExamId);
             var examQuestions = exam.GeneratedExamQs.OrderBy(q => q.QsOrder).Select(q => new OnGoingExamQuestion {
-                QId = q.ExamQs.Id,
+                QId = q.Id,
                 GeneratedExamId = q.GeneratedExamId,
                 Question = q.ExamQs.Question,
                 Answers = q.ExamQs.Answers,
@@ -33,8 +35,25 @@ namespace Examination.PL.Areas.Student.Controllers
             examGoing.EndTime = exam.TakenDate.ToDateTime(exam.TakenTime).AddMinutes(exam.Exam.Duration);
             examGoing.Duration = exam.Exam.Duration;
             examGoing.Questions = examQuestions;
+            examGoing.GeneratedExamId = GeneratedExamId;
             ViewBag.Exam = examGoing;
             return View();
+        }
+
+        public IActionResult SubmitAnswer(int GenratedExamId, int QId , string StdAnswer)
+        {
+            int loggedUserId =int.Parse(User.FindFirst("UserId").Value);
+            var res = _examService.SubmitQuestionAnswer(loggedUserId, QId, GenratedExamId, StdAnswer);
+            if (res > 0)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+           
+
         }
 
       
