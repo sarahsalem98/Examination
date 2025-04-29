@@ -2,6 +2,9 @@
 @{
     Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Comming Exam";
+    var nowTime = TimeOnly.FromDateTime(DateTime.Now);
+
+
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/ComminExam.css" />
@@ -12,17 +15,21 @@
 @if (Model.Count() > 0)
 {
 
-    @foreach (var item in Model)
-    {
-        <div class="quiz-container">
+    <div class="quiz-container">
 
-            @{
-                var endDateTime = item.TakenTime.AddMinutes(item.Exam.Duration);
-                var Qcount = (item.CountMCQ + item.CountTF) ?? 0;
 
-            }
-         
+        @foreach (var item in Model)
+        {
+
+
             <div class="quiz-card">
+                @{
+                    var startTime = item.TakenTime;
+                    var endDateTime = item.TakenTime.AddMinutes(item.Exam.Duration);
+                    var Qcount = (item.CountMCQ + item.CountTF) ?? 0;
+                    var isNow = nowTime >= startTime && nowTime < endDateTime;
+
+                }
 
                 <h4 class="fw-bold mt-2">@item.Exam.Name</h4>
 
@@ -38,10 +45,19 @@
                     <div>@item.Exam.Duration<span>Minutes</span></div>
                     <div>@item.Grade<span>Marks</span></div>
                 </div>
+                @if (isNow)
+                {
+                    <div class="unlock-btn">
+                        <button onclick="openExamWindow(@item.Id)" class="btn btn-dark btn-sm"><i class="bi bi-lock"></i> UNLOCK</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="unlock-btn" disabled>
+                        <a href="javascript:void(0);" class="btn btn-secondary btn-sm" style="cursor:not-allowed   "><i class="bi bi-lock"></i> UNLOCK</a>
+                    </div>
+                }
 
-                <div class="unlock-btn">
-                    <a href="#"><button class="btn btn-dark btn-sm"><i class="bi bi-lock"></i> UNLOCK</button></a>
-                </div>
             </div>
 
 
@@ -49,9 +65,9 @@
 
 
 
+        }
 
-        </div>
-    }
+    </div>
 }
 else
 
@@ -62,3 +78,20 @@ else
         <p class="text-muted mb-0">Stay tuned! We'll notify you when exams are scheduled.</p>
     </div>
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+        function openExamWindow(examId) {
+
+        var examWindow = window.open('/Student/Exam/Index?GeneratedExamId=' + examId, '_blank');
+        var interval = setInterval(function() {
+            if (examWindow.closed) {
+                clearInterval(interval); 
+                location.reload(); 
+            }
+        }, 1000); 
+    }
+
+  
+
+</script>

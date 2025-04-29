@@ -196,7 +196,8 @@ namespace Examination.PL.BL
                 }
 
                 // Get the student branch department ID from the database
-                var studentBranchDepId = unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == int.Parse(userIdString)).DepartmentBranchId;
+                var student= unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == int.Parse(userIdString), "StudentCourses");
+                var studentBranchDepId = student.DepartmentBranchId;
 
                 if (studentBranchDepId == null)
                 {
@@ -206,13 +207,14 @@ namespace Examination.PL.BL
 
                 //get Student comming exam
                 var commingExam = unitOfWork.GeneratedExamRepo
-                    .GetAll(e => e.DepartmentBranchId == studentBranchDepId,"Exam"
+                    .GetAll(e => e.DepartmentBranchId == studentBranchDepId  , "Exam,ExamStudentGrades"
                     ).ToList()
                     .Where(e =>
                     {
                         var startDate = e.TakenDate.ToDateTime(e.TakenTime);
                         var endDate = startDate.AddMinutes(e.Exam.Duration);
-                        return startDate > DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate);
+                        var studentGradefinal = student.StudentCourses.FirstOrDefault(s => s.CourseId == e.Exam.CourseId);
+                        return (startDate > DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate)) &&(studentGradefinal.FinalGradePercent== null);
                     })
                     .OrderBy(e => e.TakenDate.ToDateTime(e.TakenTime))
                     .ToList();

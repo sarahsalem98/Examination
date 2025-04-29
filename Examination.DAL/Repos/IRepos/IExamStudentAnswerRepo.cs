@@ -11,5 +11,6 @@ namespace Examination.DAL.Repos.IRepos
     {
         public int InsertStudentSingleAnswer(int StudentId, int QId, int GeneratedExamId, string StdAnswer);
         public int UpdateStudentSingleAnswer(int StudentId, int QId, int GeneratedExamId, string StdAnswer);
+        public int CorrectExam(int GeneratedExamId, int StudentId, string Type, int instructorCourseId, int MinSuccessPrecent);
     }
 }

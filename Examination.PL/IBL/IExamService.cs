@@ -18,7 +18,8 @@ namespace Examination.PL.IBL
 
         #region OnGoingExam
         int SubmitQuestionAnswer(int StudentId, int QId, int GeneratedExamId, string StdAnswer);
-   
+        int CorrectExam(int GeneratedExamId, int StudentId, string Type,int instructorCourseId,int MinSuccessPrecent);
+
         #endregion
 
 

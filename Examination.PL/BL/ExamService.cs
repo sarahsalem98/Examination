@@ -257,7 +257,7 @@ namespace Examination.PL.BL
                 return null;
             }
         }
-       public int SubmitQuestionAnswer(int StudentId, int QId, int GeneratedExamId, string StdAnswer)
+        public int SubmitQuestionAnswer(int StudentId, int QId, int GeneratedExamId, string StdAnswer)
         {
             var res = 0;
             try
@@ -269,7 +269,7 @@ namespace Examination.PL.BL
                     if (examStudentAnswer != null)
                     {
                         examStudentAnswer.StdAnswer = StdAnswer;
-                       _unitOfWork.ExamStudentAnswerRepo.UpdateStudentSingleAnswer(student.Id, QId, GeneratedExamId, StdAnswer);
+                        _unitOfWork.ExamStudentAnswerRepo.UpdateStudentSingleAnswer(student.Id, QId, GeneratedExamId, StdAnswer);
                     }
                     else
                     {
@@ -280,9 +280,9 @@ namespace Examination.PL.BL
                             StudentId = student.Id,
                             StdAnswer = StdAnswer
                         };
-                     _unitOfWork.ExamStudentAnswerRepo.InsertStudentSingleAnswer(newExamStudentAnswer.StudentId,newExamStudentAnswer.GeneratedExamQsId,newExamStudentAnswer.GeneratedExamId,newExamStudentAnswer.StdAnswer);
+                        _unitOfWork.ExamStudentAnswerRepo.InsertStudentSingleAnswer(newExamStudentAnswer.StudentId, newExamStudentAnswer.GeneratedExamQsId, newExamStudentAnswer.GeneratedExamId, newExamStudentAnswer.StdAnswer);
                     }
-                  
+
                 }
                 return 1;
             }
@@ -292,9 +292,24 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
+        public int CorrectExam(int GeneratedExamId, int userId, string Type, int instructorCourseId, int MinSuccessPrecent)
+        {
+            try
+            {
+                var studentId= _unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId)?.Id;  
+                var res = _unitOfWork.ExamStudentAnswerRepo.CorrectExam(GeneratedExamId, studentId??0, Type, instructorCourseId, MinSuccessPrecent);
+                return res;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while correcting exam.");
+                return 0;
+            }
+        }
+
+
+
     }
-
-
-
 }
 
