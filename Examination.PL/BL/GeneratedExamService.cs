@@ -55,15 +55,10 @@ namespace Examination.PL.BL
                 }
                  
 
-                var DepartmentBranchCourse = unitOfWork.InstructorCourseRepo.FirstOrDefault(ic => ic.Course.Exams.Any(e => e.Id == ExamId) && ic.InstructorId == CreatedBy,
-                   "Course.Exams");
-                if (DepartmentBranchCourse == null)
-                {
-                    return 0;
-                }
-                DepartmentBranchCourse.LastGeneratedExamType = instructorCourses.Course.Exams.FirstOrDefault(e => e.Id == ExamId)?.Type;
+              
+                instructorCourses.LastGeneratedExamType = instructorCourses.Course.Exams.FirstOrDefault(e => e.Id == ExamId)?.Type.ToLower();
                                                  
-                unitOfWork.InstructorCourseRepo.Update(DepartmentBranchCourse);
+                unitOfWork.InstructorCourseRepo.Update(instructorCourses);
 
                 unitOfWork.Save();
                 var res = unitOfWork.GeneratedExamRepo.GenerateExam(ExamId, DepartmentId, BranchId, NumsTS, NumsMCQ, CreatedBy, TakenDate, takenTime);
