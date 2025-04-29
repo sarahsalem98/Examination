@@ -111,11 +111,11 @@
         Topics.currentSearchData = {};
         Topics.Fetch(1);
     },
-    ChangeStatus: function (id, status) {
+    DeleteTopic: function (id) {
         $.ajax({
             type: "POST",
-            url: "/Admin/topic/ChangeStatus",
-            data: { id: id, status: status },
+            url: "/Admin/topic/DeleteTopic",
+            data: { id: id },
             success: function (response) {
                 if (response.success) {
                     Topics.Fetch(Topics.currentPage);
@@ -125,7 +125,7 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error changing student status:", error);
+                console.error("Error While Deleting Topic:", error);
             }
         });
     }
