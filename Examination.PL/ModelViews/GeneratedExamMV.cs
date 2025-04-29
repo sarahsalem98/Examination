@@ -27,6 +27,9 @@ namespace Examination.PL.ModelViews
 
         public int? CountTF { get; set; }
         public int? CountMCQ { get; set; }
+        public int? InstructorCourseId { get; set; }
+
+        public string? LastGeneratedExamType { get; set; }
 
         public InstructorMV CreatedByNavigation { get; set; } = null!;
 

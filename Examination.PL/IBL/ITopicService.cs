@@ -13,5 +13,7 @@ public interface ITopicService
 
     public List<TopicMV> GetTopicsByCourseId(int ID);
 
+    public bool SafeToDalete(int id);
+
 
 }

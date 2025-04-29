@@ -21,7 +21,7 @@
     <div class="container mt-5" style="padding-top:60px" id="container">
         <div class="row">
             <div class="col-12">
-                <h1 class="text-center mb-4">@exam.ExamTitle</h1>
+                <h1 class="text-center mb-4">@exam.ExamTitle.ToUpper()</h1>
                 <p>Start Time: @exam.StartTime.ToString("hh:mm:tt")  | End Time: @exam.EndTime.ToString("hh:mm:tt") | Duration: @exam.Duration Minutes</p>
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3>Questions</h3>
@@ -46,6 +46,8 @@
                    StudentExam.questions= @Html.Raw(Json.Serialize(exam.Questions))
                    StudentExam.totalTime=@Html.Raw(Json.Serialize(exam.Duration))
                    StudentExam.GeneratedExamId = @Html.Raw(Json.Serialize(exam.GeneratedExamId))
+                   StudentExam.ExamType=@Html.Raw(Json.Serialize(exam.ExamType))
+                   StudentExam.InstructorCourseId=@Html.Raw(Json.Serialize(exam.InstructorCourseId))
                    //console.log(StudentExam.totalTime);
                   // debugger;
                     var endTimeString = '@exam.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")';

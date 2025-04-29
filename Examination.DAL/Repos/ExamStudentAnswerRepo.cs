@@ -53,7 +53,27 @@ new SqlParameter("@StdAnswer", StdAnswer)
             }
             catch
             {
-                return -1; // SQL crash
+                return -1; 
+            }
+        }
+        public int CorrectExam(int GeneratedExamId, int StudentId, string Type, int instructorCourseId, int MinSuccessPrecent)
+        {
+            try
+            {
+                var res = _db.Database.ExecuteSqlRaw(
+                    "EXEC Exam.sp_CorrectStudentAnswers @StudentId, @GeneratedExamId, @InstructorCourseId,@MinSuccessPrecent, @ExamType",
+                    new SqlParameter("@GeneratedExamId", GeneratedExamId),
+                    new SqlParameter("@StudentId", StudentId),
+                    new SqlParameter("@ExamType", Type),
+                    new SqlParameter("@InstructorCourseId", instructorCourseId),
+                    new SqlParameter("@MinSuccessPrecent", MinSuccessPrecent)
+                );
+                return 1;
+
+            }
+            catch
+            {
+                return -1;
             }
         }
 
