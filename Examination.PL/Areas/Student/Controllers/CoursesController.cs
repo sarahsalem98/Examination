@@ -31,7 +31,7 @@ namespace Examination.PL.Areas.Student.Controllers
         {
             var userId = User.FindFirst("UserId")?.Value;
             var courses = courseService.GetCoursesByStudent(name,userId.ToString(), pagesize, page);
-            ViewBag.Grades=HttpContext.Items["Grades"];
+            ViewBag.ExamGrades = HttpContext.Items["ExamGrades"];
             return View(courses);
         }
 

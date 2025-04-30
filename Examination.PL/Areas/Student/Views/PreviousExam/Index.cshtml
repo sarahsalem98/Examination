@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "PreviousExams";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
+}
+
+<!-- Advanced Search Dropdown -->
+<div class="search d-flex align-items-center ">
+    <div class="search-dropdown">
+        <button class="advanced-search-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            Advanced Search
+        </button>
+        <div class="dropdown-menu p-4 flex-start">
+            <!-- Dropdown content -->
+            <div class="row g-2 mb-2">
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label for="Name" class="form-label">Exam Name</label>
+                    <input type="text" class="form-control rounded-0" id="Name" placeholder="Search by exam name">
+                </div>
+
+                <!-- Exam Type -->
+                <div class="col-md-6">
+                    <label for="ExamType" class="form-label">Exam Type</label>
+                    <select class="form-select rounded-0" id="ExamType">
+                        <option selected value="">Choose Exam Type...</option>
+                        <option value="@Examination.PL.Constants.ExamTypes.Midterm">Midterm</option>
+                        <option value="@Examination.PL.Constants.ExamTypes.Final">Final</option>
+                        <option value="@Examination.PL.Constants.ExamTypes.Assignment">Assignment</option>
+                        <option value="@Examination.PL.Constants.ExamTypes.Quiz">Quiz</option>
+                        <option value="@Examination.PL.Constants.ExamTypes.SecondTry">Second Try</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="reset" class="btn btn-secondary w-100 rounded-0" onclick="StdPrevExam.Reset();">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary w-100 btn-save rounded-0" onclick="StdPrevExam.Search()">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <div id="ExamList"></div>
+
+
+<div class="d-flex justify-content-center">
+    <ul id="pagination" class="pagination rounded-0"></ul>
+</div>
+
+
+@section Scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script src="~/js/student/PreviousExam.js"></script>
+    <script>
+         $(document).ready(function () {
+
+           StdPrevExam.Fetch(1)
+        });
+    </script>
+}
+

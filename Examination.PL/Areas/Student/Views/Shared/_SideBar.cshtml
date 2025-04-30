@@ -65,7 +65,7 @@
               
             </ul>
             <ul class="collapse list-unstyled ms-3 mt-3" id="examDropdown">
-                <a asp-controller="CommingExam" asp-action="Index" asp-area="Student" class=" nav-link text-white rounded-0 ">
+                <a asp-controller="PreviousExam" asp-action="Index" asp-area="Student" class=" nav-link text-white rounded-0  @IsActive("Student","PreviousExams","Index")">
                     <span class="">Previous Exam</span>
                 </a>
 
