@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Students";
     Layout = "~/Areas/Instructor/Views/Shared/_Layout.cshtml";
+    var finalGradePercent = Model.StudentCourses.FirstOrDefault(s => s.StudentId == Model.Id)?.FinalGradePercent ?? 0;
 
 }
 
@@ -47,10 +48,17 @@
 
         </div>
     </div>
+    <div class="row">
     <div class="col-md-6 mb-3">
         <label for="TrackType" class="form-label">TrackType</label>
         <input type="text" class="form-control rounded-0 mb-1" id="TrackType" value="@Enum.GetName(typeof(TrackType), Model.TrackType)" disabled>
 
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="FinalGrade" class="form-label">Final Grade</label>
+        <input type="text" class="form-control rounded-0 mb-1" id="FinalGrade"value="@finalGradePercent %" disabled>
+
+    </div>
     </div>
 
     <h5 class="mb-2" style="border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; color:var(--primary-color)">Courses And Exams</h5>
@@ -69,28 +77,32 @@
                             <th >@course.Course.Name</th>
 
                             <th>Exam Type</th>
+                            <th>Grade</th>
                             <th>Actions</th>
 
 
                         </tr>
                     </thead>
                     <tbody>
-                 
-                            @foreach (var exam in course.Course.Exams)
+
+                        @foreach (var exam in course.Course.Exams)
+                        {
+
+
+                            @foreach (var generated in exam.GeneratedExams)
                             {
-
-
-                                @foreach (var generated in exam.GeneratedExams)
-                                {
+                                var grade = @generated.ExamStudentGrades.FirstOrDefault(s => s.StudentId == Model.Id)?.GradePercent;
                                     <tr>
                                         <td>@generated.Exam.Name</td>
                                         <td>@generated.Exam.Type</td>
+                                        <td>@grade</td>
                                         <td>
 
                                             <button class="btn btn-Results" onclick="InstructorStudent.ShowExamModal(@Model.Id,@generated.Id)">Show Exam</button>
 
                                         </td>
                                     </tr>
+                                    
                                 }
 
                             }

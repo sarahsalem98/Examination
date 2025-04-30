@@ -12,7 +12,7 @@
         <div class="row g-2 mb-3">
             <div class="col-md-12 mb-2">
 
-                <div class="form-control mb-2">@i) @question.ExamQs.Question</div>
+                @i) @question.ExamQs.Question
             </div>
 
             <div class="col-md-12">
@@ -42,7 +42,7 @@
                                     }
                                     else if (answerLetter == studentAnswer)
                                     {
-                                        choiceClass = "border-2 border-red";
+                                        choiceClass = "border-2 border-danger";
                                     }
 
                                     <div class="form-control @choiceClass">

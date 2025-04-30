@@ -38,6 +38,7 @@ namespace Examination.PL.ModelViews
         public ExamMV Exam { get; set; } = null!;
         public List<GeneratedExamQMV> GeneratedExamQs { get; set; } = new List<GeneratedExamQMV>();
         public virtual List<ExamStudentAnswerMV> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswerMV>();
+        public virtual List<ExamStudentGradeMV> ExamStudentGrades { get; set; } = new List<ExamStudentGradeMV>();
 
 
     }

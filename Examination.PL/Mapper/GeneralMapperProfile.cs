@@ -27,7 +27,7 @@ namespace Examination.PL.Mapper
             CreateMap<CourseDepartmentMV, CourseDepartment>().ReverseMap();
             CreateMap<ExamStudentAnswerMV,ExamStudentAnswer>().ReverseMap();
             CreateMap<GeneratedExamQMV, GeneratedExamQ>().ReverseMap();
-
+            CreateMap<ExamStudentGradeMV, ExamStudentGrade>().ReverseMap();
 
             CreateMap<TopicMV, Topic>().ReverseMap();
         }

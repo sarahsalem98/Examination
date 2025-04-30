@@ -36,7 +36,7 @@ namespace Examination.PL.BL
                 var TakenDateExamForCourse = DepartmentBranchCourse.Course.Exams.Where(e=>e.CourseId==course_id)
                     .SelectMany(e=>e.GeneratedExams.Select(ge=>ge.TakenDate)).FirstOrDefault();
 
-                  if (DepartmentBranchCourse.IsCompleted == 1)
+                  if (DepartmentBranchCourse.IsCompleted == 1&&DepartmentBranchCourse.EndDate.Value.Year==DateTime.Now.Year)
 
                 {
                     //means he already put the grades
@@ -52,17 +52,18 @@ namespace Examination.PL.BL
                     //means instructor doasn't generate exam (tested)
                     return -3;
                 }
-                else if (TakenDateExamForCourse >= DateOnly.FromDateTime(DateTime.Now) || (DepartmentBranchCourse.FinalPassedStudentCount == null && DepartmentBranchCourse.CorrectivePassedStudentCount == null))
-                {
-                    //means student doeasn't have the exam(tested)
-                    return -4;
-                }
                 else if ((DepartmentBranchCourse.TotalStudents != DepartmentBranchCourse.FinalPassedStudentCount)
-                  && DepartmentBranchCourse.LastGeneratedExamType.Trim().ToLower() == "final")
+               && DepartmentBranchCourse.LastGeneratedExamType.Trim().ToLower() == "final")
                 {
                     //means failed students doeasn't have corrective exam (tested)
                     return -5;
                 }
+                else if (DepartmentBranchCourse.FinalPassedStudentCount == null && DepartmentBranchCourse.CorrectivePassedStudentCount == null)
+                {
+                    //means student doeasn't have the exam(tested)
+                    return -4;
+                }
+               
 
                 else
                 {
@@ -72,7 +73,7 @@ namespace Examination.PL.BL
                         var studentCourse = student.StudentCourses.FirstOrDefault(sc => sc.CourseId == course_id);
                         if (studentCourse != null)
                         {
-                            var finalgradepercent = student.ExamStudentGrades.FirstOrDefault(es => es.GeneratedExam?.Exam?.CourseId == course_id)?.GradePercent ?? 0;
+                            var finalgradepercent = student.ExamStudentGrades.LastOrDefault(es => es.GeneratedExam?.Exam?.CourseId == course_id)?.GradePercent ?? 0;
                             studentCourse.FinalGradePercent = (int)finalgradepercent;
                             unitOfWork.StudentCourseRepo.Update(studentCourse);
                         }

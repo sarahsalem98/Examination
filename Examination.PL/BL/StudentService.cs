@@ -199,7 +199,7 @@ namespace Examination.PL.BL
                StudentMV studentMV = new StudentMV();
                 var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.Id == Student_Id &&
                  s.DepartmentBranch.InstructorCourses.Any(ic=>ic.Instructor.UserId== Instructor_ID),
-                "DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course.Exams.GeneratedExams,DepartmentBranch.Department,DepartmentBranch.Branch");
+                "StudentCourses,ExamStudentGrades,DepartmentBranch.InstructorCourses.Instructor,User,DepartmentBranch.InstructorCourses.Course.Exams.GeneratedExams,DepartmentBranch.Department,DepartmentBranch.Branch");
           
                 if (student == null)
                 {

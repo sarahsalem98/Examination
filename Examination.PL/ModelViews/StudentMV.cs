@@ -27,6 +27,7 @@ namespace Examination.PL.ModelViews
         public List<StudentCourseMV>? StudentCourses { get; set; }
 
         public List<ExamStudentAnswerMV> ExamStudentAnswers { get; set; } = new List<ExamStudentAnswerMV>();
+        public List<ExamStudentGradeMV> ExamStudentGrades { get; set; } = new List<ExamStudentGradeMV>();
     }
 
     public class StudentSearchMV { 
@@ -97,6 +98,21 @@ namespace Examination.PL.ModelViews
         [Required]
         public string Phone { get; set; }
     }
+    public class ExamStudentGradeMV
+    {
+        public int Id { get; set; }
 
+        public int GeneratedExamId { get; set; }
+
+        public int StudentId { get; set; }
+
+        public decimal GradePercent { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public  GeneratedExamMV GeneratedExam { get; set; } = null!;
+
+        public  StudentMV Student { get; set; } = null!;
+    }
    
 }
