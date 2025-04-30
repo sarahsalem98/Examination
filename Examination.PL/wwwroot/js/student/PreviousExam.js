@@ -9,7 +9,7 @@
             type: "POST",
             url: "/Student/PreviousExam/List", 
             data: {
-                ExamSearch: StdPrevExam.currentSearchData,
+                search: StdPrevExam.currentSearchData,
                 PageSize: StdPrevExam.pageSize,
                 Page: Page
             },

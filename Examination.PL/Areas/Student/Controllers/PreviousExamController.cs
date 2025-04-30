@@ -25,7 +25,7 @@ namespace Examination.PL.Areas.Student.Controllers
         {
             var userId = User.FindFirst("UserId")?.Value;
             var PreviousExam = generatedExamService.GetPreviousExams(userId.ToString(), search, pagesize, page);
-            ViewBag.Grades = HttpContext.Items["Grades"];
+            ViewBag.Grades = HttpContext.Items["ExamGrades"];
             return View(PreviousExam);
         }
     }
