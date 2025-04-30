@@ -38,7 +38,8 @@ namespace Examination.PL.BL
              
 
                 var generatedExamExsist = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.ExamId == ExamId && e.DepartmentBranchId == departmentBranchId&&e.TakenDate.Year == TakenDate.Year);
-                if(instructorCourses.IsCompleted==1)
+                if (instructorCourses.IsCompleted == 1 && DateOnly.FromDateTime(instructorCourses.EndDate.Value).Year == TakenDate.Year)
+
                 {
                     return -3;
                 }
