@@ -92,6 +92,18 @@ namespace Examination.PL.Areas.Instructor.Controllers
                 response.Success = false;
                 response.Message = "You already Generate Exam Before";
             }
+            else if (res == -5)
+            {
+                response.Success = false;
+                response.Message = "This Exam Doasn't Have This Number Of TF Questions";
+            }
+            else if (res == -4)
+            {
+                response.Success = false;
+                response.Message = "This Exam Doasn't Have This Number Of MCQ Questions";
+
+            }
+          
             return Json(response);
         }
         public IActionResult UpdateGenerateExam(int GeneratedExamId)

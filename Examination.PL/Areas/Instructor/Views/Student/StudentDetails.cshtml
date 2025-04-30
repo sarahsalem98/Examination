@@ -95,7 +95,7 @@
                                     <tr>
                                         <td>@generated.Exam.Name</td>
                                         <td>@generated.Exam.Type</td>
-                                        <td>@grade</td>
+                                    <td class="(@grade>60)" ??"text-success":"text-danger">@grade</td>
                                         <td>
 
                                             <button class="btn btn-Results" onclick="InstructorStudent.ShowExamModal(@Model.Id,@generated.Id)">Show Exam</button>
