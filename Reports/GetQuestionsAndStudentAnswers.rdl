@@ -7,15 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-<<<<<<< HEAD
-      <am:Version>17.13.35825.156</am:Version>
-    </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-03-29T19:58:23.8834961Z</am:LastModifiedTimestamp>
-=======
       <am:Version>17.12.35707.178</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-03-29T23:20:04.2254282Z</am:LastModifiedTimestamp>
->>>>>>> 8add31934bab73936e7334be2c86369806029b2d
+    <am:LastModifiedTimestamp>2025-04-28T16:34:04.6735275Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -23,7 +17,7 @@
     <DataSource Name="Exam">
       <DataSourceReference>Exam</DataSourceReference>
       <rd:SecurityType>None</rd:SecurityType>
-      <rd:DataSourceID>30cb8d5d-0a86-4f00-b022-39a88c57dc9d</rd:DataSourceID>
+      <rd:DataSourceID>d0d9cbfd-f4fe-43ab-9397-c58c321c073b</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
@@ -78,7 +72,6 @@
         <DataSourceName>Exam</DataSourceName>
         <CommandType>StoredProcedure</CommandType>
         <CommandText>GetALLStudents</CommandText>
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
         <Field Name="id">
@@ -91,7 +84,7 @@
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="GeneratedExam">
+    <DataSet Name="GeneratedExamId">
       <Query>
         <DataSourceName>Exam</DataSourceName>
         <CommandType>StoredProcedure</CommandType>
@@ -117,18 +110,24 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>5.73333in</Width>
+                  <Width>2.07in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.225in</Width>
+                  <Width>2.095in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.44167in</Width>
+                  <Width>1.27in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.27in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.92in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.32833in</Height>
+                  <Height>0.2575in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -139,7 +138,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Question</Value>
+                                  <Value>Right Answer</Value>
                                   <Style>
                                     <FontFamily />
                                     <FontSize>11pt</FontSize>
@@ -171,14 +170,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="textbox6">
+                        <Textbox Name="textbox4">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Right Answer</Value>
+                                  <Value>Stuend Answer</Value>
                                   <Style>
                                     <FontFamily />
                                     <FontSize>11pt</FontSize>
@@ -191,7 +190,47 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>textbox6</rd:DefaultName>
+                          <rd:DefaultName>textbox4</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                            </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <FontFamily />
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="textbox5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Grade</Value>
+                                  <Style>
+                                    <FontFamily />
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <FontFamily />
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>textbox5</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -217,7 +256,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Student Answer</Value>
+                                  <Value>Question</Value>
                                   <Style>
                                     <FontFamily />
                                     <FontSize>11pt</FontSize>
@@ -247,24 +286,20 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.34334in</Height>
-                  <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Question">
+                        <Textbox Name="textbox8">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Question.Value</Value>
+                                  <Value>Question Type</Value>
                                   <Style>
                                     <FontFamily />
-                                    <Color>#333333</Color>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -273,7 +308,7 @@
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Question</rd:DefaultName>
+                          <rd:DefaultName>textbox8</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -290,6 +325,11 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.2475in</Height>
+                  <TablixCells>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="RightAnswer">
@@ -366,12 +406,128 @@
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Grade">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Grade.Value</Value>
+                                  <Style>
+                                    <FontFamily />
+                                    <Color>#333333</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Grade</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                            </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <FontFamily />
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Question">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Question.Value</Value>
+                                  <Style>
+                                    <FontFamily />
+                                    <Color>#333333</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Question</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                            </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <FontFamily />
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="QuestionType">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!QuestionType.Value</Value>
+                                  <Style>
+                                    <FontFamily />
+                                    <Color>#333333</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>QuestionType</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                            </Border>
+                            <BottomBorder>
+                              <Style>Solid</Style>
+                            </BottomBorder>
+                            <FontFamily />
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -398,16 +554,16 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.42in</Top>
-            <Height>0.67167in</Height>
-            <Width>8.4in</Width>
+            <Top>0.345in</Top>
+            <Height>0.505in</Height>
+            <Width>8.625in</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>1.20833in</Height>
+        <Height>0.85in</Height>
         <Style />
       </Body>
-      <Width>8.71667in</Width>
+      <Width>8.625in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
@@ -420,10 +576,10 @@
   <ReportParameters>
     <ReportParameter Name="GeneratedExamId">
       <DataType>Integer</DataType>
-      <Prompt>Generated Exam Name</Prompt>
+      <Prompt>Exam Name</Prompt>
       <ValidValues>
         <DataSetReference>
-          <DataSetName>GeneratedExam</DataSetName>
+          <DataSetName>GeneratedExamId</DataSetName>
           <ValueField>id</ValueField>
           <LabelField>Examname</LabelField>
         </DataSetReference>
@@ -431,11 +587,7 @@
     </ReportParameter>
     <ReportParameter Name="StudentId">
       <DataType>Integer</DataType>
-<<<<<<< HEAD
-      <Prompt>Student Id</Prompt>
-=======
       <Prompt>Student Name</Prompt>
->>>>>>> 8add31934bab73936e7334be2c86369806029b2d
       <ValidValues>
         <DataSetReference>
           <DataSetName>Studnets</DataSetName>
@@ -466,5 +618,5 @@
   <Language>en-US</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportID>e9e48ade-5e39-43f3-841c-6c0af48e45fc</rd:ReportID>
+  <rd:ReportID>36a833df-4773-4d4c-8a5c-633442f7725f</rd:ReportID>
 </Report>

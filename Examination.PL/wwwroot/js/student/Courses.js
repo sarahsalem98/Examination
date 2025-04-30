@@ -4,12 +4,15 @@
     currentPage: 1,
     pageSize: 8,
     Fetch: function (Page = 1) {
+        //debugger;
+        $("#loader").addClass("show");
         $.ajax({
             type: "POST",
             url: "/Student/Courses/list",
             data: { name: StudentCourses.currentSearchData.Name, PageSize: StudentCourses.pageSize, Page: Page },
 
             success: function (response) {
+                $("#loader").removeClass("show");
                 $("#CoursesCards").html(response);
                 if (Page == 1) {
                     const $html = $($.parseHTML(response));

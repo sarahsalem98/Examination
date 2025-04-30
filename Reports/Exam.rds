@@ -2,7 +2,7 @@
 <RptDataSource xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="Exam">
   <ConnectionProperties>
     <Extension>SQLAZURE</Extension>
-    <ConnectString>Data Source=sarahsalem.database.windows.net;Initial Catalog=Exam;Encrypt=True;TrustServerCertificate=True</ConnectString>
+    <ConnectString>Data Source=db17257.public.databaseasp.net,1433;Initial Catalog=db17257;Encrypt=True;TrustServerCertificate=True</ConnectString>
   </ConnectionProperties>
   <DataSourceID>ee4e1e18-bbfa-449e-ab7a-6548060ed9ab</DataSourceID>
 </RptDataSource>

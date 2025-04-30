@@ -55,15 +55,10 @@ namespace Examination.PL.BL
                 }
                  
 
-                var DepartmentBranchCourse = unitOfWork.InstructorCourseRepo.FirstOrDefault(ic => ic.Course.Exams.Any(e => e.Id == ExamId) && ic.InstructorId == CreatedBy,
-                   "Course.Exams");
-                if (DepartmentBranchCourse == null)
-                {
-                    return 0;
-                }
-                DepartmentBranchCourse.LastGeneratedExamType = instructorCourses.Course.Exams.FirstOrDefault(e => e.Id == ExamId)?.Type;
+              
+                instructorCourses.LastGeneratedExamType = instructorCourses.Course.Exams.FirstOrDefault(e => e.Id == ExamId)?.Type.ToLower();
                                                  
-                unitOfWork.InstructorCourseRepo.Update(DepartmentBranchCourse);
+                unitOfWork.InstructorCourseRepo.Update(instructorCourses);
 
                 unitOfWork.Save();
                 var res = unitOfWork.GeneratedExamRepo.GenerateExam(ExamId, DepartmentId, BranchId, NumsTS, NumsMCQ, CreatedBy, TakenDate, takenTime);
@@ -196,7 +191,8 @@ namespace Examination.PL.BL
                 }
 
                 // Get the student branch department ID from the database
-                var studentBranchDepId = unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == int.Parse(userIdString)).DepartmentBranchId;
+                var student= unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == int.Parse(userIdString), "StudentCourses");
+                var studentBranchDepId = student.DepartmentBranchId;
 
                 if (studentBranchDepId == null)
                 {
@@ -206,13 +202,14 @@ namespace Examination.PL.BL
 
                 //get Student comming exam
                 var commingExam = unitOfWork.GeneratedExamRepo
-                    .GetAll(e => e.DepartmentBranchId == studentBranchDepId,"Exam"
+                    .GetAll(e => e.DepartmentBranchId == studentBranchDepId  , "Exam,ExamStudentGrades"
                     ).ToList()
                     .Where(e =>
                     {
                         var startDate = e.TakenDate.ToDateTime(e.TakenTime);
                         var endDate = startDate.AddMinutes(e.Exam.Duration);
-                        return startDate > DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate);
+                        var studentExamTaken = e.ExamStudentGrades.FirstOrDefault(d=>d.GeneratedExamId==e.Id&&d.StudentId==student.Id);
+                        return (startDate > DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate)) &&(studentExamTaken == null);
                     })
                     .OrderBy(e => e.TakenDate.ToDateTime(e.TakenTime))
                     .ToList();

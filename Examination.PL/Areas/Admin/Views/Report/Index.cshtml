@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
+}
+<div class="text-center">
+    <div class="row">
+        <div class="col-2 p-1">
+            <button class="btn btn-add rounded-0 w-100 " onclick="AdminReport.RenderReport('GetStudentsByDeptId');">Students</button>
+        </div>
+        <div class="col-2 p-1">
+            <button class="btn btn-add rounded-0 w-100 " onclick="AdminReport.RenderReport('GetCpacityAndCoursesByInstructorID');">Capacity And Courses</button>
+        </div>
+        <div class="col-2 p-1">
+            <button class="btn btn-add rounded-0 w-100 " onclick="AdminReport.RenderReport('GetTopicsByCourseID');">Topics</button>
+        </div>
+        <div class="col-2 p-1">
+            <button class="btn btn-add rounded-0 w-100 " onclick="AdminReport.RenderReport('GetGradesBtStudentID');">Students Grades</button>
+        </div>
+        <div class="col-2 p-1">
+            <button class="btn btn-add rounded-0 w-100 " onclick="AdminReport.RenderReport('GetQuestionsAndChoicesByExamID');">Exams</button>
+        </div>
+        <div class="col-2 p-1">
+            <button class="btn btn-add rounded-0 w-100 " onclick="AdminReport.RenderReport('GetQuestionsAndStudentAnswers');">Student Answers</button>
+        </div>
+    </div>
+</div>
+<div class="mt-4 text-center" id="Report">
+</div>
+@section Scripts {
+    <script src="~/js/admin/report.js"></script>
+    <script>
+        $(document).ready(function () {
+       
+        });
+    </script>
+}

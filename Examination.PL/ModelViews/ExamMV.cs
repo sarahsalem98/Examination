@@ -84,9 +84,12 @@ namespace Examination.PL.ModelViews
     public class OnGoingExamMV { 
         public string? ExamTitle { get; set; }
         public DateTime StartTime { get; set; }
+        public int? GeneratedExamId { get; set; }
 
         public DateTime EndTime { get; set; }
         public int Duration { get; set; }
+        public int InstructorCourseId { get; set; }
+        public string? ExamType { get; set; }
         public List<OnGoingExamQuestion> Questions { get; set; } = new List<OnGoingExamQuestion>();
 
 
@@ -102,6 +105,7 @@ namespace Examination.PL.ModelViews
         public string? Answers { get; set; }
         public string ? RightAnswer { get; set; }
         public int Degree { get; set; }
+
 
     }
 

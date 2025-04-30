@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="~/css/exam.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container mt-5" style="padding-top:60px">
+    <div class="container mt-5" style="padding-top:60px" id="container">
         <div class="row">
             <div class="col-12">
-                <h1 class="text-center mb-4">@exam.ExamTitle</h1>
+                <h1 class="text-center mb-4">@exam.ExamTitle.ToUpper()</h1>
                 <p>Start Time: @exam.StartTime.ToString("hh:mm:tt")  | End Time: @exam.EndTime.ToString("hh:mm:tt") | Duration: @exam.Duration Minutes</p>
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3>Questions</h3>
@@ -43,9 +43,30 @@
     <script src="~/js/student/Exams.js"></script>
     <script>
         $(document).ready(function(){
-
                    StudentExam.questions= @Html.Raw(Json.Serialize(exam.Questions))
+                   StudentExam.totalTime=@Html.Raw(Json.Serialize(exam.Duration))
+                   StudentExam.GeneratedExamId = @Html.Raw(Json.Serialize(exam.GeneratedExamId))
+                   StudentExam.ExamType=@Html.Raw(Json.Serialize(exam.ExamType))
+                   StudentExam.InstructorCourseId=@Html.Raw(Json.Serialize(exam.InstructorCourseId))
+                   //console.log(StudentExam.totalTime);
+                  // debugger;
+                    var endTimeString = '@exam.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")';
+                    var endTime = new Date(endTimeString);
+                    var currentTime = new Date();
+                    var timeDifference = endTime - currentTime;
+                    var secondsLeft = timeDifference  / 1000;
+                    var container = document.getElementById("container");
+                     if(timeDifference<=0){
+                         container.innerHTML = "";
+                         container.innerHTML = `<h2 style="color: red;" class="text-center">Time's up! Please check your PC clock.</h2>`;
+
+                     }else{
+                   StudentExam.timeLeft =secondsLeft;
                    StudentExam.loadQuestion(1);
+                   timer = setInterval(StudentExam.updateTimer, 1000);
+                   console.log( StudentExam.GeneratedExamId);
+
+                     }
 
         });
     </script>

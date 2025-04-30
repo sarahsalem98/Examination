@@ -75,8 +75,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (course.IsCompleted == 1)
-                        {
+                 
                             @foreach (var exam in course.Course.Exams)
                             {
 
@@ -95,13 +94,7 @@
                                 }
 
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="3"class="alert-danger text-center"> No Exams Generated Yet</td>
-                            </tr>
-                        }
+                     
 
 
                     </tbody>

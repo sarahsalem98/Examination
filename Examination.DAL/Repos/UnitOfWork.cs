@@ -32,6 +32,7 @@ namespace Examination.DAL.Repos
         private ITopicRepo _topicRepo;
         private ICourseTopicRepo _courseTopicRepo;
         private IStudentCourseRepo _studentCourseRepo;
+        private IExamStudentAnswerRepo _examStudentAnswerRepo;
         public IStudentRepo StudentRepo => _studentRepo ??= new StudentRepo(_db);
         public IUserRepo UserRepo => _userRepo ??= new UserRepo(_db);
         public IBranchRepo BranchRepo => _branchRepo ??= new BranchRepo(_db);
@@ -49,6 +50,7 @@ namespace Examination.DAL.Repos
         public ITopicRepo TopicRepo => _topicRepo ??= new TopicRepo(_db);
         public ICourseTopicRepo CourseTopicRepo => _courseTopicRepo ??= new CourseTopicRepo(_db);
         public IStudentCourseRepo StudentCourseRepo => _studentCourseRepo ??= new StudentCourseRepo(_db);
+        public IExamStudentAnswerRepo ExamStudentAnswerRepo => _examStudentAnswerRepo ??= new ExamStudentAnswerRepo(_db);
 
 
         public UnitOfWork(AppDbContext db)

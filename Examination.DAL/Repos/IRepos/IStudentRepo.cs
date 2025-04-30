@@ -12,5 +12,6 @@ namespace Examination.DAL.Repos.IRepos
         public int AddStudentCoursesAccordingToDepartmentId(int StudentId, int DepartmentId);
         public int UpdateStudentCoursesAccordingToDepartmentId(int StudentId, int DepartmentId);
         public int DoesStudentFinishedAtLeastOneCourse(int StudentId);
+
     }
 }

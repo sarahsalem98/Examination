@@ -7,9 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.13.35825.156</am:Version>
+      <am:Version>17.12.35707.178</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-03-29T20:11:02.8609641Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-04-28T16:26:46.0387367Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
   <AutoRefresh>0</AutoRefresh>
@@ -71,15 +71,15 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.29167in</Width>
+                  <Width>2.5375in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.225in</Width>
+                  <Width>2.47083in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.32in</Height>
+                  <Height>0.38in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -163,7 +163,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.31in</Height>
+                  <Height>0.37in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -274,16 +274,16 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.42in</Top>
-            <Height>0.63in</Height>
-            <Width>4.51667in</Width>
+            <Top>0.3in</Top>
+            <Height>0.75in</Height>
+            <Width>5.00833in</Width>
             <Style />
           </Tablix>
         </ReportItems>
         <Height>1.05in</Height>
         <Style />
       </Body>
-      <Width>5in</Width>
+      <Width>5.00833in</Width>
       <Page>
         <LeftMargin>1in</LeftMargin>
         <RightMargin>1in</RightMargin>
@@ -296,7 +296,7 @@
   <ReportParameters>
     <ReportParameter Name="InstructorId">
       <DataType>Integer</DataType>
-      <Prompt>Instructor Nane</Prompt>
+      <Prompt>Instructor Name</Prompt>
       <ValidValues>
         <DataSetReference>
           <DataSetName>Instructors</DataSetName>

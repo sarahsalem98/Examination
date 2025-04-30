@@ -21,7 +21,7 @@ namespace Examination.DAL.Repos
         public int AddStudentCoursesAccordingToDepartmentId(int StudentId, int DepartmentId)
         {
             var student = _db.Students.Include(s => s.StudentCourses).FirstOrDefault(s => s.Id == StudentId);
-            if (student != null && student.StudentCourses.Count()==0)
+            if (student != null && student.StudentCourses.Count() == 0)
             {
                 var courses = _db.Courses.Where(c => c.CourseDepartments.Any(cd => cd.DepartmentId == DepartmentId)).ToList();
                 foreach (var course in courses)
@@ -66,8 +66,7 @@ namespace Examination.DAL.Repos
         }
 
 
+    }
 
-}
-    
 
 }

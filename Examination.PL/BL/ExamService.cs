@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Http;
 
 namespace Examination.PL.BL
 {
-    public class ExamService:IExamService
+    public class ExamService : IExamService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<ExamService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ExamService(IUnitOfWork unitOfWork, IMapper mapper,ILogger<ExamService> logger,IHttpContextAccessor httpContextAccessor)
+        public ExamService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<ExamService> logger, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -33,22 +33,23 @@ namespace Examination.PL.BL
                 {
                     return -1;
                 }
-                var NewExam= _mapper.Map<Exam>(exam);
+                var NewExam = _mapper.Map<Exam>(exam);
 
                 NewExam.Name = exam.Name;
                 NewExam.Type = exam.Type;
-                NewExam.Duration=exam.Duration;
+                NewExam.Duration = exam.Duration;
                 NewExam.Description = exam.Description;
                 NewExam.CourseId = exam.CourseId;
-                NewExam.CreatedAt =DateTime.Now;
+                NewExam.CreatedAt = DateTime.Now;
                 NewExam.CreatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
                 NewExam.Status = (int)Status.Active;
                 _unitOfWork.ExamRepo.Insert(NewExam);
                 var res = _unitOfWork.Save();
-                if(res>0)
+                if (res > 0)
                 {
                     return 1;
-                }else
+                }
+                else
                 {
                     return 0;
                 }
@@ -64,12 +65,12 @@ namespace Examination.PL.BL
         {
             try
             {
-                var OldExam=_unitOfWork.ExamRepo.FirstOrDefault(e=>e.Id==exam.Id, "Course");
+                var OldExam = _unitOfWork.ExamRepo.FirstOrDefault(e => e.Id == exam.Id, "Course");
                 if (OldExam == null)
                 {
                     return -2;
                 }
-                var examExsist = _unitOfWork.ExamRepo.FirstOrDefault(e => e.CourseId == exam.CourseId && e.Type == exam.Type&&e.Id!=OldExam.Id);
+                var examExsist = _unitOfWork.ExamRepo.FirstOrDefault(e => e.CourseId == exam.CourseId && e.Type == exam.Type && e.Id != OldExam.Id);
                 if (examExsist != null)
                 {
                     return -1;
@@ -82,7 +83,7 @@ namespace Examination.PL.BL
                 OldExam.UpdatedAt = DateTime.Now;
                 OldExam.UpdatedBy = int.Parse(_httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
                 OldExam.Status = (int)Status.Active;
-                
+
                 _unitOfWork.ExamRepo.Update(OldExam);
                 var res = _unitOfWork.Save();
                 if (res > 0)
@@ -101,7 +102,7 @@ namespace Examination.PL.BL
                 return 0;
             }
         }
-        public int ChnageStatus(int id,int status)
+        public int ChnageStatus(int id, int status)
         {
             try
             {
@@ -135,13 +136,14 @@ namespace Examination.PL.BL
         {
             try
             {
-                ExamMV examMV=new ExamMV();
+                ExamMV examMV = new ExamMV();
 
-                var  exam=_unitOfWork.ExamRepo.FirstOrDefault(d=>d.Id==id, "Course");
-                if(exam == null)
+                var exam = _unitOfWork.ExamRepo.FirstOrDefault(d => d.Id == id, "Course");
+                if (exam == null)
                 {
                     return examMV;
-                }else
+                }
+                else
                 {
                     examMV = _mapper.Map<ExamMV>(exam);
                     return examMV;
@@ -159,7 +161,7 @@ namespace Examination.PL.BL
 
             try
             {
-                List<ExamMV> list  = new List<ExamMV>();
+                List<ExamMV> list = new List<ExamMV>();
                 List<Exam> data = _unitOfWork.ExamRepo.GetAll(
                     item =>
                         (String.IsNullOrEmpty(SearchModel.Type) || item.Type == SearchModel.Type) &&
@@ -207,8 +209,8 @@ namespace Examination.PL.BL
                 List<Exam> data = _unitOfWork.ExamRepo.GetAll(
                     item =>
                         status == null
-                            ? item.Status != (int)Status.Deleted 
-                            : item.Status == status,             
+                            ? item.Status != (int)Status.Deleted
+                            : item.Status == status,
                     "Course"
                 )
                 .OrderByDescending(item => item.CreatedAt)
@@ -223,7 +225,7 @@ namespace Examination.PL.BL
                 return null;
             }
         }
-        public List<ExamMV> GetByInstructorDepartmentBranch(int instructor_id,int department_id,int branch_id)
+        public List<ExamMV> GetByInstructorDepartmentBranch(int instructor_id, int department_id, int branch_id)
         {
             try
             {
@@ -236,9 +238,9 @@ namespace Examination.PL.BL
 
                 }
                 List<ExamMV> exams = new List<ExamMV>();
-                List<Exam> data = _unitOfWork.ExamRepo.GetAll(e => e.Status == (int)Status.Active && e.Course.InstructorCourses.Any(ic => ic.Instructor.UserId == instructor_id&&ic.DepartmentBranchId==departmentBranchId),
+                List<Exam> data = _unitOfWork.ExamRepo.GetAll(e => e.Status == (int)Status.Active && e.Course.InstructorCourses.Any(ic => ic.Instructor.UserId == instructor_id && ic.DepartmentBranchId == departmentBranchId),
                     "Course,Course.InstructorCourses.Instructor").ToList();
-               
+
                 //exams = _mapper.Map<List<ExamMV>>(data);
                 exams = data.Select(e => new ExamMV
                 {
@@ -255,9 +257,59 @@ namespace Examination.PL.BL
                 return null;
             }
         }
-}
+        public int SubmitQuestionAnswer(int StudentId, int QId, int GeneratedExamId, string StdAnswer)
+        {
+            var res = 0;
+            try
+            {
+                var student = _unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == StudentId, "ExamStudentAnswers");
+                if (student != null)
+                {
+                    var examStudentAnswer = student.ExamStudentAnswers.FirstOrDefault(e => e.GeneratedExamId == GeneratedExamId && e.GeneratedExamQsId == QId);
+                    if (examStudentAnswer != null)
+                    {
+                        examStudentAnswer.StdAnswer = StdAnswer;
+                        _unitOfWork.ExamStudentAnswerRepo.UpdateStudentSingleAnswer(student.Id, QId, GeneratedExamId, StdAnswer);
+                    }
+                    else
+                    {
+                        var newExamStudentAnswer = new ExamStudentAnswer
+                        {
+                            GeneratedExamId = GeneratedExamId,
+                            GeneratedExamQsId = QId,
+                            StudentId = student.Id,
+                            StdAnswer = StdAnswer
+                        };
+                        _unitOfWork.ExamStudentAnswerRepo.InsertStudentSingleAnswer(newExamStudentAnswer.StudentId, newExamStudentAnswer.GeneratedExamQsId, newExamStudentAnswer.GeneratedExamId, newExamStudentAnswer.StdAnswer);
+                    }
+
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while submitting question answer.");
+                return 0;
+            }
+        }
+        public int CorrectExam(int GeneratedExamId, int userId, string Type, int instructorCourseId, int MinSuccessPrecent)
+        {
+            try
+            {
+                var studentId= _unitOfWork.StudentRepo.FirstOrDefault(s => s.UserId == userId)?.Id;  
+                var res = _unitOfWork.ExamStudentAnswerRepo.CorrectExam(GeneratedExamId, studentId??0, Type, instructorCourseId, MinSuccessPrecent);
+                return res;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while correcting exam.");
+                return 0;
+            }
+        }
 
 
 
+    }
 }
 
