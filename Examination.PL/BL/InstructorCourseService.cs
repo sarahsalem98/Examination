@@ -36,7 +36,7 @@ namespace Examination.PL.BL
                 var TakenDateExamForCourse = DepartmentBranchCourse.Course.Exams.Where(e=>e.CourseId==course_id)
                     .SelectMany(e=>e.GeneratedExams.Select(ge=>ge.TakenDate)).FirstOrDefault();
 
-                  if (DepartmentBranchCourse.IsCompleted == 1&& DepartmentBranchCourse.EndDate.HasValue && DepartmentBranchCourse.EndDate.Value.Year==DateTime.Now.Year)
+                  if (DepartmentBranchCourse.IsCompleted == 1)
 
                 {
                     //means he already put the grades
