@@ -35,8 +35,10 @@ namespace Examination.PL.BL
                     throw new Exception("Department Branch not found");
 
                 }
-             
 
+                var NumOfMCQInExam =unitOfWork.ExamQuestionRepo.GetAll(e=>e.ExamId==ExamId&&e.QuestionType.Trim().ToLower()=="mcq").Count();
+                var NumOfTfInExam = unitOfWork.ExamQuestionRepo.GetAll(e => e.ExamId == ExamId && e.QuestionType.Trim().ToLower() == "tf").Count();
+               
                 var generatedExamExsist = unitOfWork.GeneratedExamRepo.FirstOrDefault(e => e.ExamId == ExamId && e.DepartmentBranchId == departmentBranchId&&e.TakenDate.Year == TakenDate.Year);
                 if (instructorCourses.IsCompleted == 1 && DateOnly.FromDateTime(instructorCourses.EndDate.Value).Year == TakenDate.Year)
 
@@ -54,9 +56,17 @@ namespace Examination.PL.BL
 
                     return -1;
                 }
-                 
-
+                else if (NumsTS > NumOfTfInExam)
+                {
+                    return -5;
+                }
+                else if (NumsMCQ > NumOfMCQInExam)
+                {
+                    return -4;
+                }
               
+
+
                 instructorCourses.LastGeneratedExamType = instructorCourses.Course.Exams.FirstOrDefault(e => e.Id == ExamId)?.Type.ToLower();
                                                  
                 unitOfWork.InstructorCourseRepo.Update(instructorCourses);

@@ -155,14 +155,28 @@
         var examId = $('#examsmentDropdown').val();
         var departmentId = $('#departmentDropdown').val();
         var branchId = $('#branchId').val();
-        var numsTS = $('input[name="NumsTS"]').val();
-        var numsMCQ = $('input[name="NumsMCQ"]').val();
-        var takenDate = $('input[name="TakenDate"]').val();
-        var takenTime = $('input[name="takenTime"]').val();
+        var numsTS = $('#NumsTS').val();
+        var numsMCQ = $('#NumsMCQ').val();
+        var takenDate = $('#dateInput').val();
+        var takenTime = $('#timeInput').val();
 
         if (!examId || !departmentId || !branchId || !numsTS || !numsMCQ || !takenDate || !takenTime) {
             toastr.error("Please fill in all required fields.");
             return;
+        }
+        var selectedDate = new Date(takenDate);
+        var selectedTimeParts = takenTime.split(":");
+        var selectedHours = parseInt(selectedTimeParts[0]);
+        var selectedMinutes = parseInt(selectedTimeParts[1]);
+
+        var now = new Date();
+        if (selectedDate.getFullYear() === now.getFullYear() && selectedDate.getMonth() === now.getMonth() && selectedDate.getDate() === now.getDate()) {
+            if (selectedHours < now.getHours() || (selectedHours === now.getHours() && selectedMinutes < now.getMinutes()))
+            {
+                toastr.error("You cannot select a past time for today.");
+
+                return;
+            }
         }
 
         var formData = {
@@ -216,14 +230,31 @@
 
         e.preventDefault();
    
-        var takenDate = $('input[name="TakenDate"]').val();
-        var takenTime = $('input[name="takenTime"]').val();
+        var takenDate = $("#dateInput").val();
+        var takenTime = $("#timeInput").val();
         var GenereatedExamId = $('#GenereatedExamId').val();
-        if ( !takenDate || !takenTime) {
+        if (!takenDate || !takenTime) {
             toastr.error("Please fill in all required fields.");
             return;
         }
 
+        var selectedDate = new Date(takenDate);
+        var selectedTimeParts = takenTime.split(":");
+        var selectedHours = parseInt(selectedTimeParts[0]);
+        var selectedMinutes = parseInt(selectedTimeParts[1]);
+
+        var now = new Date();
+        if (selectedDate.getFullYear() === now.getFullYear() &&selectedDate.getMonth() === now.getMonth() &&selectedDate.getDate() === now.getDate())
+        {
+            if (selectedHours < now.getHours() ||(selectedHours === now.getHours() && selectedMinutes < now.getMinutes()))
+            {
+                toastr.error("You cannot select a past time for today.");
+            
+                return;
+            }
+        }
+       
+       
         var formData = {
             GeneratedExamId: GenereatedExamId,
             TakenDate: takenDate,
