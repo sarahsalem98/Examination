@@ -76,6 +76,13 @@ namespace Examination.PL.Areas.Admin.Controllers
                     response.Data = null;
 
                 }
+                else if (res == -2)
+                {
+                    response.Success = false;
+                    response.Message = "this courses in this department already assigned to another instructor";
+                    response.Data = null;
+
+                }
                 else
                 {
                     response.Success = false;

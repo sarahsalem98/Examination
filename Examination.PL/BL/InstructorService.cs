@@ -84,23 +84,21 @@ namespace Examination.PL.BL
                 var resUpdateInstuctorCourses = 0;
                 var newInstuctorCoursesList= new  List<InstructorCourse>(){}; 
                 var oldinstructor=unitOfWork.InstructorRepo.FirstOrDefault(i=>i.Id==instructor.Id, "GeneratedExams,InstructorCourses,User");
-                //if (instructor.InstructorCourses.Count() > 0)
-                //{
-                    resUpdateInstuctorCourses=this.UpdateInstructorCourses(instructor.InstructorCourses, oldinstructor.Id);
-                //}
-
-                if (resUpdateInstuctorCourses == 0)
-                {
-                    return -2;
-                }
-
+  
                 if (oldinstructor == null)
                 {
                     return -1;
                 }
                 else
                 {
+                    resUpdateInstuctorCourses = this.UpdateInstructorCourses(instructor.InstructorCourses, oldinstructor.Id);
 
+
+                    if (resUpdateInstuctorCourses == 0)
+                    {
+                        return -2;
+                    }
+                   
                     oldinstructor.User.UpdatedAt = DateTime.Now;
                     oldinstructor.User.UpdatedBy = int.Parse(httpContextAccessor.HttpContext.User.FindFirst("UserId")?.Value);
                     oldinstructor.User.Email = instructor.User.Email;
@@ -108,8 +106,8 @@ namespace Examination.PL.BL
                     oldinstructor.User.LastName = instructor.User.LastName;
                     oldinstructor.User.Phone = instructor.User.Phone;
                     oldinstructor.User.Age = instructor.User.Age;
-                    oldinstructor.IsExternal = instructor.IsExternal;            
-            
+                    oldinstructor.IsExternal = instructor.IsExternal;
+
                     unitOfWork.InstructorRepo.Update(oldinstructor);
                     res = unitOfWork.Save();
                     return res;

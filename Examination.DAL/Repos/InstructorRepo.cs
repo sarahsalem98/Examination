@@ -20,10 +20,6 @@ namespace Examination.DAL.Repos
         {
             var res = 0;
             var instructor = db.Instructors.Include(i => i.InstructorCourses).ThenInclude(i=>i.DepartmentBranch).FirstOrDefault(i => i.Id == instructorId);
-            if (instructor == null)
-            {
-                return 0;
-            }
             var coursesToRemove = instructor.InstructorCourses
             .Where(ic => !newInstructorCourses.Any(nc =>
                 nc.DepartmentBranch?.BranchId == ic.DepartmentBranch?.BranchId &&
@@ -34,11 +30,12 @@ namespace Examination.DAL.Repos
             {
                 var existing = instructor.InstructorCourses
                     .FirstOrDefault(ic =>ic.Id==newCourse.Id);
+                var departmentBranchId = db.DepartmentBranches.FirstOrDefault(d => d.DepartmentId == newCourse.DepartmentBranch.DepartmentId && d.BranchId == newCourse.DepartmentBranch.BranchId).Id;
 
                 if (existing != null)
                 {
                     existing.CourseId = newCourse.CourseId;
-                    existing.DepartmentBranchId =db.DepartmentBranches.FirstOrDefault(d=>d.DepartmentId==newCourse.DepartmentBranch.DepartmentId&&d.BranchId==newCourse.DepartmentBranch.BranchId).Id ;
+                    existing.DepartmentBranchId = departmentBranchId;
                     existing.TotalStudents = db.Departments.FirstOrDefault(d=>d.Id==newCourse.DepartmentBranch.DepartmentId).Capacity;
                     existing.StartDate = newCourse.StartDate;
                     existing.EndDate = newCourse.EndDate;
@@ -47,17 +44,28 @@ namespace Examination.DAL.Repos
                 }
                 else
                 {
-                 
-                    var NewCourse = new InstructorCourse
+                   var alreadyExistedToAnotherInstructor = db.InstructorCourses.FirstOrDefault(c => c.CourseId == newCourse.CourseId && c.DepartmentBranchId == departmentBranchId && newCourse.StartDate.Value.Year == c.StartDate.Value.Year);
+
+                    if (alreadyExistedToAnotherInstructor == null)
                     {
-                        CourseId = newCourse.CourseId,
-                        DepartmentBranchId = db.DepartmentBranches.FirstOrDefault(d => d.DepartmentId == newCourse.DepartmentBranch.DepartmentId && d.BranchId == newCourse.DepartmentBranch.BranchId).Id,
-                        InstructorId = instructor.Id,
-                        TotalStudents = db.Departments.FirstOrDefault(d => d.Id == newCourse.DepartmentBranch.DepartmentId).Capacity,
-                        StartDate = newCourse.StartDate,
-                        EndDate = newCourse.EndDate,
-                    };
-                    instructor.InstructorCourses.Add(NewCourse);
+                        var NewCourse = new InstructorCourse
+                        {
+                            CourseId = newCourse.CourseId,
+                            DepartmentBranchId = departmentBranchId,
+                            InstructorId = instructor.Id,
+                            TotalStudents = db.Departments.FirstOrDefault(d => d.Id == newCourse.DepartmentBranch.DepartmentId).Capacity,
+                            StartDate = newCourse.StartDate,
+                            EndDate = newCourse.EndDate,
+                        };
+                        instructor.InstructorCourses.Add(NewCourse);
+
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+
+                   
                 }
             }
         
