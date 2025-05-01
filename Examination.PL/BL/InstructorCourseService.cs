@@ -42,7 +42,7 @@ namespace Examination.PL.BL
                     //means he already put the grades
                     return -6;
                 }
-               else if (DepartmentBranchCourse.EndDate > DateTime.Now)
+               else if (DepartmentBranchCourse.EndDate.HasValue && DepartmentBranchCourse.EndDate > DateTime.Now)
                 {
                     //means course doasn't end (tested)
                     return -2;
