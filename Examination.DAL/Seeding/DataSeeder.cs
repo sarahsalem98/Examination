@@ -108,15 +108,33 @@ namespace Examination.DAL.Seeding
         {
             var userPassword = "123456";
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userPassword);
+            List<UserType> userTypes = new List<UserType>();
             if (!_db.UserTypes.Any(u => u.TypeName == "SuperAdmin"))
             {
                 var userType = new UserType
                 {
                     TypeName = "SuperAdmin"
                 };
-                _db.UserTypes.Add(userType);
-                _db.SaveChanges();
+             userTypes.Add(userType);
             }
+            if (!_db.UserTypes.Any(u => u.TypeName == "Instructor"))
+            {
+                var userType = new UserType
+                {
+                    TypeName = "Instructor"
+                };
+               userTypes.Add(userType);
+            }
+            if (!_db.UserTypes.Any(u => u.TypeName == "Student"))
+            {
+                var userType = new UserType
+                {
+                    TypeName = "Student"
+                };
+                userTypes.Add(userType);
+            }
+            _db.UserTypes.AddRange(userTypes);
+            _db.SaveChanges();
             var AdminUserType = _db.UserTypes.FirstOrDefault(u => u.TypeName == "SuperAdmin");
             if (!_db.Users.Any(u => u.Email == "superAdmin@gmail.com"))
             {
@@ -142,32 +160,5 @@ namespace Examination.DAL.Seeding
 
             }
         }
-
-        //public void CourseSeeder()
-        //{
-        //    if (!_db.Courses.Any(c => c.Name == "C#"))
-        //    {
-        //        var course = new Course
-        //        {
-        //            Name = "C#",
-        //            Description = "C# Programming Language",
-        //            Status = 1,
-        //            CreatedBy = 1,
-        //            CreatedAt = DateTime.Now,
-        //        };
-        //        _db.Courses.Add(course);
-        //        _db.SaveChanges();
-        //    }
-        //    if (!_db.CourseDepartments.Any(cd => cd.CourseId == 1 && cd.DepartmentId == 1))
-        //    {
-        //        var courseDepartment = new CourseDepartment
-        //        {
-        //            CourseId = 1,
-        //            DepartmentId = 1,
-        //        };
-        //        _db.CourseDepartments.Add(courseDepartment);
-        //        _db.SaveChanges();
-        //    }
-        //} 
     }
 }

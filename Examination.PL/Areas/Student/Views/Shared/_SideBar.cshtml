@@ -20,6 +20,10 @@
         {
             return "active";
         }
+        else if (currentArea == "Student" && (currentController == "PreviousExams") && (currentAction == "Index"))
+        {
+            return "active";
+        }
         else
         {
             return "";
@@ -37,11 +41,11 @@
 
     <ul class="nav flex-column mt-3">
         <!-- Calender -->
-        <li class="nav-item mt-2">
+      @*   <li class="nav-item mt-2">
             <a href="Dashbord.html" class="sidebar-link  nav-link text-white">
                 <i class="bi bi-calendar"></i> <span class="ms-2">Calendar</span>
             </a>
-        </li>
+        </li> *@
         <!-- Courses -->
         <li class="nav-item mt-2">
             <a asp-controller="Courses" asp-action="Index" asp-area="Student" class="sidebar-link nav-link text-white rounded-0 @IsActive("Student","Courses","Index")">

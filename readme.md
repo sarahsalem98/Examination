@@ -71,3 +71,21 @@
 <img align="left" height="450" src="https://ik.imagekit.io/woiv2eo8w/NewERD%20(2).png?updatedAt=1746000515135"  />
 
 ###
+
+<h2 align="left">🛠️ Getting Started</h2>
+
+###
+
+To run this project locally, follow these steps:
+
+1. **Configure `appsettings.json`**  
+   - Navigate to the `PL` (Presentation Layer) project.  
+   - Open `appsettings.json`.  
+   - Add your SQL Server connection string under `"ConnectionStrings"` with the key `"DefaultConnection"`.
+
+   Example:
+   ```json
+   "ConnectionStrings": {
+     "DefaultConnection": "Server=.;Database=ExamDB;Trusted_Connection=True;MultipleActiveResultSets=true"
+   }
+   - Go to Program.cs  and uncomment the code there before build 
