@@ -274,7 +274,9 @@ namespace Examination.PL.BL
                 {
                     var startDate = e.TakenDate.ToDateTime(e.TakenTime);
                     var endDate = startDate.AddMinutes(e.Exam.Duration);
-                    return endDate < DateTime.Now;
+                    var studentExamTaken = e.ExamStudentGrades.FirstOrDefault(d => d.GeneratedExamId == e.Id && d.StudentId == student.Id);
+                    return (endDate < DateTime.Now || (startDate <= DateTime.Now && DateTime.Now <= endDate)) && (studentExamTaken != null);
+                    //return endDate < DateTime.Now;
                 })
                 .OrderByDescending(e => e.TakenDate.ToDateTime(e.TakenTime))
                 .ToList();
