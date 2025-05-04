@@ -2,11 +2,12 @@
 @{
     ViewData["Title"] = "Comming Exam";
     var nowTime = TimeOnly.FromDateTime(DateTime.Now);
+    var dateNow = DateOnly.FromDateTime(DateTime.Now);
 
 
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/ComminExam.css" />
+<link rel="stylesheet" href="~/css/ComminExam.css" />
 }
 
 
@@ -23,10 +24,11 @@
 
             <div class="quiz-card">
                 @{
+                    var takenDate = item.TakenDate;
                     var startTime = item.TakenTime;
                     var endDateTime = item.TakenTime.AddMinutes(item.Exam.Duration);
                     var Qcount = (item.CountMCQ + item.CountTF) ?? 0;
-                    var isNow = nowTime >= startTime && nowTime < endDateTime;
+                    var isNow = takenDate <= dateNow ? (nowTime >= startTime && nowTime < endDateTime) : false;
 
                 }
 
