@@ -68,9 +68,10 @@
 
 ###
 
-<img align="left" height="450" src="https://ik.imagekit.io/woiv2eo8w/NewERD%20(2).png?updatedAt=1746000515135"  />
+<img  height="450" src="https://ik.imagekit.io/woiv2eo8w/NewERD%20(2).png?updatedAt=1746000515135"  />
 
 ###
+
 
 <h2 align="left">🛠️ Getting Started</h2>
 
@@ -88,4 +89,5 @@ To run this project locally, follow these steps:
    "ConnectionStrings": {
      "DefaultConnection": "Server=.;Database=ExamDB;Trusted_Connection=True;MultipleActiveResultSets=true"
    }
-   - Go to Program.cs  and uncomment the code there before build 
+   
+2. Go to Program.cs  and uncomment the code there before build 
