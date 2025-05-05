@@ -91,3 +91,14 @@ To run this project locally, follow these steps:
    }
    
 2. Go to Program.cs  and uncomment the code there before build 
+<h3 align="left">🛠️ Notes</h3>
+
+---
+
+- 🔐 **Super Admin Credentials**  
+  - **Email:** `SuperAdmin@gmail.com`  
+  - **Password:** `123456`
+
+- 👥 **Default Password for Users**  
+  - Every user created by the Admin (Students and Instructors) is assigned the default password: `123456`  
+  - Users are encouraged to update their password upon first login for security purposes.
